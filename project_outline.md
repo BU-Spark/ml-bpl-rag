@@ -21,10 +21,19 @@ Give a brief explanation of what you returned based on what you remember
 
 *In as direct terms as possible, provide the “Data Science” or "Machine Learning" problem statement version of the overview. Think of this as translating the above into a more technical definition to execute on. eg: a classification problem to segregate users into one of three groups on based on the historical user data available from a publicly available database*
 
-Run through entire BPL database, embed entire catalog
-Ingest and process query and compare it to the database to look for similarities
-Return entries we deemed similar and relevant
-Generate brief summary of materials and provide links to relevant documentation
+1. (Optional) Increase robustness of data by performing OCR/speech recognition/multimodal model summarization
+2. We will be using RAG techniques to accomplish this project
+3. Run through entire BPL database, embed entire catalog
+   a. Select vectorstore and ingestion method
+   b. Run job that will ingest data into the vectorstore whilst chunking and embedding the full text data
+      i. For multimedia, use a multimodal embeddings model in addition to the textual embedding
+4. Ingest and process query and compare it to the database to look for similarities
+   a. Cosine similarity search between vectors generated for chunks and the user’s query
+      i. Potentially use an LLM to dissect query and generate alternative queries to compare against the vectorstore
+5. Return entries we deemed similar and relevant
+6. Generate brief summary of materials and provide links to relevant documentation
+   a. Retrieve like vectors from the vectorstore and insert them into the prompt to the LLM that will generate a response
+
 
 ### C. Checklist for project completion
 
