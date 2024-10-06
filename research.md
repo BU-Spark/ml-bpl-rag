@@ -2,7 +2,7 @@
 
 Members: Daniel Foley, Brandon Vargus, Jinanshi Mehta, Enrico Collautti
 
-## Paper 1: [Retrieval Augmented Generation (RAG) and Beyond: A Comprehensive Survey on How to Make your LLMs use External Data More Wisely\]([https://arxiv.org/pdf/2409.14924](https://arxiv.org/pdf/2409.14924))
+## Paper 1: [Retrieval Augmented Generation (RAG) and Beyond: A Comprehensive Survey on How to Make your LLMs use External Data More Wisely\](https://arxiv.org/pdf/2409.14924]
 
 - Proposes a method in which RAG queries are categorized and handled accordingly (explicit fact queries, implicit fact queries, interpretable rationale queries, and hidden rationale queries)  
 - The first two categories are simpler than the rationale categories. They represent fact retrieval which is usually easier than rationale determination. (Intelligence vs. Wisdom from my understanding)  
@@ -10,7 +10,7 @@ Members: Daniel Foley, Brandon Vargus, Jinanshi Mehta, Enrico Collautti
   - Specifically addresses which techniques to explore given each query level (We can build our structure up sequentially to cover more complex queries)  
   - In addition to techniques for each query type, it references current research related to each technique.
 
-## Paper 2: [AI-Powered Search: Embedding-Based Retrieval and Retrieval-Augmented Generation (RAG)\] ([https://dtunkelang.medium.com/ai-powered-search-embedding-based-retrieval-and-retrieval-augmented-generation-rag-cabeaba26a8b](https://dtunkelang.medium.com/ai-powered-search-embedding-based-retrieval-and-retrieval-augmented-generation-rag-cabeaba26a8b))
+## Paper 2: [AI-Powered Search: Embedding-Based Retrieval and Retrieval-Augmented Generation (RAG)\] (https://dtunkelang.medium.com/ai-powered-search-embedding-based-retrieval-and-retrieval-augmented-generation-rag-cabeaba26a8b)
 
 - Discusses the advantages of embedding words rather than using a bag of words, including retrieval and ranking techniques like HNSW graphs and machine-learned ranking.  
 - Query Rewriting → Content Segmentation/Chunking → Retrieval   
