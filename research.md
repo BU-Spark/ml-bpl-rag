@@ -10,7 +10,7 @@ Members: Daniel Foley, Brandon Vargus, Jinanshi Mehta, Enrico Collautti
   - Specifically addresses which techniques to explore given each query level (We can build our structure up sequentially to cover more complex queries)  
   - In addition to techniques for each query type, it references current research related to each technique.
 
-## Paper 2: [AI-Powered Search: Embedding-Based Retrieval and Retrieval-Augmented Generation (RAG)] (https://dtunkelang.medium.com/ai-powered-search-embedding-based-retrieval-and-retrieval-augmented-generation-rag-cabeaba26a8b)
+## Paper 2: [AI-Powered Search: Embedding-Based Retrieval and Retrieval-Augmented Generation (RAG)](https://dtunkelang.medium.com/ai-powered-search-embedding-based-retrieval-and-retrieval-augmented-generation-rag-cabeaba26a8b)
 
 - Discusses the advantages of embedding words rather than using a bag of words, including retrieval and ranking techniques like HNSW graphs and machine-learned ranking.  
 - Query Rewriting → Content Segmentation/Chunking → Retrieval   
@@ -29,7 +29,7 @@ Members: Daniel Foley, Brandon Vargus, Jinanshi Mehta, Enrico Collautti
 
 - Open source framework to create applications using LLMs, which is useful for RAG.
 
-## Notable Resource: SAIC Natural Language Library Querying
+## Notable Resource: [SAIC Natural Language Library Querying](https://www.saic.edu/libraries-special-collections/john-m-flaxman-library)
 
 - Similar to our project in retrieval  
 - Room for improvement in design (only returns resources rather than a structured response)
