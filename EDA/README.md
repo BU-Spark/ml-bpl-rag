@@ -6,7 +6,7 @@ We analyzed metadata retreived from the Digital CommonWealth API as well as full
 
 Some of our findings, such as how much of the image/video data has text annotations, will help in determing how we should conduct RAG in the coming phase.
 
-# Running the Code
+## Running the Code
 Please make sure your environment is the same as our to run the notebook using the following commands:
 
 pip install -r requirements.txt
