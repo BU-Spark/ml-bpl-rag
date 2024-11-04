@@ -1,5 +1,7 @@
 # How to Conduct the MVP
 
+Make sure you pip install -r requirements.txt
+
 Basically run all of the cells in the Jupyter Notebook sequentially, making sure that you include your own OPENAI_API_KEY
 
 From the cell where the chunks are made, copy the saved directory of the vector store.
