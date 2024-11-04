@@ -2,6 +2,8 @@
 
 Make sure you pip install -r requirements.txt
 
+We used python version 3.11.9 and pip version 24.3.1
+
 Basically run all of the cells in the Jupyter Notebook sequentially, making sure that you include your own OPENAI_API_KEY
 
 From the cell where the chunks are made, copy the saved directory of the vector store.
