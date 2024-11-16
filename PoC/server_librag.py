@@ -6,12 +6,7 @@ from langchain_openai import ChatOpenAI
 from langserve import add_routes
 import nest_asyncio
 import uvicorn
-from query_prompt import query_prompt
 import numpy as np
-
-
-from langchain.vectorstores import FAISS
-from langchain.embeddings import HuggingFaceEmbeddings
 
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
@@ -23,13 +18,7 @@ from langchain_core.documents import Document
 
 from langchain_core.runnables import RunnableLambda
 
-
-def f(x: str) -> str:
-    return x + "a"
-
-def g(x: str) -> str:
-    return x + "z"
-
+# Instantiate Runnable Object
 runnable = RunnableLambda(f) | g
 as_tool = runnable.as_tool()
 as_tool.invoke("b")
