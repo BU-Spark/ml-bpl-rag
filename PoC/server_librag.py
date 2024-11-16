@@ -4,6 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import ChatOpenAI
 from langserve import add_routes
+
 import nest_asyncio
 import uvicorn
 import numpy as np
