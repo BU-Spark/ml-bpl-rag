@@ -17,20 +17,8 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.documents import Document
 
-from langchain_core.runnables import RunnableLambda
-
-# Instantiate Runnable Object
-runnable = RunnableLambda(f) | g
-as_tool = runnable.as_tool()
-as_tool.invoke("b")
-
-
 vectorstore = Chroma(persist_directory="/var/folders/xq/fj3st__56r54gz9tdvb7d2k40000gn/T/tmpcp1qkd0k", embedding_function=OpenAIEmbeddings(model="text-embedding-3-large", dimensions=3072))
 retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 3})
-
-
-def format_docs(docs):
-    return "\n\n".join(doc.page_content for doc in docs)
 
 # 1. Create prompt template
 system_template = """Answer the question based only on the following context:
@@ -51,7 +39,6 @@ user_template = ChatPromptTemplate.from_messages([
 #print(q)
 #print(query_prompt(q))
 
-
 # 2. Create model
 model = ChatOpenAI(model="gpt-4o-mini")
 
@@ -63,7 +50,7 @@ parser = StrOutputParser()
 chain = {"context": retriever | format_docs, "question": RunnablePassthrough()} | prompt_template | model #| parser
 
 #print(chain.invoke("Who did Z. B. Oakes receive a letter from?"))
-print(model.invoke("Tell me about Barnstable Public Schools"))
+
 # 5. App definition
 app = FastAPI(
   title="LangChain Server",
