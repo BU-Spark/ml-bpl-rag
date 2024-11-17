@@ -13,10 +13,13 @@ from langchain_openai import OpenAIEmbeddings
 
 from langchain_core.runnables import RunnablePassthrough
 
-from langchain.chains.combine_documents import create_stuff_documents_chain
+#from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.documents import Document
 
 from langchain_core.runnables import RunnableLambda
+
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
 
 # Instantiate Runnable Object
 runnable = RunnableLambda(f) | g
