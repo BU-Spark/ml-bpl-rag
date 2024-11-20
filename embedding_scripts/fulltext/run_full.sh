@@ -19,4 +19,4 @@ echo "Print python version"
 python --version
 python3 --version
 
-python3 embed.py 0 100
+python3 embed_ft.py 0 100

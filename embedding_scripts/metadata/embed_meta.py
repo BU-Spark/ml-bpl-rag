@@ -22,9 +22,9 @@ import time
 BEGIN = int(sys.argv[1])
 END = int(sys.argv[2])
 
-INDEX_PATH = "/projectnb/sparkgrp/ml-bpl-rag-data/vectorstore/"
+INDEX_PATH = "/projectnb/sparkgrp/ml-bpl-rag-data/vectorstore/faiss_index_metadata"
 
-index_file_path = os.path.join(INDEX_PATH,"faiss_index_metadata")
+index_file_path = os.path.join(INDEX_PATH,"index.faiss")
 
 print("loading JSON...")
 
@@ -54,7 +54,7 @@ if os.path.exists(index_file_path):
 
     vector_store = FAISS.load_local(
 
-        index_file_path,hf,allow_dangerous_deserialization=True
+        INDEX_PATH,hf,allow_dangerous_deserialization=True
 
     )
 
@@ -121,7 +121,7 @@ end = time.time()
 print(f"Embedded all documents in {end-start} seconds...")
 
 print(f"Saving vectorstore to {index_file_path}...")
-vector_store.save_local(index_file_path)
+vector_store.save_local(INDEX_PATH)
 
 retriever = vector_store.as_retriever()
 print("Performing test...\n\n")
