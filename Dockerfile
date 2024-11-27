@@ -94,7 +94,7 @@ ENV PORT=7860
 
 
 
-ENV CHAINLIT_SERVER_PORT=8000
+ENV CHAINLIT_SERVER_PORT=7860
 
 
 
@@ -108,4 +108,4 @@ ENV CHAINLIT_HOST="0.0.0.0"
 
 # Change the CMD to use chainlit
 
-CMD ["chainlit", "run", "app.py"]
+CMD ["chainlit", "run", "app.py","--port","7860"]
