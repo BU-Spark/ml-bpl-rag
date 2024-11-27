@@ -1,26 +1,40 @@
+import os
+
+from typing import List
+
+
+
+from langchain.embeddings.openai import OpenAIEmbeddings
+
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+from langchain.vectorstores import Chroma
+
+from langchain.chains import (
+
+    ConversationalRetrievalChain,
+
+)
+
+from langchain.chat_models import ChatOpenAI
+
+
+
+from langchain.docstore.document import Document
+
+from langchain.memory import ChatMessageHistory, ConversationBufferMemory
+
+
+
 import chainlit as cl
 
 
 
-from typing import Optional
+os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 
 
-import time
-
-
-
-
-
-
-
-# Store conversation history
-
-
-
-conversation_memory = []
-
-
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
 
 
 
@@ -28,47 +42,115 @@ conversation_memory = []
 
 @cl.on_chat_start
 
+async def on_chat_start():
 
-
-async def start():
-
-
-
-    """Initializes the chat session"""
+    files = None
 
 
 
-    # Send an initial message
+    # Wait for the user to upload a file
+
+    while files == None:
+
+        files = await cl.AskFileMessage(
+
+            content="Please upload a text file to begin!",
+
+            accept=["text/plain"],
+
+            max_size_mb=20,
+
+            timeout=180,
+
+        ).send()
 
 
 
-    await cl.Message(
+    file = files[0]
 
 
 
-        content="👋 Hello! I'm your AI assistant. How can I help you today?",
+    msg = cl.Message(content=f"Processing `{file.name}`...")
+
+    await msg.send()
 
 
 
-        author="Assistant"
+    with open(file.path, "r", encoding="utf-8") as f:
+
+        text = f.read()
 
 
 
-    ).send()
+    # Split the text into chunks
+
+    texts = text_splitter.split_text(text)
 
 
 
-    
+    # Create a metadata for each chunk
+
+    metadatas = [{"source": f"{i}-pl"} for i in range(len(texts))]
 
 
 
-    # Set some session variables
+    # Create a Chroma vector store
+
+    embeddings = OpenAIEmbeddings()
+
+    docsearch = await cl.make_async(Chroma.from_texts)(
+
+        texts, embeddings, metadatas=metadatas
+
+    )
 
 
 
-    cl.user_session.set("conversation_started", True)
+    message_history = ChatMessageHistory()
 
 
+
+    memory = ConversationBufferMemory(
+
+        memory_key="chat_history",
+
+        output_key="answer",
+
+        chat_memory=message_history,
+
+        return_messages=True,
+
+    )
+
+
+
+    # Create a chain that uses the Chroma vector store
+
+    chain = ConversationalRetrievalChain.from_llm(
+
+        ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0, streaming=True),
+
+        chain_type="stuff",
+
+        retriever=docsearch.as_retriever(),
+
+        memory=memory,
+
+        return_source_documents=True,
+
+    )
+
+
+
+    # Let the user know that the system is ready
+
+    msg.content = f"Processing `{file.name}` done. You can now ask questions!"
+
+    await msg.update()
+
+
+
+    cl.user_session.set("chain", chain)
 
 
 
@@ -76,190 +158,56 @@ async def start():
 
 @cl.on_message
 
-
-
 async def main(message: cl.Message):
 
+    chain = cl.user_session.get("chain")  # type: ConversationalRetrievalChain
 
+    cb = cl.AsyncLangchainCallbackHandler()
 
-    """Main message handler"""
 
 
+    res = await chain.acall(message.content, callbacks=[cb])
 
-    
+    answer = res["answer"]
 
+    source_documents = res["source_documents"]  # type: List[Document]
 
 
-    # Simulate some processing time
 
+    text_elements = []  # type: List[cl.Text]
 
 
-    with cl.Step("Processing...") as step:
 
+    if source_documents:
 
+        for source_idx, source_doc in enumerate(source_documents):
 
-        time.sleep(1)  # Simulated delay
+            source_name = f"source_{source_idx}"
 
+            # Create the text element referenced in the message
 
+            text_elements.append(
 
-        step.output = "Processed message"
+                cl.Text(content=source_doc.page_content, name=source_name, display="side")
 
+            )
 
+        source_names = [text_el.name for text_el in text_elements]
 
-    
 
 
+        if source_names:
 
-    # Store message in conversation history
+            answer += f"\nSources: {', '.join(source_names)}"
 
+        else:
 
+            answer += "\nNo sources found"
 
-    conversation_memory.append({
 
 
+    await cl.Message(content=answer, elements=text_elements).send()
 
-        "role": "user",
 
 
 
-        "content": message.content
-
-
-
-    })
-
-
-
-    
-
-
-
-    # Create a response
-
-
-
-    response = f"I received your message: '{message.content}'. This is a demo response."
-
-
-
-    
-
-
-
-    # Store response in conversation history
-
-
-
-    conversation_memory.append({
-
-
-
-        "role": "assistant",
-
-
-
-        "content": response
-
-
-
-    })
-
-
-
-    
-
-
-
-    # Send response with typing effect
-
-
-
-    await cl.Message(
-
-
-
-        content=response,
-
-
-
-        author="Assistant"
-
-
-
-    ).send()
-
-
-
-
-
-
-
-@cl.password_auth_callback
-
-
-
-def auth_callback(username: str, password: str) -> Optional[cl.User]:
-
-
-
-    """Basic authentication handler"""
-
-
-
-    # This is a simple example - in production, use proper authentication
-
-
-
-    if username == "demo" and password == "password":
-
-
-
-        return cl.User(identifier="demo", metadata={"role": "user"})
-
-
-
-    return None
-
-
-
-
-
-
-
-@cl.on_chat_end
-
-
-
-async def end():
-
-
-
-    """Cleanup when chat ends"""
-
-
-
-    await cl.Message(content="👋 Thank you for chatting! Goodbye!").send()
-
-
-
-
-
-
-
-# Custom action handler example
-
-
-
-@cl.action_callback("feedback")
-
-
-
-async def on_action(action):
-
-
-
-    """Handles custom feedback action"""
-
-
-
-    await cl.Message(content=f"Received feedback: {action.value}").send()
