@@ -1,7 +1,15 @@
-# TEMPLATE-base-repo
+---
 
-Create a new branch from dev, add changes on the new branch you just created.
+title: Basic Docker SDK Space
 
-Open a Pull Request to dev. Add your PM and TPM as reviewers. 
+emoji: 🐳
 
-At the end of the semester during project wrap up open a final Pull Request to main from dev branch.
+colorFrom: purple
+
+colorTo: gray
+
+sdk: docker
+
+app_port: 7860
+
+---
