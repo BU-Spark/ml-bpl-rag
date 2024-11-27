@@ -1,16 +1,13 @@
 name: Push Production to HuggingFace
 
-
-
 on:
 
   push:
 
     branches: [dan_dev]
 
-  # run this workflow manualy from the Actions tab
-
   workflow_dispatch:
+
 
 
 jobs:
@@ -28,6 +25,18 @@ jobs:
           fetch-depth: 0
 
           lfs: true
+
+      
+
+      - name: Configure Git LFS
+
+        run: |
+
+          git lfs install
+
+          git lfs pull
+
+      
 
       - name: Deploy Production (dan_dev) to HuggingFace
 
