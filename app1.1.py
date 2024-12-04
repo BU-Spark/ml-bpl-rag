@@ -7,6 +7,7 @@ from langchain_community.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import Document
+from langchain.embeddings import HuggingFaceEmbeddings
 import json
 
 # Load environment variables from .env file
@@ -33,7 +34,8 @@ def setup_vector_store_from_json(json_data):
     documents = [Document(page_content=item["content"], metadata={"url": item["url"]}) for item in json_data]
 
     # Create embeddings and store them in FAISS
-    embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
+    #embeddings = OpenAIEmbeddings(openai_api_key=OPENAI_API_KEY)
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
     vector_store = FAISS.from_documents(documents, embeddings)
     return vector_store
 
