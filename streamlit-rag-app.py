@@ -49,15 +49,15 @@ def setup_qa_chain(vector_store):
 
 def main():
     # Set page title and header
-    st.set_page_config(page_title="Football Players RAG App", page_icon="⚽")
-    st.title("Football Players Knowledge Base 🏆")
+    st.set_page_config(page_title="LibRAG, page_icon="📖")
+    st.title("Boston Public Library Database 📚")
 
     # Sidebar for initialization
     st.sidebar.header("Initialize Knowledge Base")
     if st.sidebar.button("Load Data"):
         try:
             # Load and preprocess the JSON file
-            json_data = load_json_file("football_players.json")
+            json_data = load_json_file(".json")
             st.session_state.vector_store = setup_vector_store_from_json(json_data)
             st.session_state.qa_chain = setup_qa_chain(st.session_state.vector_store)
             st.sidebar.success("Knowledge base loaded successfully!")
@@ -66,7 +66,7 @@ def main():
 
     # Query input and processing
     st.header("Ask a Question")
-    query = st.text_input("Enter your question about football players:")
+    query = st.text_input("Enter your question about BPL's database")
 
     if query:
         # Check if vector store and QA chain are initialized

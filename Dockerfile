@@ -82,7 +82,7 @@ COPY --chown=user . /app
 
 
 
-# Set environment variables for Chainlit
+# Set environment variables for Streamlit
 
 
 
@@ -94,12 +94,12 @@ ENV PORT=7860
 
 
 
-ENV CHAINLIT_SERVER_PORT=7860
+ENV STREAMLIT_SERVER_PORT=7860
 
 
 
-ENV CHAINLIT_HOST="0.0.0.0"
 
+ENV STREAMLIT_SERVER_ADDRESS=0.0.0.0
 
 
 
@@ -108,4 +108,4 @@ ENV CHAINLIT_HOST="0.0.0.0"
 
 # Change the CMD to use chainlit
 
-CMD ["chainlit", "run", "app.py","--port","7860"]
+CMD ["streamlit", "run", "streamlit-rag-app.py", "--server.port", "7860", "--server.address", "0.0.0.0"]

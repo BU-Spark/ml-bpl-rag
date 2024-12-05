@@ -9,3 +9,13 @@ pydantic==2.7.3
 pydantic-settings==2.6.1
 
 pydantic_core==2.18.4
+
+sentence_transformers
+
+streamlit
+
+python-dotenv
+
+openai
+
+faiss-cpu
