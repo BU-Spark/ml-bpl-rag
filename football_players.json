@@ -4,6 +4,10 @@
         "content": "This is content about De Bruyne and their incredible football career."
     },
     {
+        "url": "https://test.url",
+        "content": "This is a test for this article"
+    },
+    {
         "url": "https://example.com/article2",
         "content": "This is content about Messi and their incredible football career."
     },
