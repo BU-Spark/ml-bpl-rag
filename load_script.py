@@ -11,10 +11,9 @@ import sys
 import requests
 
 
-
-
-
 def fetch_digital_commonwealth():
+
+    PATH = sys.argv[1]
 
     start = time.time()
 
@@ -30,7 +29,7 @@ def fetch_digital_commonwealth():
 
     output = []
 
-    file_path = f"/projectnb/sparkgrp/ml-bpl-rag-data/{file_name}"
+    file_path = f"PATH/{file_name}"
 
     # file_path = './output.json'
 
