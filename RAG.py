@@ -76,7 +76,7 @@ def rerank(documents: List[Document], query: str) -> List[Document]:
         if json_data:
             text_content = extract_text_from_json(json_data)
             if text_content:  # Only add documents with actual content
-                full_docs.append(Document(page_content=text_content, metadata=doc.metadata))
+                full_docs.append(Document(page_content=text_content, metadata={"source":doc.metadata['source'],"field":doc.metadata['field'],"URL":url}))
     
     # If no valid documents were processed, return empty list
     if not full_docs:
@@ -101,7 +101,7 @@ def parse_xml_and_check(xml_string: str) -> str:
     
     return parsed_response.get('RESPONSE', "No response found in the output")
 
-def RAG(llm: Any, query: str, index_name: str, embeddings: Any, top: int = 10, k: int = 100) -> Tuple[str, List[Document]]:
+def RAG(llm: Any, query: str, index_name: str, embeddings: Any, top: int = 10, k: int = 300) -> Tuple[str, List[Document]]:
     """Main RAG function with improved error handling and validation."""
     try:
         # Retrieve initial documents
