@@ -146,7 +146,7 @@ def RAG(llm: Any, query: str, index_name: str, embeddings: Any, top: int = 10, k
         )
         query_prompt = query_template.invoke({"query":query})
         query_response = llm.invoke(query_prompt)
-        new_query = parse_xml_and_query(query_response.content)
+        new_query = parse_xml_and_query(query=query,xml_string=query_response.content)
 
         retrieved, _ = retrieve(index_name=index_name, query=new_query, embeddings=embeddings, k=k)
         if not retrieved:
