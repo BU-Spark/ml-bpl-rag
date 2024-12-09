@@ -24,24 +24,24 @@ Our prototype uses a simplified RAG pipeline built with LangChain, designed to r
 
 ## **How the Database Is Built**
 
-The BPL database is vast and diverse, containing a wide variety of digital assets:
+The Digital Commonwealth database is vast and diverse, containing a wide variety of digital assets:
 
 - **Total Items**: ~1.3 million items, including text, video, and audio.
-- **Full-Text Documents**: ~130,000 documents (approximately 10% of the database).
-- **Metadata**: JSON files totaling 6.7GB in size, containing 135 description fields.
+- **Full-Text Documents**: A subset of the total items, ~147,000 OCR documents.
+- **Metadata**: JSON files containing up to 135 description fields.
 - **File Types**:
   - **Still Images**: Most prevalent type, exceeding 600,000.
   - **Text Files**: Second most common type.
   - **Other File Types**: Fewer than 100,000 items, including notated music and manuscripts.
 - **Text Abstracts**: Almost all images include textual descriptions, providing valuable metadata for retrieval.
 
-The database is continuously updated, ensuring its relevance and comprehensiveness.
+Our solution ingested metadata items through the Digital Commonwealth API and embedded them for querying.
 
 ---
 
-## **What is a RAG?**
+## **What is RAG?**
 
-Retrieval-Augmented Generation (RAG) combines information retrieval and generative AI to answer queries effectively. Here's how it works:
+Retrieval-Augmented Generation (RAG) combines information retrieval and generative AI to answer queries over a bespoke dataset. Here's how it works:
 
 - **Query Processing**: Transform the user's natural language query into a format suitable for retrieval and embedding.
 - **Document Retrieval**:
@@ -54,7 +54,8 @@ Retrieval-Augmented Generation (RAG) combines information retrieval and generati
 
 ### Key Components of RAG:
 - **Embedding Model**: Converts text into numerical vectors that capture semantic meaning.
-- **Vector Store**: A database to store and retrieve embeddings for efficient similarity searches.
+- **Vector Store**: A database to store and retrieve embeddings for similarity searches.
+- **Rerankig Algorithm**: Determines priority of retrieved documents from the vectorstore (a second retrieval of sorts).
 
 ---
 
@@ -73,9 +74,9 @@ Our initial prototype used:
 
 Throughout development, we encountered several issues:
 - **Limited Customization**: LangServe's UI was not sufficiently customizable.
-- **Lightweight Vector Store**: Chroma couldn't handle our large dataset effectively.
-- **High Costs**: OpenAI embeddings were too expensive for a database of this size.
-- **Overpowered LLM**: GPT-4o was unnecessarily expensive for our use case.
+- **Lightweight Vector Store**: Chroma and FAISS couldn't handle our large dataset effectively.
+- **Local Vector Store**: A local vectorstore required the local storage of our large data and were cumbersome to load.
+- **High Costs**: OpenAI embeddings were too expensive for a database of this size. Pinecone expenses grow quickly so we used a subset of our data.
 
 ---
 
@@ -84,14 +85,16 @@ Throughout development, we encountered several issues:
 We refined our approach to address these challenges:
 - **Embedding Model**: Switched to `all-MiniLM-L6-v2`, a free, open-source model from Hugging Face, offering excellent performance.
 - **LLM**: Chose `4o-mini`, a cost-effective alternative with sufficient capabilities.
-- **Vector Store**: Adopted FAISS for its efficiency and scalability with large datasets.
-- **UI Development**: Replaced LangServe with Streamlit, which provided better customization and ease of use.
+- **Vector Store**: Adopted Pinecone vectorstore due to its accessibility via API given the size of the data.
+- **UI Development**: Using Streamlit for UI due to its easy integration through python and compatibility with Huggingface Spaces.
 
 ---
 
 ## **Deployment**
 
 The final RAG model is hosted on Hugging Face, ensuring accessibility and reliability.
+
+Our current solution externally hosts data on Pinecone and calls GPT-4o-mini.
 
 ---
 
@@ -100,7 +103,7 @@ The final RAG model is hosted on Hugging Face, ensuring accessibility and reliab
 AI systems bring inherent risks that require careful management:
 - **Biased Document Retrieval**:
   - Risk: The model may retrieve biased documents depending on the query.
-  - Solution: Regularly audit retrieval processes to ensure unbiased results.
+  - Solution: Present to the user that this is from doocuments retrieved, not a response on behalf of the BPL.
 - **Conversational Hallucinations**:
   - Risk: The AI may generate responses not rooted in the database.
   - Solution: Restrict the system to generate responses strictly based on retrieved documents.
