@@ -153,7 +153,7 @@ def RAG(llm: Any, query: str, index_name: str, embeddings: Any, top: int = 10, k
             return "No documents found for your query.", []
         
         # Rerank documents
-        reranked = rerank(documents=retrieved, query=new_query)
+        reranked = rerank(documents=retrieved, query=query)
         if not reranked:
             return "Unable to process the retrieved documents.", []
         
