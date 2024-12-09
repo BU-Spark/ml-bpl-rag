@@ -13,8 +13,6 @@ import requests
 
 def fetch_digital_commonwealth():
 
-    PATH = sys.argv[1]
-
     start = time.time()
 
     BASE_URL = "https://www.digitalcommonwealth.org/search.json?search_field=all_fields&per_page=100&q="
@@ -29,7 +27,7 @@ def fetch_digital_commonwealth():
 
     output = []
 
-    file_path = f"PATH/{file_name}"
+    file_path = f"./{file_name}"
 
     # file_path = './output.json'
 

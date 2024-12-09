@@ -100,7 +100,7 @@ def main():
         return
     
     # Constants
-    INDEX_NAME = 'bpl-rag'
+    INDEX_NAME = 'langchain-test-index'
     
     # Display chat history
     for message in st.session_state.messages:

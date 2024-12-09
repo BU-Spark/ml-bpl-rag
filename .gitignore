@@ -1,6 +1,8 @@
 .env
 
-poc_venv
+.temp_venv/
+
+poc_venv/
 
 PoC/
 
