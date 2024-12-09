@@ -161,7 +161,7 @@ def RAG(llm: Any, query: str, index_name: str, embeddings: Any, top: int = 10, k
         context = "\n\n".join(doc.page_content for doc in reranked[:top] if doc.page_content)
         if not context.strip():
             return "No relevant content found in the documents.", []
-        
+        # change for the sake of another commit
         # Prepare prompt
         answer_template = PromptTemplate.from_template(
             """Pretend you are a professional librarian. Please Summarize The Following Context as though you had retrieved it for a patron:
