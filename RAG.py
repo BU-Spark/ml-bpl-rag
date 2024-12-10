@@ -118,7 +118,7 @@ def parse_xml_and_check(xml_string: str) -> str:
     
     return parsed_response.get('RESPONSE', "No response found in the output")
 
-def RAG(llm: Any, query: str, index_name: str, embeddings: Any,vectorstore:PineconeVectorStore, top: int = 10, k: int = 100) -> Tuple[str, List[Document]]:
+def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: int = 100) -> Tuple[str, List[Document]]:
     """Main RAG function with improved error handling and validation."""
     start = time.time()
     try:
@@ -147,7 +147,6 @@ def RAG(llm: Any, query: str, index_name: str, embeddings: Any,vectorstore:Pinec
 
             <QUERY>{query}</QUERY>
             """
-
         )
         query_prompt = query_template.invoke({"query":query})
         query_response = llm.invoke(query_prompt)
