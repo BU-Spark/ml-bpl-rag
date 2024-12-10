@@ -68,6 +68,7 @@ def rerank(documents: List[Document], query: str) -> List[Document]:
         return []
     
     full_docs = []
+    meta_start = time.time()
     for doc in documents:
         if not doc.metadata.get('source'):
             continue
@@ -79,7 +80,7 @@ def rerank(documents: List[Document], query: str) -> List[Document]:
             text_content = extract_text_from_json(json_data)
             if text_content:  # Only add documents with actual content
                 full_docs.append(Document(page_content=text_content, metadata={"source":doc.metadata['source'],"field":doc.metadata['field'],"URL":url}))
-    
+    logging.info(f"Took {time.time()-meta_start} seconds to retrieve all metadata")
     # If no valid documents were processed, return empty list
     if not full_docs:
         return []
@@ -150,7 +151,7 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
         query_prompt = query_template.invoke({"query":query})
         query_response = llm.invoke(query_prompt)
         new_query = parse_xml_and_query(query=query,xml_string=query_response.content)
-        print(f"New_Query: {new_query}")
+        logging.info(f"Old_Query: {query},New_Query: {new_query}")
 
         retrieved, _ = retrieve(query=new_query, vectorstore=vectorstore, k=k)
         if not retrieved:
