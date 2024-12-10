@@ -122,38 +122,38 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
     """Main RAG function with improved error handling and validation."""
     start = time.time()
     try:
-        # Retrieve initial documents using rephrased query
-        query_template = PromptTemplate.from_template(
-            """
-            Your job is to think about a query and then generate a statement that only includes information from the query that would answer the query.
-            You will be provided with a query in <QUERY></QUERY> tags. 
-            Then you will think about what kind of information the query is looking for between <REASONING></REASONING> tags.
-            Then, based on the reasoning, you will generate a sample response to the query that only includes information from the query between <STATEMENT></STATEMENT> tags.
-            Afterwards, you will determine and reason about whether or not the statement you generated only includes information from the original query and would answer the query between <DETERMINATION></DETERMINATION> tags.
-            Finally, you will return a YES, or NO response between <VALID></VALID> tags based on whether or not you determined the statment to be valid.
-            Let me provide you with an exmaple:
+        # Retrieve initial documents using rephrased query -- not working as intended currently, maybe would be better for data with more words.
+        # query_template = PromptTemplate.from_template(
+        #     """
+        #     Your job is to think about a query and then generate a statement that only includes information from the query that would answer the query.
+        #     You will be provided with a query in <QUERY></QUERY> tags. 
+        #     Then you will think about what kind of information the query is looking for between <REASONING></REASONING> tags.
+        #     Then, based on the reasoning, you will generate a sample response to the query that only includes information from the query between <STATEMENT></STATEMENT> tags.
+        #     Afterwards, you will determine and reason about whether or not the statement you generated only includes information from the original query and would answer the query between <DETERMINATION></DETERMINATION> tags.
+        #     Finally, you will return a YES, or NO response between <VALID></VALID> tags based on whether or not you determined the statment to be valid.
+        #     Let me provide you with an exmaple:
 
-            <QUERY>I would really like to learn more about Bermudan geography<QUERY>
+        #     <QUERY>I would really like to learn more about Bermudan geography<QUERY>
 
-            <REASONING>This query is interested in geograph as it relates to Bermuda. Some things they might be interested in are Bermudan climate, towns, cities, and geography</REASONING>
+        #     <REASONING>This query is interested in geograph as it relates to Bermuda. Some things they might be interested in are Bermudan climate, towns, cities, and geography</REASONING>
 
-            <STATEMENT>Bermuda's Climate is [blank]. Some of Bermuda's cities and towns are [blank]. Other points of interested about Bermuda's geography are [blank].</STATEMENT>
+        #     <STATEMENT>Bermuda's Climate is [blank]. Some of Bermuda's cities and towns are [blank]. Other points of interested about Bermuda's geography are [blank].</STATEMENT>
 
-            <DETERMINATION>The query originally only mentions bermuda and geography. The answers do not provide any false information, instead replacing meaningful responses with a placeholder [blank]. If it had hallucinated, it would not be valid. Because the statements do not hallucinate anything, this is a valid statement.</DETERMINATION>
+        #     <DETERMINATION>The query originally only mentions bermuda and geography. The answers do not provide any false information, instead replacing meaningful responses with a placeholder [blank]. If it had hallucinated, it would not be valid. Because the statements do not hallucinate anything, this is a valid statement.</DETERMINATION>
             
-            <VALID>YES</VALID>
+        #     <VALID>YES</VALID>
 
-            Now it's your turn! Remember not to hallucinate:
+        #     Now it's your turn! Remember not to hallucinate:
 
-            <QUERY>{query}</QUERY>
-            """
-        )
-        query_prompt = query_template.invoke({"query":query})
-        query_response = llm.invoke(query_prompt)
-        new_query = parse_xml_and_query(query=query,xml_string=query_response.content)
-        logging.info(f"Old_Query: {query},New_Query: {new_query}")
+        #     <QUERY>{query}</QUERY>
+        #     """
+        # )
+        # query_prompt = query_template.invoke({"query":query})
+        # query_response = llm.invoke(query_prompt)
+        # new_query = parse_xml_and_query(query=query,xml_string=query_response.content)
+        # logging.info(f"Old_Query: {query},New_Query: {new_query}")
 
-        retrieved, _ = retrieve(query=new_query, vectorstore=vectorstore, k=k)
+        retrieved, _ = retrieve(query=query, vectorstore=vectorstore, k=k)
         if not retrieved:
             return "No documents found for your query.", []
         
