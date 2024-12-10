@@ -58,8 +58,6 @@ def initialize_models() -> Tuple[Optional[ChatOpenAI], HuggingFaceEmbeddings]:
 def process_message(
     query: str,
     llm: ChatOpenAI,
-    index_name: str,
-    embeddings: HuggingFaceEmbeddings,
     vectorstore: PineconeVectorStore,
 
 ) -> Tuple[str, List]:
@@ -68,8 +66,6 @@ def process_message(
         response, sources = RAG(
             query=query,
             llm=llm,
-            index_name=index_name,
-            embeddings=embeddings,
             vectorstore=vectorstore,
         )
         return response, sources
