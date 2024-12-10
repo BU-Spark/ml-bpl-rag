@@ -121,7 +121,7 @@ def main():
         
         # Process and display assistant response
         with st.chat_message("assistant"):
-            with st.spinner("Let Me Think..."):
+            with st.spinner("Thinking... Please be patient, I'm a little slow right now..."):
                 response, sources = process_message(
                     query=user_input,
                     llm=st.session_state.llm,
@@ -143,8 +143,8 @@ def main():
     # Footer
     st.markdown("---")
     st.markdown(
-        "Built with ❤️ using Streamlit + LangChain + OpenAI",
-        help="An AI-powered chatbot with RAG capabilities"
+        "Built with Langchain + Streamlit + Pinecone",
+        help="Natural Language Querying for Digital Commonwealth"
     )
 
 if __name__ == "__main__":
