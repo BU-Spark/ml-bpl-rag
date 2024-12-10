@@ -7,3 +7,5 @@ langchain-openai
 python-dotenv
 langchain-core
 streamlit
+bs4
+pillow
