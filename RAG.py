@@ -31,7 +31,7 @@ def retrieve(query: str,vectorstore:PineconeVectorStore, k: int = 1000) -> Tuple
     for res, score in results:
         documents.append(res)
         scores.append(score)
-    print(f"Finished Retrieval: {time.time() - start}")
+    logging.info(f"Finished Retrieval: {time.time() - start}")
     return documents, scores
 
 def safe_get_json(url: str) -> Optional[Dict]:
@@ -87,7 +87,7 @@ def rerank(documents: List[Document], query: str) -> List[Document]:
     # Create BM25 retriever with the processed documents
     reranker = BM25Retriever.from_documents(full_docs, k=min(10, len(full_docs)))
     reranked_docs = reranker.invoke(query)
-    print(f"Finished reranking: {time.time()-start}")
+    logging.info(f"Finished reranking: {time.time()-start}")
     return reranked_docs
 
 def parse_xml_and_query(query:str,xml_string:str) -> str:
@@ -195,7 +195,7 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
         
         # Parse and return response
         parsed = parse_xml_and_check(response.content)
-        print(f"RAG Finished: {time.time()-start}")
+        logging.info(f"RAG Finished: {time.time()-start}")
         return parsed, reranked
         
     except Exception as e:
