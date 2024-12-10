@@ -1,8 +1,8 @@
 ---
 
-title: Basic Docker SDK Space
+title: LibRAG
 
-emoji: 🐳
+emoji: 📖
 
 colorFrom: purple
 
