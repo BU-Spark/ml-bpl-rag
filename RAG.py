@@ -151,7 +151,7 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
         # query_prompt = query_template.invoke({"query":query})
         # query_response = llm.invoke(query_prompt)
         # new_query = parse_xml_and_query(query=query,xml_string=query_response.content)
-        logging.info(f"---\nQUERY: {query}\n---")
+        logging.info(f"\n---\nQUERY: {query}")
 
         retrieved, _ = retrieve(query=query, vectorstore=vectorstore, k=k)
         if not retrieved:
@@ -196,7 +196,8 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
         
         # Parse and return response
         parsed = parse_xml_and_check(response.content)
-        logging.info(f"RAG Finished: {time.time()-start}")
+        logging.info(f"RESPONSE: {parsed}\nRETRIEVED: {reranked}")
+        logging.info(f"RAG Finished: {time.time()-start}\n---\n")
         return parsed, reranked
         
     except Exception as e:
