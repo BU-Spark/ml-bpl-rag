@@ -15,7 +15,8 @@ from typing import Dict, Any, Optional, List, Tuple
 import json
 import logging
 
-def retrieve(index_name: str, query: str, embeddings, k: int = 1000) -> Tuple[List[Document], List[float]]:        
+def retrieve(index_name: str, query: str, embeddings, k: int = 1000) -> Tuple[List[Document], List[float]]:    
+    start = time.time()    
     load_dotenv()
     pinecone_api_key = os.getenv("PINECONE_API_KEY")
     pc = Pinecone(api_key=pinecone_api_key)
@@ -31,6 +32,7 @@ def retrieve(index_name: str, query: str, embeddings, k: int = 1000) -> Tuple[Li
     for res, score in results:
         documents.append(res)
         scores.append(score)
+    print(f"Finished Retrieval: {time.time() - start}")
     return documents, scores
 
 def safe_get_json(url: str) -> Optional[Dict]:
@@ -61,7 +63,8 @@ def extract_text_from_json(json_data: Dict) -> str:
     return " ".join(text_parts) if text_parts else "No content available"
 
 def rerank(documents: List[Document], query: str) -> List[Document]:
-    """Rerank documents using BM25, with proper error handling."""
+    """Ingest more metadata. Rerank documents using BM25"""
+    start = time.time()
     if not documents:
         return []
     
@@ -85,6 +88,7 @@ def rerank(documents: List[Document], query: str) -> List[Document]:
     # Create BM25 retriever with the processed documents
     reranker = BM25Retriever.from_documents(full_docs, k=min(10, len(full_docs)))
     reranked_docs = reranker.invoke(query)
+    print(f"Finished reranking: {time.time()-start}")
     return reranked_docs
 
 def parse_xml_and_query(query:str,xml_string:str) -> str:
@@ -116,8 +120,9 @@ def parse_xml_and_check(xml_string: str) -> str:
 
 def RAG(llm: Any, query: str, index_name: str, embeddings: Any, top: int = 10, k: int = 100) -> Tuple[str, List[Document]]:
     """Main RAG function with improved error handling and validation."""
+    start = time.time()
     try:
-        # Retrieve initial documents
+        # Retrieve initial documents using rephrased query
         query_template = PromptTemplate.from_template(
             """
             Your job is to think about a query and then generate a statement that only includes information from the query that would answer the query.
@@ -147,6 +152,7 @@ def RAG(llm: Any, query: str, index_name: str, embeddings: Any, top: int = 10, k
         query_prompt = query_template.invoke({"query":query})
         query_response = llm.invoke(query_prompt)
         new_query = parse_xml_and_query(query=query,xml_string=query_response.content)
+        print(f"New_Query: {new_query}")
 
         retrieved, _ = retrieve(index_name=index_name, query=new_query, embeddings=embeddings, k=k)
         if not retrieved:
@@ -191,6 +197,7 @@ def RAG(llm: Any, query: str, index_name: str, embeddings: Any, top: int = 10, k
         
         # Parse and return response
         parsed = parse_xml_and_check(response.content)
+        print(f"RAG Finished: {time.time()-start}")
         return parsed, reranked
         
     except Exception as e:
