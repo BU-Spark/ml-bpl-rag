@@ -151,7 +151,7 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
         # query_prompt = query_template.invoke({"query":query})
         # query_response = llm.invoke(query_prompt)
         # new_query = parse_xml_and_query(query=query,xml_string=query_response.content)
-        # logging.info(f"Old_Query: {query},New_Query: {new_query}")
+        logging.info(f"---\nQUERY: {query}\n---")
 
         retrieved, _ = retrieve(query=query, vectorstore=vectorstore, k=k)
         if not retrieved:
