@@ -26,20 +26,29 @@ def initialize_models() -> Tuple[Optional[ChatOpenAI], HuggingFaceEmbeddings]:
     try:
         load_dotenv()
         
-        # Initialize OpenAI model
-        llm = ChatOpenAI(
-            model="gpt-4",  # Changed from gpt-4o-mini which appears to be a typo
-            temperature=0,
-            timeout=60,  # Added reasonable timeout
-            max_retries=2
-        )
+        if "llm" not in st.session_state:
+            # Initialize OpenAI model
+            st.session_state.llm = ChatOpenAI(
+                model="gpt-4",  # Changed from gpt-4o-mini which appears to be a typo
+                temperature=0,
+                timeout=60,  # Added reasonable timeout
+                max_retries=2
+            )
         
-        # Initialize embeddings
-        embeddings = HuggingFaceEmbeddings(
-            model_name="sentence-transformers/all-MiniLM-L6-v2"
-        )
-        
-        return llm, embeddings
+        if "embeddings" not in st.session_state:
+            # Initialize embeddings
+            st.session_state.embeddings = HuggingFaceEmbeddings(
+                model_name="sentence-transformers/all-MiniLM-L6-v2"
+            )
+
+        if "pinecone" not in st.session_state:
+            pinecone_api_key = os.getenv("PINECONE_API_KEY")
+            INDEX_NAME = 'bpl-rag'
+            #initialize vectorstore
+            pc = Pinecone(api_key=pinecone_api_key)
+            
+            index = pc.Index(INDEX_NAME)
+            st.session_state.pinecone = PineconeVectorStore(index=index, embedding=st.session_state.embeddings)
         
     except Exception as e:
         logger.error(f"Error initializing models: {str(e)}")
@@ -90,35 +99,24 @@ def display_sources(sources: List) -> None:
             st.error(f"Error displaying source {i}")
 
 def main():
-    st.title("RAG Chatbot")
+    st.title("Digital Commonwealth RAG")
     
     INDEX_NAME = 'bpl-rag'
-
-    pinecone_api_key = os.getenv("PINECONE_API_KEY")
 
     # Initialize session state
     if "messages" not in st.session_state:
         st.session_state.messages = []
     
     # Initialize models
-    llm, embeddings = initialize_models()
-    if not llm or not embeddings:
-        st.error("Failed to initialize the application. Please check the logs.")
-        return
-    
-    #initialize vectorstore
-    pc = Pinecone(api_key=pinecone_api_key)
-    
-    index = pc.Index(INDEX_NAME)
-    vector_store = PineconeVectorStore(index=index, embedding=embeddings)
-    
+    initialize_models()
+
     # Display chat history
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
     
     # Chat input
-    user_input = st.chat_input("Type your message here...")
+    user_input = st.chat_input("Type your query here...")
     if user_input:
         # Display user message
         with st.chat_message("user"):
@@ -130,10 +128,10 @@ def main():
             with st.spinner("Let Me Think..."):
                 response, sources = process_message(
                     query=user_input,
-                    llm=llm,
+                    llm=st.session_state.llm,
                     index_name=INDEX_NAME,
-                    embeddings=embeddings,
-                    vectorstore=vector_store
+                    embeddings=st.session_state.embeddings,
+                    vectorstore=st.session_state.pinecone
                 )
                 
                 if isinstance(response, str):
