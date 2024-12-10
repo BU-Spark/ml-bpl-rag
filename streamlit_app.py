@@ -50,7 +50,9 @@ def process_message(
     query: str,
     llm: ChatOpenAI,
     index_name: str,
-    embeddings: HuggingFaceEmbeddings
+    embeddings: HuggingFaceEmbeddings,
+    vectorstore: PineconeVectorStore,
+
 ) -> Tuple[str, List]:
     """Process the user message using the RAG system."""
     try:
@@ -58,7 +60,8 @@ def process_message(
             query=query,
             llm=llm,
             index_name=index_name,
-            embeddings=embeddings
+            embeddings=embeddings,
+            vectorstore=vectorstore,
         )
         return response, sources
     except Exception as e:
@@ -89,6 +92,10 @@ def display_sources(sources: List) -> None:
 def main():
     st.title("RAG Chatbot")
     
+    INDEX_NAME = 'bpl-rag'
+
+    pinecone_api_key = os.getenv("PINECONE_API_KEY")
+
     # Initialize session state
     if "messages" not in st.session_state:
         st.session_state.messages = []
@@ -99,8 +106,11 @@ def main():
         st.error("Failed to initialize the application. Please check the logs.")
         return
     
-    # Constants
-    INDEX_NAME = 'bpl-rag'
+    #initialize vectorstore
+    pc = Pinecone(api_key=pinecone_api_key)
+    
+    index = pc.Index(INDEX_NAME)
+    vector_store = PineconeVectorStore(index=index, embedding=embeddings)
     
     # Display chat history
     for message in st.session_state.messages:
@@ -122,7 +132,8 @@ def main():
                     query=user_input,
                     llm=llm,
                     index_name=INDEX_NAME,
-                    embeddings=embeddings
+                    embeddings=embeddings,
+                    vectorstore=vector_store
                 )
                 
                 if isinstance(response, str):

@@ -15,15 +15,15 @@ from typing import Dict, Any, Optional, List, Tuple
 import json
 import logging
 
-def retrieve(index_name: str, query: str, embeddings, k: int = 1000) -> Tuple[List[Document], List[float]]:    
+def retrieve(query: str,vectorstore:PineconeVectorStore, k: int = 1000) -> Tuple[List[Document], List[float]]:    
     start = time.time()    
     load_dotenv()
-    pinecone_api_key = os.getenv("PINECONE_API_KEY")
-    pc = Pinecone(api_key=pinecone_api_key)
+    # pinecone_api_key = os.getenv("PINECONE_API_KEY")
+    # pc = Pinecone(api_key=pinecone_api_key)
     
-    index = pc.Index(index_name)
-    vector_store = PineconeVectorStore(index=index, embedding=embeddings)
-    results = vector_store.similarity_search_with_score(
+    # index = pc.Index(index_name)
+    # vector_store = PineconeVectorStore(index=index, embedding=embeddings)
+    results = vectorstore.similarity_search_with_score(
         query,
         k=k,
     )
@@ -118,7 +118,7 @@ def parse_xml_and_check(xml_string: str) -> str:
     
     return parsed_response.get('RESPONSE', "No response found in the output")
 
-def RAG(llm: Any, query: str, index_name: str, embeddings: Any, top: int = 10, k: int = 100) -> Tuple[str, List[Document]]:
+def RAG(llm: Any, query: str, index_name: str, embeddings: Any,vectorstore:PineconeVectorStore, top: int = 10, k: int = 100) -> Tuple[str, List[Document]]:
     """Main RAG function with improved error handling and validation."""
     start = time.time()
     try:
@@ -154,7 +154,7 @@ def RAG(llm: Any, query: str, index_name: str, embeddings: Any, top: int = 10, k
         new_query = parse_xml_and_query(query=query,xml_string=query_response.content)
         print(f"New_Query: {new_query}")
 
-        retrieved, _ = retrieve(index_name=index_name, query=new_query, embeddings=embeddings, k=k)
+        retrieved, _ = retrieve(query=new_query, vectorstore=vectorstore, k=k)
         if not retrieved:
             return "No documents found for your query.", []
         
