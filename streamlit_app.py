@@ -9,6 +9,8 @@ from langchain_core.prompts import PromptTemplate
 from dotenv import load_dotenv
 from RAG import RAG
 import logging
+from image_scraper import DigitalCommonwealthScraper
+import shutil
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -84,12 +86,42 @@ def display_sources(sources: List) -> None:
         try:
             with st.expander(f"Source {i}"):
                 if hasattr(doc, 'page_content'):
-                    st.markdown(f"**Content:** {doc.page_content}")
+                    st.markdown(f"**Content:** {doc.page_content[0:100] + ' ...'}")
                     if hasattr(doc, 'metadata'):
                         for key, value in doc.metadata.items():
                             st.markdown(f"**{key.title()}:** {value}")
+                            
+                        # Web Scraper to display images of sources
+                        # Especially helpful if the sources are images themselves
+                        # or are OCR'd text files
+                        scraper = DigitalCommonwealthScraper()
+                        images = scraper.extract_images(doc.metadata["URL"])
+                        images = images[:1]
+                        
+                        # If there are no images then don't display them
+                        if not images:
+                                st.warning("No images found on the page.")
+                                return
+                                
+                        # Download the images
+                        # Delete the directory if it already exists
+                        # to clear the existing cache of images for each listed source
+                        output_dir = 'downloaded_images'
+                        if os.path.exists(output_dir):
+                            shutil.rmtree(output_dir)
+                        
+                        # Download the main image to a local directory
+                        downloaded_files = scraper.download_images(images)
+                
+                        # Display the image using st.image
+                        # Display the title of the image using img.get
+                        st.image(downloaded_files, width=400, caption=[
+                            img.get('alt', f'Image {i+1}') for i, img in enumerate(images)
+                            ])
+
                 else:
                     st.markdown(f"**Content:** {str(doc)}")
+                    
         except Exception as e:
             logger.error(f"Error displaying source {i}: {str(e)}")
             st.error(f"Error displaying source {i}")
