@@ -129,8 +129,6 @@ def main():
                 response, sources = process_message(
                     query=user_input,
                     llm=st.session_state.llm,
-                    index_name=INDEX_NAME,
-                    embeddings=st.session_state.embeddings,
                     vectorstore=st.session_state.pinecone
                 )
                 

@@ -16,8 +16,7 @@ import json
 import logging
 
 def retrieve(query: str,vectorstore:PineconeVectorStore, k: int = 1000) -> Tuple[List[Document], List[float]]:    
-    start = time.time()    
-    load_dotenv()
+    start = time.time()
     # pinecone_api_key = os.getenv("PINECONE_API_KEY")
     # pc = Pinecone(api_key=pinecone_api_key)
     
