@@ -178,6 +178,7 @@ def main():
         "Built with Langchain + Streamlit + Pinecone",
         help="Natural Language Querying for Digital Commonwealth"
     )
+    st.markdown("The Digital Commonwealth site provides access to photographs, manuscripts, books, audio recordings, and other materials of historical interest that have been\ndigitized and made available by members of Digital Commonwealth, a statewide consortium of libraries, museums, archives, and historical societies from across Massachusetts.")
 
 if __name__ == "__main__":
     main()
