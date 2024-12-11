@@ -158,7 +158,7 @@ def parse_xml_and_check(xml_string: str) -> str:
     parsed_response = dict(matches)
     
     if parsed_response.get('VALID') == 'NO':
-        return "Sorry, I was unable to find any documents relevant to your query."
+        return "Sorry, I was unable to find any documents for your query.\n\n Here are some documents I found that might be relevant."
     
     return parsed_response.get('RESPONSE', "No response found in the output")
 
