@@ -14,6 +14,7 @@ import requests
 from typing import Dict, Any, Optional, List, Tuple
 import logging
 import concurrent.futures
+import json
 
 def retrieve(query: str,vectorstore:PineconeVectorStore, k: int = 100) -> Tuple[List[Document], List[float]]:    
     start = time.time()
@@ -47,6 +48,22 @@ def safe_get_json(url: str) -> Optional[Dict]:
         logging.error(f"Error fetching from {url}: {str(e)}")
         return None
 
+def extract_text_from_json(json_data: Dict) -> str:
+    """Extract text content from JSON response."""
+    if not json_data:
+        return ""
+    
+    text_parts = []
+    
+    # Handle direct text fields
+    text_fields = ["title_info_primary_tsi","abstract_tsi","subject_geographic_sim","genre_basic_ssim","genre_specific_ssim","date_tsim"]
+    for field in text_fields:
+        if field in json_data['data']['attributes'] and json_data['data']['attributes'][field]:
+            # print(json_data[field])
+            text_parts.append(str(json_data['data']['attributes'][field]))
+    
+    return " ".join(text_parts) if text_parts else "No content available"
+
 def process_single_document(doc: Document) -> Optional[Document]:
     """Process a single document by fetching and extracting metadata."""
     if not doc.metadata.get('source'):
@@ -68,7 +85,7 @@ def process_single_document(doc: Document) -> Optional[Document]:
             )
     return None
 
-def rerank(documents: List[Document], query: str, max_workers: int = 2) -> List[Document]:
+def rerank(documents: List[Document], query: str, max_workers: int = 3) -> List[Document]:
     """Ingest more metadata and rerank documents using BM25 with parallel processing."""
     start = time.time()
     if not documents:
@@ -102,6 +119,7 @@ def rerank(documents: List[Document], query: str, max_workers: int = 2) -> List[
     reranked_docs = reranker.invoke(query)
     logging.info(f"Finished reranking: {time.time()-start}")
     return full_docs
+
 
 def parse_xml_and_query(query:str,xml_string:str) -> str:
     """parse xml and return rephrased query"""
