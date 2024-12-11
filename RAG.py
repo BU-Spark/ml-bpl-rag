@@ -14,8 +14,6 @@ import requests
 from typing import Dict, Any, Optional, List, Tuple
 import logging
 import concurrent.futures
-import json
-from threading import Lock
 
 def retrieve(query: str,vectorstore:PineconeVectorStore, k: int = 100) -> Tuple[List[Document], List[float]]:    
     start = time.time()
@@ -86,20 +84,8 @@ def process_single_document(doc: Document) -> Optional[Document]:
             )
     return None
 
-# Global state to track alternating behavior
-_use_two_workers = False
-_worker_lock = Lock()
-
-def get_current_worker_count() -> int:
-    """Thread-safe way to get and toggle the worker count between 1 and 2."""
-    global _use_two_workers
-    with _worker_lock:
-        current_workers = 2 if _use_two_workers else 1
-        _use_two_workers = not _use_two_workers  # Toggle for next time
-        return current_workers
-
-def rerank(documents: List[Document], query: str) -> List[Document]:
-    """Ingest more metadata and rerank documents using BM25 with alternating worker counts."""
+def rerank(documents: List[Document], query: str, max_workers: int = 1) -> List[Document]:
+    """Ingest more metadata and rerank documents using BM25 with parallel processing."""
     start = time.time()
     if not documents:
         return []
@@ -107,12 +93,8 @@ def rerank(documents: List[Document], query: str) -> List[Document]:
     meta_start = time.time()
     full_docs = []
     
-    # Get the worker count for this specific call
-    worker_count = get_current_worker_count()
-    logging.info(f"Processing with {worker_count} worker{'s' if worker_count > 1 else ''}")
-    
     # Process documents in parallel using ThreadPoolExecutor
-    with concurrent.futures.ThreadPoolExecutor(max_workers=worker_count) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         # Submit all document processing tasks
         future_to_doc = {
             executor.submit(process_single_document, doc): doc 
@@ -122,7 +104,7 @@ def rerank(documents: List[Document], query: str) -> List[Document]:
         # Collect results as they complete
         for future in concurrent.futures.as_completed(future_to_doc):
             processed_doc = future.result()
-            if processed_doc:
+            if processed_doc:extract_text_from_json():
                 full_docs.append(processed_doc)
     
     logging.info(f"Took {time.time()-meta_start} seconds to retrieve all metadata")
@@ -135,8 +117,7 @@ def rerank(documents: List[Document], query: str) -> List[Document]:
     reranker = BM25Retriever.from_documents(full_docs, k=min(10, len(full_docs)))
     reranked_docs = reranker.invoke(query)
     logging.info(f"Finished reranking: {time.time()-start}")
-    return reranked_docs
-
+    return full_docs
 
 def parse_xml_and_query(query:str,xml_string:str) -> str:
     """parse xml and return rephrased query"""
@@ -222,7 +203,7 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
             First, reason about the answer between <REASONING></REASONING> headers,
             based on the context determine if there is sufficient material for answering the exact question,
             return either <VALID>YES</VALID> or <VALID>NO</VALID>
-            then return a response between <RESPONSE></RESPONSE> headers:
+            then return a response between <RESPONSE></RESPONSE> headers, your response should be well formatted and an individual summary of each piece of relevant context:
             Here is an example
             <EXAMPLE>
             <QUERY>Are pineapples a good fuel for cars?</QUERY>
