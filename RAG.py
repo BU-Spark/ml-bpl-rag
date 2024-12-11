@@ -12,49 +12,8 @@ from langchain_core.documents import Document
 from langchain_community.retrievers import BM25Retriever
 import requests
 from typing import Dict, Any, Optional, List, Tuple
-import json
 import logging
-
-
-import logging
-from datetime import datetime
-from io import StringIO
-
-class RunLogger:
-    def __init__(self, script_name='streamlit_script'):
-        # Create string buffer to store logs
-        self.log_buffer = StringIO()
-        
-        # Create logger
-        self.logger = logging.getLogger(script_name)
-        self.logger.setLevel(logging.INFO)
-        
-        # Create handler that writes to our string buffer
-        handler = logging.StreamHandler(self.log_buffer)
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        self.logger.addHandler(handler)
-        
-        self.logger.info("=== Starting new run ===")
-    
-    def info(self, message):
-        self.logger.info(message)
-    
-    def error(self, message):
-        self.logger.error(message)
-    
-    def warning(self, message):
-        self.logger.warning(message)
-        
-    def output_logs(self):
-        """Print all collected logs"""
-        print("\n=== Run Complete - All Logs ===")
-        print(self.log_buffer.getvalue())
-        print("=== End Logs ===\n")
-        
-    def __del__(self):
-        """Ensure logs are output if logger is garbage collected"""
-        self.output_logs()
+import concurrent.futures
 
 def retrieve(query: str,vectorstore:PineconeVectorStore, k: int = 100) -> Tuple[List[Document], List[float]]:    
     start = time.time()
@@ -80,7 +39,6 @@ def retrieve(query: str,vectorstore:PineconeVectorStore, k: int = 100) -> Tuple[
 
 def safe_get_json(url: str) -> Optional[Dict]:
     """Safely fetch and parse JSON from a URL."""
-    print("Fetching JSON")
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
@@ -89,42 +47,52 @@ def safe_get_json(url: str) -> Optional[Dict]:
         logging.error(f"Error fetching from {url}: {str(e)}")
         return None
 
-def extract_text_from_json(json_data: Dict) -> str:
-    """Extract text content from JSON response."""
-    if not json_data:
-        return ""
+def process_single_document(doc: Document) -> Optional[Document]:
+    """Process a single document by fetching and extracting metadata."""
+    if not doc.metadata.get('source'):
+        return None
+        
+    url = f"https://www.digitalcommonwealth.org/search/{doc.metadata['source']}"
+    json_data = safe_get_json(f"{url}.json")
     
-    text_parts = []
-    
-    # Handle direct text fields
-    text_fields = ["title_info_primary_tsi","abstract_tsi","subject_geographic_sim","genre_basic_ssim","genre_specific_ssim","date_tsim"]
-    for field in text_fields:
-        if field in json_data['data']['attributes'] and json_data['data']['attributes'][field]:
-            # print(json_data[field])
-            text_parts.append(str(json_data['data']['attributes'][field]))
-    
-    return " ".join(text_parts) if text_parts else "No content available"
+    if json_data:
+        text_content = extract_text_from_json(json_data)
+        if text_content:
+            return Document(
+                page_content=text_content, 
+                metadata={
+                    "source": doc.metadata['source'],
+                    "field": doc.metadata['field'],
+                    "URL": url
+                }
+            )
+    return None
 
-def rerank(documents: List[Document], query: str) -> List[Document]:
-    """Ingest more metadata. Rerank documents using BM25"""
+def rerank(documents: List[Document], query: str, max_workers: int = 2) -> List[Document]:
+    """Ingest more metadata and rerank documents using BM25 with parallel processing."""
     start = time.time()
     if not documents:
         return []
     
-    full_docs = []
     meta_start = time.time()
-    for doc in documents:
-        if not doc.metadata.get('source'):
-            continue
-            
-        url = f"https://www.digitalcommonwealth.org/search/{doc.metadata['source']}"
-        json_data = safe_get_json(f"{url}.json")
+    full_docs = []
+    
+    # Process documents in parallel using ThreadPoolExecutor
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Submit all document processing tasks
+        future_to_doc = {
+            executor.submit(process_single_document, doc): doc 
+            for doc in documents
+        }
         
-        if json_data:
-            text_content = extract_text_from_json(json_data)
-            if text_content:  # Only add documents with actual content
-                full_docs.append(Document(page_content=text_content, metadata={"source":doc.metadata['source'],"field":doc.metadata['field'],"URL":url}))
+        # Collect results as they complete
+        for future in concurrent.futures.as_completed(future_to_doc):
+            processed_doc = future.result()
+            if processed_doc:
+                full_docs.append(processed_doc)
+    
     logging.info(f"Took {time.time()-meta_start} seconds to retrieve all metadata")
+    
     # If no valid documents were processed, return empty list
     if not full_docs:
         return []
@@ -133,7 +101,7 @@ def rerank(documents: List[Document], query: str) -> List[Document]:
     reranker = BM25Retriever.from_documents(full_docs, k=min(10, len(full_docs)))
     reranked_docs = reranker.invoke(query)
     logging.info(f"Finished reranking: {time.time()-start}")
-    return reranked_docs
+    return full_docs
 
 def parse_xml_and_query(query:str,xml_string:str) -> str:
     """parse xml and return rephrased query"""
