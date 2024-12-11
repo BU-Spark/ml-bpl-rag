@@ -196,4 +196,11 @@ Once you do that, you're ready to run.
 streamlit run streamlit_app.py
 ```
 
-This will run the app on port 8501. When querying, please be patient, sometimes the retrieval and re-ranking process is slow depending on how much data you embedded.
+This will run the app on port 8501. When querying, please be patient, sometimes the retrieval and re-ranking process is slow depending on how much data you embedded.\
+
+**On-going Challenges**
+ - Vector Store: 1.3 million metadata objects and 147,000 full text docs resulted in a cumulative ~140GB of vectors when using all-MiniLM-L6-v2 and recursive character splitting on 1000 characters. This made locally hosted vectorstores cumbersome and implausible. Our solution was to migrate a portion of our metadata vectors to Pinecone and used that in our final implementation. Hosting on Pinecone can become expensive and adds another dimension of complexity to the project.
+ - Speed: Currently, the app takes anywhere from 25-70sec to generate a response, we have found that the most time-consuming aspect of this is our calls to the Digital Commonwealth API to retrieve the rest of the metadata for each object retrieved within Pinecone. We were unable to associate an object's full metadata in Pinecone due to internal limits, so we are hitting the Digital Commonwealth API to do so. On average, responses take 1/4 of a sec, however across 100 responses that becomes cumbersome.
+ - Query Alignment: The way queries are worded can have impact on the quality of retrieval. We attempted to implement a form of query alignment by using an llm to generate a sample response to the query, however we found it to be ineffective and detrimental. Further research should be done in this area to improve standardization of query alignment ot improve retrieval.
+ - Usage Monitoring: Real-time usage monitoring through the console logs is implemented, however it would be beneficial to implement a form of persistent usage monitoring for generating insights into model performance and query wording for the purpose of ML/OPs.
+  
