@@ -162,7 +162,7 @@ def parse_xml_and_check(xml_string: str) -> str:
     
     return parsed_response.get('RESPONSE', "No response found in the output")
 
-def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: int = 1000) -> Tuple[str, List[Document]]:
+def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: int = 100) -> Tuple[str, List[Document]]:
     """Main RAG function with improved error handling and validation."""
     start = time.time()
     try:
@@ -219,7 +219,7 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
             First, reason about the answer between <REASONING></REASONING> headers,
             based on the context determine if there is sufficient material for answering the exact question,
             return either <VALID>YES</VALID> or <VALID>NO</VALID>
-            then return a response between <RESPONSE></RESPONSE> headers:
+            then return a response between <RESPONSE></RESPONSE> headers, your response should be well formatted and an individual summary of each piece of relevant context:
             Here is an example
             <EXAMPLE>
             <QUERY>Are pineapples a good fuel for cars?</QUERY>
