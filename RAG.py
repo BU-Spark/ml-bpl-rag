@@ -56,7 +56,7 @@ class RunLogger:
         """Ensure logs are output if logger is garbage collected"""
         self.output_logs()
 
-def retrieve(query: str,vectorstore:PineconeVectorStore, k: int = 1000) -> Tuple[List[Document], List[float]]:    
+def retrieve(query: str,vectorstore:PineconeVectorStore, k: int = 100) -> Tuple[List[Document], List[float]]:    
     start = time.time()
     # pinecone_api_key = os.getenv("PINECONE_API_KEY")
     # pc = Pinecone(api_key=pinecone_api_key)
@@ -97,7 +97,7 @@ def extract_text_from_json(json_data: Dict) -> str:
     text_parts = []
     
     # Handle direct text fields
-    text_fields = ["title_info_primary_tsi","abstract_tsi","subject_geographic_sim","genre_specific_ssim"]
+    text_fields = ["title_info_primary_tsi","abstract_tsi","subject_geographic_sim","genre_basic_ssim","genre_specific_ssim","date_tsim"]
     for field in text_fields:
         if field in json_data['data']['attributes'] and json_data['data']['attributes'][field]:
             # print(json_data[field])
@@ -162,7 +162,7 @@ def parse_xml_and_check(xml_string: str) -> str:
     
     return parsed_response.get('RESPONSE', "No response found in the output")
 
-def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: int = 100) -> Tuple[str, List[Document]]:
+def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: int = 1000) -> Tuple[str, List[Document]]:
     """Main RAG function with improved error handling and validation."""
     start = time.time()
     try:
