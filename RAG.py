@@ -15,6 +15,47 @@ from typing import Dict, Any, Optional, List, Tuple
 import json
 import logging
 
+
+import logging
+from datetime import datetime
+from io import StringIO
+
+class RunLogger:
+    def __init__(self, script_name='streamlit_script'):
+        # Create string buffer to store logs
+        self.log_buffer = StringIO()
+        
+        # Create logger
+        self.logger = logging.getLogger(script_name)
+        self.logger.setLevel(logging.INFO)
+        
+        # Create handler that writes to our string buffer
+        handler = logging.StreamHandler(self.log_buffer)
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
+        
+        self.logger.info("=== Starting new run ===")
+    
+    def info(self, message):
+        self.logger.info(message)
+    
+    def error(self, message):
+        self.logger.error(message)
+    
+    def warning(self, message):
+        self.logger.warning(message)
+        
+    def output_logs(self):
+        """Print all collected logs"""
+        print("\n=== Run Complete - All Logs ===")
+        print(self.log_buffer.getvalue())
+        print("=== End Logs ===\n")
+        
+    def __del__(self):
+        """Ensure logs are output if logger is garbage collected"""
+        self.output_logs()
+
 def retrieve(query: str,vectorstore:PineconeVectorStore, k: int = 1000) -> Tuple[List[Document], List[float]]:    
     start = time.time()
     # pinecone_api_key = os.getenv("PINECONE_API_KEY")
@@ -182,7 +223,7 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
             <CONTEXT>Cars use gasoline for fuel. Some cars use electricity for fuel.Tesla stock has increased by 10 percent over the last quarter.</CONTEXT>
             <REASONING>Based on the context pineapples have not been explored as a fuel for cars. The context discusses gasoline, electricity, and tesla stock, therefore it is not relevant to the query about pineapples for fuel</REASONING>
             <VALID>NO</VALID>
-            <RESPONSE>Pineapples are not a good fuel for cars, however with further researach they migth be</RESPONSE> 
+            <RESPONSE>Pineapples are not a good fuel for cars, however with further research they might be</RESPONSE> 
             </EXAMPLE>
             Now it's your turn 
             <QUERY>
@@ -192,6 +233,9 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
         
         # Generate response
         ans_prompt = answer_template.invoke({"context": context, "query": query})
+        # Max input tokens is 10,000 for 4o-mini. This is a quick and dirty solution
+        if len(ans_prompt) > 30000:
+            ans_prompt = ans_prompt[:30000]
         response = llm.invoke(ans_prompt)
         
         # Parse and return response
