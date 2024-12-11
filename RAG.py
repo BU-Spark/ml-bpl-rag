@@ -70,6 +70,9 @@ def retrieve(query: str,vectorstore:PineconeVectorStore, k: int = 1000) -> Tuple
     documents = []
     scores = []
     for res, score in results:
+        # check to make sure response isnt too long for context window of 4o-mini
+        if len(res.page_content) > 4000:
+            res.page_content = res.page_content[:4000]
         documents.append(res)
         scores.append(score)
     logging.info(f"Finished Retrieval: {time.time() - start}")
@@ -233,9 +236,6 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
         
         # Generate response
         ans_prompt = answer_template.invoke({"context": context, "query": query})
-        # Max input tokens is 10,000 for 4o-mini. This is a quick and dirty solution
-        if len(ans_prompt) > 30000:
-            ans_prompt = ans_prompt[:30000]
         response = llm.invoke(ans_prompt)
         
         # Parse and return response
