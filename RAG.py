@@ -118,7 +118,7 @@ def rerank(documents: List[Document], query: str, max_workers: int = 3) -> List[
     reranker = BM25Retriever.from_documents(full_docs, k=min(10, len(full_docs)))
     reranked_docs = reranker.invoke(query)
     logging.info(f"Finished reranking: {time.time()-start}")
-    return full_docs
+    return reranked_docs
 
 
 def parse_xml_and_query(query:str,xml_string:str) -> str:
