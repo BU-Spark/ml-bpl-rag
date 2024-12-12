@@ -125,6 +125,9 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
     """Main RAG function with improved error handling and validation."""
     start = time.time()
     try:
+
+        # Query alignment is commented our, however I have decided to leave it in for potential future use.
+
         # Retrieve initial documents using rephrased query -- not working as intended currently, maybe would be better for data with more words.
         # query_template = PromptTemplate.from_template(
         #     """

@@ -187,7 +187,7 @@ Our implementation uses GPT-4o-mini from OpenAI, however you could fit in your o
 Also, make sure to replace the variable INDEX_NAME in streamlit-app.py with the name of your index.
 
 ```
-OPENAI_API_KEY = "<you-api-key>"
+OPENAI_API_KEY = "<your-api-key>"
 ```
 
 Once you do that, you're ready to run.
@@ -201,6 +201,13 @@ This will run the app on port 8501. When querying, please be patient, sometimes 
 **On-going Challenges**
  - Vector Store: 1.3 million metadata objects and 147,000 full text docs resulted in a cumulative ~140GB of vectors when using all-MiniLM-L6-v2 and recursive character splitting on 1000 characters. This made locally hosted vectorstores cumbersome and implausible. Our solution was to migrate a portion of our metadata vectors to Pinecone and used that in our final implementation. Hosting on Pinecone can become expensive and adds another dimension of complexity to the project.
  - Speed: Currently, the app takes anywhere from 25-70sec to generate a response, we have found that the most time-consuming aspect of this is our calls to the Digital Commonwealth API to retrieve the rest of the metadata for each object retrieved within Pinecone. We were unable to associate an object's full metadata in Pinecone due to internal limits, so we are hitting the Digital Commonwealth API to do so. On average, responses take 1/4 of a sec, however across 100 responses that becomes cumbersome.
- - Query Alignment: The way queries are worded can have impact on the quality of retrieval. We attempted to implement a form of query alignment by using an llm to generate a sample response to the query, however we found it to be ineffective and detrimental. Further research should be done in this area to improve standardization of query alignment ot improve retrieval.
+ - Query Alignment: The way queries are worded can have impact on the quality of retrieval. We attempted to implement a form of query alignment by using an llm to generate a sample response to the query, however we found it to be ineffective and detrimental. One specific aspect is the efficacy of specific queries versus vague ones ("Who wrote letters to WEB Du Bois?" vs "What happened in Boston in 1919?"). Queries as a whole may benefit from segmentation into the likely metadata fields they contain in order to inform querying (set up separate vectorstores for each field and then retrieve different parts of the query respectively). Further research should be done in this area to improve standardization of query alignment ot improve retrieval.
  - Usage Monitoring: Real-time usage monitoring through the console logs is implemented, however it would be beneficial to implement a form of persistent usage monitoring for generating insights into model performance and query wording for the purpose of ML/OPs.
-  
+
+ **Ad Hoc Process/Recommendations**
+  - Our Demo on huggingface (that will temporarily be hooked up to a group member's personal Pinecone index before being disconnected after submission) only included retrieval over 600k entries in the Digital Commonwealth API. Each entry's title fields and abstract were embedded and input into the vectorstore. We first retrieve the top 100 related vectors to the query (with the intent to reduce vectorstore size and only retrieve on topical relevance), then we retrieve the metadata for certain fields from each retrieved vector's source id deemed related to queries (abstract, title, format, etc.) and rerank with BM25 off of that (with the intent to then prioritize entries on metadata like format and date). This was a way to effectively put together a quick demo.
+  - The size of the data is significant in size and largely grows with vectorsize assuming you are significantly chunking each entry. It is our formal recommendation that you host your vectorstore on Pinecone or another service for efficient retrieval and initialization as well as in consideration of the storage of huggingface spaces.
+  - As mentioned previously, a way to segment and analyze each query prior to retrieval could create a more reliable and accuracte retriever. Also of not is our prompt engineering. We strongly suggest using XML tags and a parser for efficient Chain of Thought in order to minimize llm calls.
+  - Currently we are linearly hitting the Digital Commonwealth API for metadata once we retrieve the top 100 vectors in order to perform reranking and contextual addition to the prompt. This is really slow. We recommend that you either forego this method for some other or parallelize your calls (we tried parallelization, however found that rate limiting was too severe). A solution might be to create a metadata database and initialize it only on startup for referencing or to create proxies for api parallelization.
+
+  Thank You and Best of Luck!
