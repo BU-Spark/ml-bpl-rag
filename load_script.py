@@ -22,6 +22,7 @@ def fetch_digital_commonwealth():
     
     if int(PAGE) >= int(END_PAGE):
         return None
+      
     print(f'Reading page {PAGE} up to page {END_PAGE}')
 
     retries = 0
