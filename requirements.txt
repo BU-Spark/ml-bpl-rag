@@ -1,0 +1,11 @@
+langchain
+langchain-community
+langchain-huggingface
+langchain-pinecone
+pinecone-notebooks
+langchain-openai
+python-dotenv
+langchain-core
+streamlit
+bs4
+pillow
