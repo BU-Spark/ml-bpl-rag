@@ -51,7 +51,7 @@ We evaluated open-source projects for potential integration:
 ## 3. Research Findings  
 
 ### 3.1 Embedding Process  
-- Uses **all-MiniLM-L6-v2 (Hugging Face model).  
+- Uses all-MiniLM-L6-v2 (Hugging Face model).  
 - Vector size: 384 dimensions.  
 - Stored in Pinecone vector store.  
 - Only key metadata fields embedded due to storage limits.  
@@ -66,7 +66,7 @@ We evaluated three methods:
    - Creates distinct embeddings for title, date, abstract, and author.  
    - Granular control, but increases retrieval complexity.  
 3. **Hybrid Retrieval (BM25 + Embeddings)**  
-   - Uses BM25 for structured fields** (titles, dates, authors) and vector search for abstracts.  
+   - Uses BM25 for structured fields (titles, dates, authors) and vector search for abstracts.  
    - Best balance of efficiency and accuracy.  
 
 ### 3.3 RAG Query Processing  
@@ -94,7 +94,7 @@ We evaluated three methods:
 **Issue:** Queries take ~5 minutes due to metadata API delays.  
 **Proposed Fixes:**  
 - **Preload metadata** into a structured SQL/NoSQL database instead of calling the API per query.  
-- **Parallelize metadata retrieval** using *synchronous calls.  
+- **Parallelize metadata retrieval** using synchronous calls.  
 - **Implement multi-vector search** (separate indexes for title, date, abstract).  
 
 ### 3.8 Alternative Vector Stores to Pinecone  
