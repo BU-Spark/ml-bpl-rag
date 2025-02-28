@@ -17,11 +17,6 @@ import logging
 
 def retrieve(query: str,vectorstore:PineconeVectorStore, k: int = 1000) -> Tuple[List[Document], List[float]]:    
     start = time.time()
-    # pinecone_api_key = os.getenv("PINECONE_API_KEY")
-    # pc = Pinecone(api_key=pinecone_api_key)
-    
-    # index = pc.Index(index_name)
-    # vector_store = PineconeVectorStore(index=index, embedding=embeddings)
     results = vectorstore.similarity_search_with_score(
         query,
         k=k,
@@ -64,6 +59,17 @@ def extract_text_from_json(json_data: Dict) -> str:
     
     return " ".join(text_parts) if text_parts else "No content available"
 
+weights = {
+    "title_info_primary_tsi": 2.0,  # Titles should be prioritized
+    "name_role_tsim": 1.8,  # Author/role should be highly weighted
+    "date_tsim": 1.5,  # Date should be considered
+    "abstract_tsi": 1.2,  # Abstracts are important but less so
+    "subject_geographic_sim": 0.9,  
+    "genre_basic_ssim": 0.9, 
+    "genre_specific_ssim": 0.9,  
+}
+
+
 def rerank(documents: List[Document], query: str) -> List[Document]:
     """Ingest more metadata. Rerank documents using BM25"""
     start = time.time()
@@ -89,8 +95,28 @@ def rerank(documents: List[Document], query: str) -> List[Document]:
         return []
     
     # Create BM25 retriever with the processed documents
-    reranker = BM25Retriever.from_documents(full_docs, k=min(10, len(full_docs)))
-    reranked_docs = reranker.invoke(query)
+     bm25 = BM25Retriever.from_documents(full_docs, k=min(10, len(full_docs)))
+
+    bm25_ranked_docs = bm25.invoke(query)
+
+    ranked_docs = []
+    for doc in bm25_ranked_docs:
+        bm25_score = 1.0 
+
+        # Sum weighted metadata relevance
+        metadata_score = 0
+        for field, weight in weights.items():
+            if field in doc.metadata and doc.metadata[field]:
+                metadata_score += weight 
+
+        # Compute final score: BM25 weight + Metadata score
+        final_score = bm25_score + metadata_score
+
+        ranked_docs.append((doc, final_score))
+
+    # Sort by final score 
+    ranked_docs.sort(key=lambda x: x[1], reverse=True)
+
     logging.info(f"Finished reranking: {time.time()-start}")
     return reranked_docs
 
