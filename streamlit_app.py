@@ -31,7 +31,7 @@ def initialize_models() -> Tuple[Optional[ChatOpenAI], HuggingFaceEmbeddings]:
         if "llm" not in st.session_state:
             # Initialize OpenAI model
             st.session_state.llm = ChatOpenAI(
-                model="gpt-4",  # Changed from gpt-4o-mini which appears to be a typo
+                model="gpt-4o-mini",  # Changed from gpt-4o-mini which appears to be a typo
                 temperature=0,
                 timeout=60,  # Added reasonable timeout
                 max_retries=2

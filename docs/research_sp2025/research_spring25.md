@@ -34,10 +34,10 @@
 ### 2.2 Academic Papers Reviewed  
 We examined four key papers related to vector search, metadata embedding, and retrieval-augmented generation (RAG):
 
-- **[Efficient Retrieval-Augmented Generation](https://arxiv.org/abs/2205.09780)** – Discusses optimizing retrieval before passing data to LLMs for faster inference.  
+- **[Efficient Retrieval-Augmented Generation](https://arxiv.org/abs/2005.11401)** – Discusses optimizing retrieval before passing data to LLMs for faster inference.  
 - **[BM25-FIC: Information Content-based Field Weighting for BM25F](https://ceur-ws.org/Vol-2741/paper-11.pdf)** – Proposes an optimized BM25 weighting approach for metadata-heavy retrieval.  
-- **[Optimizing BM25 for Hybrid Search](https://arxiv.org/abs/1905.09625)** – Covers BM25 ranking improvements when combining keyword-based and vector-based retrieval.  
-- **[Vector Search in a Nutshell](https://towardsdatascience.com/vector-search-in-a-nutshell-6f0a44a5ddaa)** – Explains ANN techniques like FAISS vs. Pinecone vs. Weaviate for cost-effective vector search.  
+- **[Optimizing BM25 for Hybrid Search](https://opensearch.org/blog/hybrid-search-optimization)** – Covers BM25 ranking improvements when combining keyword-based and vector-based retrieval.  
+- **[Vector Databases Compared: Pinecone, Milvus, Chroma, Weaviate, FAISS](https://zackproser.com/blog/vector-databases-compared)** – Explains ANN techniques like FAISS vs. Pinecone vs. Weaviate for cost-effective vector search.  
 
 ### 2.3 Open Source Projects Explored  
 We evaluated open-source projects for potential integration:
