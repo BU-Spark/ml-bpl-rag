@@ -51,7 +51,7 @@ user_template = ChatPromptTemplate.from_messages([
 
 
 # 2. Create model
-model = ChatOpenAI(model="gpt-4o-mini")
+model = ChatOpenAI(model="gpt-3.5-turbo")
 
 
 # 3. Create parser
