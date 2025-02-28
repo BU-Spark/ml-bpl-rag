@@ -99,3 +99,6 @@ We talked with the client about focusing on metadata first, making sure we weigh
 
 ### 02/16/2025 (Weekly meeting with PM)
 Tasks were assigned to all team members via Notion for easy tracking. A list of questions was prepared to clarify requirements with the stakeholder, and the project outline was discussed thoroughly with the Project Manager to identify key milestones.
+
+### 02/23/2025 (Weekly meeting with PM)
+This week, we focused on enhancing metadata ranking by refining BM25 and embedding-based retrieval, prioritizing titles, dates, and multimedia data for improved search results. We also optimized retrieval accuracy by better linking structured metadata with user queries. To reduce API costs and improve scalability, we explored alternative vector stores like FAISS while preloading metadata for faster search performance
