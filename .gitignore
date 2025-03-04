@@ -171,6 +171,8 @@ $RECYCLE.BIN/
 
 .env
 
-.venv/
+/metadata
 
-metadata/
+/data
+
+.venv
