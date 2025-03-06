@@ -60,10 +60,8 @@ def extract_text_from_json(json_data: Dict) -> str:
     return " ".join(text_parts) if text_parts else "No content available"
 
 def rephrase_and_expand_query(query: str, llm: Any) -> str:
-    """
-    Use LLM to rewrite and expand a query for better alignment with archive metadata.
-    This helps the vector search and reranker work with cleaner, more relevant input.
-    """
+    
+    # Use LLM to rewrite and expand a query for better alignment with archive metadata.
     prompt_template = PromptTemplate.from_template(
         """
         You are a professional librarian skilled at historical research.
