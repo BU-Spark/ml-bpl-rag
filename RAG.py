@@ -60,13 +60,14 @@ def extract_text_from_json(json_data: Dict) -> str:
     return " ".join(text_parts) if text_parts else "No content available"
 
 weights = {
-    "title_info_primary_tsi": 2.0,  # Titles should be prioritized
-    "name_role_tsim": 1.8,  # Author/role should be highly weighted
-    "date_tsim": 1.5,  # Date should be considered
-    "abstract_tsi": 1.2,  # Abstracts are important but less so
-    "subject_geographic_sim": 0.9,  
-    "genre_basic_ssim": 0.9, 
-    "genre_specific_ssim": 0.9,  
+    "title_info_primary_tsi": 1.5,  # Titles should be prioritized
+    "name_role_tsim": 1.4,  # Author/role should be highly weighted
+    "date_tsim": 1.3,  # Date should be considered
+    "abstract_tsi": 1.0,  # Abstracts are important but less so
+    "note_tsim": 0.8,  
+    "subject_geographic_sim": 0.5,  
+    "genre_basic_ssim": 0.5, 
+    "genre_specific_ssim": 0.5,  
 }
 
 
@@ -77,48 +78,50 @@ def rerank(documents: List[Document], query: str) -> List[Document]:
         return []
     
     full_docs = []
+    seen_sources = set()  
     meta_start = time.time()
     for doc in documents:
-        if not doc.metadata.get('source'):
-            continue
-            
-        url = f"https://www.digitalcommonwealth.org/search/{doc.metadata['source']}"
+        source = doc.metadata.get('source')
+        if not source or source in seen_sources:
+            continue  # Skip duplicate sources
+        seen_sources.add(source)
+
+        url = f"https://www.digitalcommonwealth.org/search/{source}"
         json_data = safe_get_json(f"{url}.json")
         
         if json_data:
             text_content = extract_text_from_json(json_data)
             if text_content:  # Only add documents with actual content
-                full_docs.append(Document(page_content=text_content, metadata={"source":doc.metadata['source'],"field":doc.metadata['field'],"URL":url}))
+                full_docs.append(Document(page_content=text_content, metadata={"source": source, "field": doc.metadata.get("field", ""), "URL": url}))
+
     logging.info(f"Took {time.time()-meta_start} seconds to retrieve all metadata")
-    # If no valid documents were processed, return empty list
     if not full_docs:
         return []
-    
-    # Create BM25 retriever with the processed documents
-     bm25 = BM25Retriever.from_documents(full_docs, k=min(10, len(full_docs)))
 
+    # Create BM25 retriever with the processed documents
+    bm25 = BM25Retriever.from_documents(full_docs, k=min(10, len(full_docs)))
     bm25_ranked_docs = bm25.invoke(query)
 
     ranked_docs = []
     for doc in bm25_ranked_docs:
         bm25_score = 1.0 
 
-        # Sum weighted metadata relevance
-        metadata_score = 0
+        # Compute metadata multiplier
+        metadata_multiplier = 1.0 
         for field, weight in weights.items():
             if field in doc.metadata and doc.metadata[field]:
-                metadata_score += weight 
+                metadata_multiplier += weight  
 
-        # Compute final score: BM25 weight + Metadata score
-        final_score = bm25_score + metadata_score
-
+        # Compute final score: BM25 weight * Metadata multiplier
+        final_score = bm25_score * metadata_multiplier
         ranked_docs.append((doc, final_score))
 
     # Sort by final score 
     ranked_docs.sort(key=lambda x: x[1], reverse=True)
 
     logging.info(f"Finished reranking: {time.time()-start}")
-    return reranked_docs
+    return [doc for doc, _ in ranked_docs] 
+
 
 def parse_xml_and_query(query:str,xml_string:str) -> str:
     """parse xml and return rephrased query"""
