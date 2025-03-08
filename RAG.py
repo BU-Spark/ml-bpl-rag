@@ -59,6 +59,46 @@ def extract_text_from_json(json_data: Dict) -> str:
     
     return " ".join(text_parts) if text_parts else "No content available"
 
+def rephrase_and_expand_query(query: str, llm: Any) -> str:
+    
+    # Use LLM to rewrite and expand a query for better alignment with archive metadata.
+    prompt_template = PromptTemplate.from_template(
+        """
+        You are a professional librarian skilled at historical research.
+        Your task is to improve and expand the following search query to better match metadata in a historical archive.
+
+        - First, rewrite the query to improve clarity and fit how librarians would search.
+        - Second, expand the query by adding related terms (synonyms, related concepts, historical terminology, etc.).
+
+        Return your output strictly in this format (no extra explanation):
+        <IMPROVED_QUERY>your improved query here</IMPROVED_QUERY>
+        <EXPANDED_QUERY>your expanded query here</EXPANDED_QUERY>
+
+        Original Query: {query}
+        """
+    )
+
+    prompt = prompt_template.invoke({"query": query})
+    response = llm.invoke(prompt)
+
+    # Extract just the improved and expanded queries
+    improved_match = re.search(r"<IMPROVED_QUERY>(.*?)</IMPROVED_QUERY>", response.content, re.DOTALL)
+    expanded_match = re.search(r"<EXPANDED_QUERY>(.*?)</EXPANDED_QUERY>", response.content, re.DOTALL)
+
+    improved_query = improved_match.group(1).strip() if improved_match else query
+    expanded_query = expanded_match.group(1).strip() if expanded_match else ""
+
+    final_query = f"{improved_query} {expanded_query}".strip()
+
+    logging.info(f"Original Query: {query}")
+    logging.info(f"Improved Query: {improved_query}")
+    logging.info(f"Expanded Query: {expanded_query}")
+    logging.info(f"Final Query for Retrieval: {final_query}")
+
+    return final_query
+
+
+
 weights = {
     "title_info_primary_tsi": 1.5,  # Titles should be prioritized
     "name_role_tsim": 1.4,  # Author/role should be highly weighted
@@ -186,7 +226,12 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
         # query_prompt = query_template.invoke({"query":query})
         # query_response = llm.invoke(query_prompt)
         # new_query = parse_xml_and_query(query=query,xml_string=query_response.content)
-        logging.info(f"\n---\nQUERY: {query}")
+        
+        #logging.info(f"\n---\nQUERY: {query}")
+
+        #new query rephrasing
+        query = rephrase_and_expand_query(query, llm)
+        logging.info(f"\n---\nRephrased QUERY: {query}")
 
         retrieved, _ = retrieve(query=query, vectorstore=vectorstore, k=k)
         if not retrieved:
