@@ -137,10 +137,6 @@ class DigitalCommonwealthScraper:
         downloaded_files = []
         
         for i, image in enumerate(images):
-            url = image.get('url')
-            if not url or not url.startswith(('http://', 'https://')):
-                self.logger.warning(f"Skipping invalid image URL: '{url}'")
-                continue
             try:
                 response = requests.get(image['url'], headers=self.headers)
                 response.raise_for_status()
