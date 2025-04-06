@@ -8,7 +8,7 @@ from tqdm import tqdm
 from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from psycopg2.pool import ThreadedConnectionPool
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import decimal
 
@@ -19,11 +19,11 @@ load_dotenv()
 # DB settings
 DB_HOST = os.getenv("DB_HOST", "127.0.0.1")
 DB_PORT = os.getenv("DB_PORT", "5432")
-DB_NAME = os.getenv("DB_NAME", "bpl_metadata")
+DB_NAME = os.getenv("DB_NAME", "bpl_metadata_new")
 DB_USER = os.getenv("DB_USER", "postgres")
 DB_PASSWORD = os.getenv("DB_PASSWORD")
-FILE_PATH = "bpl_data.json"
-NUM_THREADS = 8
+FILE_PATH = "/projectnb/sparkgrp/ml-bpl-rag-data/extraneous/metadata/bpl_data.json"
+NUM_THREADS = 4
 
 FIELDS_TO_EMBED = [
     'abstract_tsi',
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS documents (
     source_id TEXT,
     field TEXT,
     content TEXT,
-    embedding VECTOR(384),
+    embedding VECTOR(768),
     metadata JSONB
 );
 """)
@@ -70,7 +70,7 @@ cur.close()
 DB_POOL.putconn(conn)
 
 # Embedder and splitter
-embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
 
 # Worker: embed + chunk one item
@@ -121,15 +121,15 @@ def insert_batch(batch):
 # Main
 start = time.time()
 with open(FILE_PATH, "r") as f:
-    items = list(ijson.items(f, "Data.item.data.item"))  # Load ahead to count
-    total = len(items)
+    item_iterator = ijson.items(f, "Data.item.data.item")
 
     batch = []
     futures = []
     with ThreadPoolExecutor(max_workers=NUM_THREADS) as executor:
-        with tqdm(total=total, desc="Embedding & Inserting", unit="doc") as pbar:
-            for item in items:
-                futures.append(executor.submit(process_item, item))
+        with tqdm(desc="Embedding & Inserting", unit="doc") as pbar:
+            for item in item_iterator:
+                future = executor.submit(process_item, item)
+                futures.append(future)
 
             for future in as_completed(futures):
                 result = future.result()
