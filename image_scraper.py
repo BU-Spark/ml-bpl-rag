@@ -137,10 +137,6 @@ class DigitalCommonwealthScraper:
         downloaded_files = []
         
         for i, image in enumerate(images):
-            url = image.get('url')
-            if not url or not url.startswith(('http://', 'https://')):
-                self.logger.warning(f"Skipping invalid image URL: '{url}'")
-                continue
             try:
                 response = requests.get(image['url'], headers=self.headers)
                 response.raise_for_status()
@@ -154,8 +150,72 @@ class DigitalCommonwealthScraper:
                 
                 downloaded_files.append(filename)
                 self.logger.info(f"Downloaded: {filename}")
-            
+                
             except Exception as e:
                 self.logger.error(f"Error downloading {image['url']}: {e}")
         
         return downloaded_files
+    
+    def search_query(self, query: str, limit: int = 20) -> List[str]:
+        """
+        Search Digital Commonwealth with a query
+        
+        :param query: Search query
+        :param limit: Maximum number of items to return
+        :return: List of item IDs
+        """
+        # Construct search URL
+        encoded_query = query.replace(" ", "+")
+        url = f"{self.base_url}/search?q={encoded_query}&format=json"
+        
+        # Fetch search results
+        response = self.fetch_page(url)
+        if not response:
+            return []
+        
+        try:
+            search_data = response.json()
+            
+            # Extract items
+            item_ids = []
+            
+            # Handle different JSON structures
+            if "data" in search_data:
+                for item in search_data.get("data", []):
+                    if len(item_ids) < limit:
+                        item_id = item.get("id")
+                        if item_id:
+                            item_ids.append(item_id)
+            
+            return item_ids[:limit]
+            
+        except Exception as e:
+            self.logger.error(f"Error processing search data: {e}")
+            return []
+
+# Example usage
+if __name__ == "__main__":
+    scraper = DigitalCommonwealthScraper()
+    
+    # Search for items
+    query = "boston historic"
+    item_ids = scraper.search_query(query, limit=5)
+    
+    if item_ids:
+        print(f"Found {len(item_ids)} items for query: {query}")
+        
+        # Process first item
+        if item_ids:
+            item_url = f"https://www.digitalcommonwealth.org/search/{item_ids[0]}"
+            print(f"Processing item: {item_url}")
+            
+            # Extract images
+            images = scraper.extract_images(item_url)
+            print(f"Found {len(images)} images")
+            
+            # Download first image if available
+            if images:
+                downloaded = scraper.download_images([images[0]], "sample_images")
+                print(f"Downloaded: {downloaded}")
+    else:
+        print(f"No items found for query: {query}")
