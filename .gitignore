@@ -170,3 +170,5 @@ $RECYCLE.BIN/
 .nfs*
 
 .venv/
+
+.env
