@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from RAG import RAG
 import logging
 from image_scraper import DigitalCommonwealthScraper
+from RAG_cloudsql_vector import CloudSQLVectorStore
 import shutil
 
 # Configure logging
@@ -31,7 +32,7 @@ def initialize_models() -> Tuple[Optional[ChatOpenAI], HuggingFaceEmbeddings]:
         if "llm" not in st.session_state:
             # Initialize OpenAI model
             st.session_state.llm = ChatOpenAI(
-                model="gpt-4",  # Changed from gpt-4o-mini which appears to be a typo
+                model="gpt-4o-mini",  # Changed from gpt-4o-mini which appears to be a typo
                 temperature=0,
                 timeout=60,  # Added reasonable timeout
                 max_retries=2
@@ -51,6 +52,9 @@ def initialize_models() -> Tuple[Optional[ChatOpenAI], HuggingFaceEmbeddings]:
             
             index = pc.Index(INDEX_NAME)
             st.session_state.pinecone = PineconeVectorStore(index=index, embedding=st.session_state.embeddings)
+        
+        if "vectorstore" not in st.session_state:
+            st.session_state.vectorstore = CloudSQLVectorStore(embedding=st.session_state.embeddings)
         
     except Exception as e:
         logger.error(f"Error initializing models: {str(e)}")
@@ -76,7 +80,7 @@ def process_message(
         return f"Error processing message: {str(e)}", []
 
 def display_sources(sources: List) -> None:
-    """Display sources in expandable sections with proper formatting."""
+    """Display sources with minimal output: content preview, source, URL, and image if available."""
     if not sources:
         st.info("No sources available for this response.")
         return
@@ -85,46 +89,37 @@ def display_sources(sources: List) -> None:
     for i, doc in enumerate(sources, 1):
         try:
             with st.expander(f"Source {i}"):
+                # Content preview
                 if hasattr(doc, 'page_content'):
-                    st.markdown(f"**Content:** {doc.page_content[0:100] + ' ...'}")
-                    if hasattr(doc, 'metadata'):
-                        for key, value in doc.metadata.items():
-                            st.markdown(f"**{key.title()}:** {value}")
-                            
-                        # Web Scraper to display images of sources
-                        # Especially helpful if the sources are images themselves
-                        # or are OCR'd text files
-                        scraper = DigitalCommonwealthScraper()
-                        images = scraper.extract_images(doc.metadata["URL"])
-                        images = images[:1]
-                        
-                        # If there are no images then don't display them
-                        if not images:
-                                st.warning("No images found on the page.")
-                                return
-                                
-                        # Download the images
-                        # Delete the directory if it already exists
-                        # to clear the existing cache of images for each listed source
-                        output_dir = 'downloaded_images'
-                        if os.path.exists(output_dir):
-                            shutil.rmtree(output_dir)
-                        
-                        # Download the main image to a local directory
-                        downloaded_files = scraper.download_images(images)
-                
-                        # Display the image using st.image
-                        # Display the title of the image using img.get
-                        st.image(downloaded_files, width=400, caption=[
-                            img.get('alt', f'Image {i+1}') for i, img in enumerate(images)
-                            ])
+                    st.markdown(f"**Content:** {doc.page_content[:100]} ...")
 
-                else:
-                    st.markdown(f"**Content:** {str(doc)}")
-                    
+                # Extract source and URL
+                source = doc.metadata.get("source", "N/A")
+                doc_url = doc.metadata.get("URL", "").strip()
+
+                if not doc_url and source:
+                    doc_url = f"https://www.digitalcommonwealth.org/search/{source}"
+
+                st.markdown(f"**Source:** {source}")
+                st.markdown(f"**URL:** {doc_url}")
+
+                # Try to show an image
+                scraper = DigitalCommonwealthScraper()
+                images = scraper.extract_images(doc_url)
+                images = images[:1]
+
+                if images:
+                    output_dir = 'downloaded_images'
+                    if os.path.exists(output_dir):
+                        shutil.rmtree(output_dir)
+                    downloaded_files = scraper.download_images(images)
+                    st.image(downloaded_files, width=400, caption=[
+                        img.get('alt', f'Image {i}') for i, img in enumerate(images)
+                    ])
         except Exception as e:
-            logger.error(f"Error displaying source {i}: {str(e)}")
+            logger.warning(f"[display_sources] Error displaying document {i}: {e}")
             st.error(f"Error displaying source {i}")
+
 
 def main():
     st.title("Digital Commonwealth RAG")
@@ -157,7 +152,7 @@ def main():
                 response, sources = process_message(
                     query=user_input,
                     llm=st.session_state.llm,
-                    vectorstore=st.session_state.pinecone
+                    vectorstore=st.session_state.vectorstore
                 )
                 
                 if isinstance(response, str):
