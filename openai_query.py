@@ -133,7 +133,7 @@ class OpenAIQueryInterface:
     
     def search_images(self, query: str, top_k: int = 5, enhance: bool = True) -> Dict:
         """
-        Search for images matching the natural language query
+        Search for images matching the natural language query using field-based approach
         
         :param query: Natural language query
         :param top_k: Number of results to return
@@ -143,52 +143,47 @@ class OpenAIQueryInterface:
         # Enhance query if requested
         search_query = self.enhance_query(query) if enhance else query
         
-        # Search using the Pinecone manager directly - this avoids the dimension mismatch
-        results = self.pinecone_manager.search(search_query, top_k=top_k)
+        # Search using the Pinecone manager's field-based search
+        results = self.pinecone_manager.search_fields(search_query, top_k=top_k)
         
         # Format results for display
         formatted_results = []
         
         for match in results.get('matches', []):
-            if match['type'] == 'image':
-                # Image result
-                metadata = match.get('metadata', {})
-                result = {
-                    'type': 'image',
-                    'score': match.get('score'),
-                    'caption': metadata.get('caption', 'No caption available'),
-                    'url': metadata.get('url', ''),
-                    'source_page': metadata.get('source_page', ''),
-                    'tags': metadata.get('tags', [])
-                }
-                formatted_results.append(result)
-            elif match['type'] == 'text':
-                # Text result
-                # Get the linked image ID
-                image_id = match.get('metadata', {}).get('image_id')
-                if image_id:
-                    # Try to find the image info
-                    image_info = self.find_image_by_id(image_id)
-                    if image_info:
-                        result = {
-                            'type': 'image',
-                            'score': match.get('score'),
-                            'content': match.get('content', ''),
-                            'caption': image_info.get('caption', 'No caption available'),
-                            'url': image_info.get('url', ''),
-                            'source_page': image_info.get('source_page', ''),
-                            'tags': image_info.get('tags', [])
-                        }
-                        formatted_results.append(result)
-                    else:
-                        # Add just the text result if image not found
-                        result = {
-                            'type': 'text',
-                            'score': match.get('score'),
-                            'content': match.get('content', 'No content available'),
-                            'image_id': image_id
-                        }
-                        formatted_results.append(result)
+            source_id = match.get('source_id')
+            fields = match.get('fields', {})
+            
+            # Construct result with available fields
+            result = {
+                'type': 'image',
+                'score': match.get('score', 0),
+                'source_id': source_id,
+                'url': match.get('url', '')
+            }
+            
+            # Add caption if available
+            if 'caption' in fields:
+                result['caption'] = fields['caption'].get('content', 'No caption available')
+            
+            # Add description if available
+            if 'description' in fields:
+                result['description'] = fields['description'].get('content', '')
+            
+            # Add tags if available
+            if 'tags' in fields:
+                tags_content = fields['tags'].get('content', [])
+                if isinstance(tags_content, list):
+                    result['tags'] = tags_content
+                else:
+                    # Handle case where tags might be stored as string
+                    result['tags'] = str(tags_content).split()
+            
+            # Add other metadata fields
+            for field_type, field_data in fields.items():
+                if field_type not in ['caption', 'description', 'tags', 'image']:
+                    result[field_type] = field_data.get('content')
+            
+            formatted_results.append(result)
         
         return {
             'query': query,
@@ -196,49 +191,15 @@ class OpenAIQueryInterface:
             'results': formatted_results
         }
     
-    def find_image_by_id(self, image_id: str) -> Optional[Dict]:
+    def openai_generate_response(self, query: str, enhanced_query: str, results: List[Dict]) -> str:
         """
-        Find image information by its ID
+        Generate a natural language response to the query based on search results
         
-        :param image_id: Image ID to find
-        :return: Image information or None if not found
+        :param query: Original query
+        :param enhanced_query: Enhanced query (if available)
+        :param results: Formatted search results
+        :return: Natural language response
         """
-        try:
-            # Query for the specific image ID
-            result = self.pinecone_manager.index.fetch(
-                ids=[image_id],
-                namespace=f"{self.namespace}_image"
-            )
-            
-            if image_id in result.get('vectors', {}):
-                return result['vectors'][image_id].get('metadata', {})
-            
-            return None
-        except Exception as e:
-            logger.error(f"Error finding image by ID: {e}")
-            return None
-    
-    def generate_response(self, query: str, top_k: int = 5, enhance: bool = True) -> Dict:
-        """
-        Generate a complete natural language response to the query
-        
-        :param query: Natural language query
-        :param top_k: Number of results to return
-        :param enhance: Whether to enhance the query
-        :return: Structured response with results and generated text
-        """
-        # First get the search results
-        search_results = self.search_images(query, top_k, enhance)
-        
-        # If no results, return early
-        if not search_results['results']:
-            return {
-                'query': query,
-                'response': f"I couldn't find any historical images matching '{query}'. Try a different search term or refine your query.",
-                'results': []
-            }
-        
-        # Use OpenAI to generate a natural language response
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.openai_api_key}"
@@ -246,18 +207,23 @@ class OpenAIQueryInterface:
         
         # Create a summary of the search results for the prompt
         result_summaries = []
-        for i, result in enumerate(search_results['results']):
-            if result['type'] == 'image':
+        for i, result in enumerate(results):
+            if result.get('type') == 'image':
                 summary = f"Image {i+1}: {result.get('caption', 'No caption')}"
-                if 'content' in result and result['content']:
-                    summary += f" - {result['content'][:200]}..."
+                
+                # Add tags if available
                 if 'tags' in result and result['tags']:
-                    summary += f" - Tags: {', '.join(result['tags'][:10])}"
+                    tags_str = ', '.join(result['tags'][:10]) if isinstance(result['tags'], list) else result['tags']
+                    summary += f" - Tags: {tags_str}"
+                
+                # Add URL
                 if 'url' in result and result['url']:
                     summary += f" - URL: {result['url']}"
-                result_summaries.append(summary)
-            else:
-                summary = f"Text {i+1}: {result.get('content', 'No content')[:200]}..."
+                
+                # Add source ID
+                if 'source_id' in result:
+                    summary += f" - Source ID: {result['source_id']}"
+                
                 result_summaries.append(summary)
         
         # System prompt for natural language response
@@ -298,9 +264,38 @@ Keep your response conversational but concise (3-4 sentences total)."""
         except Exception as e:
             logger.error(f"Error generating response with OpenAI: {e}")
             # Fall back to simple response
-            response_text = f"I found {len(search_results['results'])} historical images matching your query '{query}'."
-            if search_results['results']:
-                response_text += f" The top result is: {search_results['results'][0].get('caption', 'No caption available')}"
+            response_text = f"I found {len(results)} historical images matching your query '{query}'."
+            if results:
+                response_text += f" The top result is: {results[0].get('caption', 'No caption available')}"
+        
+        return response_text
+    
+    def generate_response(self, query: str, top_k: int = 5, enhance: bool = True) -> Dict:
+        """
+        Generate a complete natural language response to the query
+        
+        :param query: Natural language query
+        :param top_k: Number of results to return
+        :param enhance: Whether to enhance the query
+        :return: Structured response with results and generated text
+        """
+        # First get the search results using the field-based approach
+        search_results = self.search_images(query, top_k, enhance)
+        
+        # If no results, return early
+        if not search_results['results']:
+            return {
+                'query': query,
+                'response': f"I couldn't find any historical images matching '{query}'. Try a different search term or refine your query.",
+                'results': []
+            }
+        
+        # Generate a natural language response using OpenAI
+        response_text = self.openai_generate_response(
+            query=query,
+            enhanced_query=search_results.get('enhanced_query', query),
+            results=search_results['results']
+        )
         
         # Construct the final response
         return {
@@ -309,7 +304,54 @@ Keep your response conversational but concise (3-4 sentences total)."""
             'response': response_text,
             'results': search_results['results']
         }
-
+    
+    def find_image_by_source_id(self, source_id: str) -> Optional[Dict]:
+        """
+        Find image information by its source ID in the field-based structure
+        
+        :param source_id: Source ID to find
+        :return: Image information or None if not found
+        """
+        try:
+            # Query for vectors with matching source_id
+            filter_dict = {"source_id": {"$eq": source_id}}
+            
+            result = self.pinecone_manager.index.query(
+                vector=[0.0] * 512,  # Dummy vector, we're just using the filter
+                top_k=100,  # Get all fields for this source ID
+                namespace=f"{self.namespace}_fields",
+                include_metadata=True,
+                filter=filter_dict
+            )
+            
+            if not result.get('matches'):
+                return None
+            
+            # Group by field type
+            fields = {}
+            image_url = ""
+            
+            for match in result.get('matches', []):
+                metadata = match.get('metadata', {})
+                field_type = metadata.get('field_type')
+                
+                if field_type:
+                    if field_type == 'image':
+                        image_url = metadata.get('url', '')
+                    
+                    content = metadata.get('content')
+                    if content:
+                        fields[field_type] = content
+            
+            return {
+                'source_id': source_id,
+                'url': image_url,
+                'fields': fields
+            }
+            
+        except Exception as e:
+            logger.error(f"Error finding image by source ID: {e}")
+            return None
 
 # Example usage
 if __name__ == "__main__":
@@ -344,18 +386,27 @@ if __name__ == "__main__":
         test_query = "old photographs of Boston Common with people"
         print(f"\nSearching for: '{test_query}'")
         
-        response = query_interface.generate_response(test_query, top_k=3)
+        # Test field-based search
+        search_results = query_interface.search_images(test_query, top_k=3)
         
-        print(f"\nResponse: {response['response']}")
-        print("\nTop results:")
-        
-        for i, result in enumerate(response['results']):
+        print(f"\nFound {len(search_results['results'])} results:")
+        for i, result in enumerate(search_results['results']):
             print(f"\nResult {i+1}:")
             print(f"  Score: {result['score']:.4f}")
-            print(f"  Type: {result['type']}")
+            print(f"  Source ID: {result.get('source_id', 'N/A')}")
+            print(f"  Caption: {result.get('caption', 'No caption')}")
+            print(f"  URL: {result.get('url', 'No URL')}")
             
-            if result['type'] == 'image':
-                print(f"  Caption: {result.get('caption', 'No caption')}")
-                print(f"  URL: {result.get('url', 'No URL')}")
-            else:
-                print(f"  Content: {result.get('content', 'No content')[:100]}...")
+            if 'tags' in result and result['tags']:
+                tags_str = ', '.join(result['tags'][:5]) if isinstance(result['tags'], list) else result['tags']
+                print(f"  Tags: {tags_str}")
+        
+        # Test natural language response generation
+        print("\n\nGenerating natural language response:")
+        response = query_interface.generate_response(test_query, top_k=3)
+        
+        print(f"\nQuery: {test_query}")
+        if response.get('enhanced_query'):
+            print(f"Enhanced query: {response['enhanced_query']}")
+        
+        print(f"\nResponse: {response['response']}")
