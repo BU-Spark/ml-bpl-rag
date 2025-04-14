@@ -41,12 +41,13 @@ def initialize_models() -> Tuple[Optional[ChatOpenAI], HuggingFaceEmbeddings]:
         if "embeddings" not in st.session_state:
             # Initialize embeddings
             st.session_state.embeddings = HuggingFaceEmbeddings(
-                model_name="sentence-transformers/all-MiniLM-L6-v2"
+                model_name="sentence-transformers/all-mpnet-base-v2"
+                #model_name="sentence-transformers/all-MiniLM-L6-v2"
             )
 
         if "pinecone" not in st.session_state:
             pinecone_api_key = os.getenv("PINECONE_API_KEY")
-            INDEX_NAME = 'bpl-rag'
+            INDEX_NAME = 'bpl-test'
             #initialize vectorstore
             pc = Pinecone(api_key=pinecone_api_key)
             
@@ -54,7 +55,8 @@ def initialize_models() -> Tuple[Optional[ChatOpenAI], HuggingFaceEmbeddings]:
             st.session_state.pinecone = PineconeVectorStore(index=index, embedding=st.session_state.embeddings)
         
         if "vectorstore" not in st.session_state:
-            st.session_state.vectorstore = CloudSQLVectorStore(embedding=st.session_state.embeddings)
+            #st.session_state.vectorstore = CloudSQLVectorStore(embedding=st.session_state.embeddings)
+            st.session_state.vectorstore = st.session_state.pinecone
         
     except Exception as e:
         logger.error(f"Error initializing models: {str(e)}")

@@ -22,7 +22,7 @@ USE_DB_FOR_METADATA = os.getenv("USE_DB_FOR_METADATA", "True").lower() == "true"
 # Database connection details
 DB_HOST = os.getenv("DB_HOST", "127.0.0.1")  # Default to local proxy
 DB_PORT = os.getenv("DB_PORT", "5432")
-DB_NAME = "bpl_metadata"
+DB_NAME = "bpl_metadata_new"
 DB_USER = "postgres"
 DB_PASSWORD = os.getenv("DB_PASSWORD")
 
@@ -418,8 +418,8 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
         #logging.info(f"\n---\nQUERY: {query}")
 
         #new query rephrasing
-        query = rephrase_and_expand_query(query, llm)
-        logging.info(f"\n---\nRephrased QUERY: {query}")
+        #query = rephrase_and_expand_query(query, llm)
+        #logging.info(f"\n---\nRephrased QUERY: {query}")
 
         retrieved, _ = retrieve(query=query, vectorstore=vectorstore, k=k)
         if not retrieved:
@@ -439,6 +439,8 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
         # Prepare prompt
         answer_template = PromptTemplate.from_template(
             """Pretend you are a professional librarian. Please Summarize The Following Context as though you had retrieved it for a patron:
+            Some of the retrieved results may include image descriptions, captions, or references to photos, rather than the images themselves. 
+            Assume that content describing or captioning an image, or mentioning a place/person clearly, is valid and relevant — even if the actual image isn't embedded.
             Context:{context}
             Make sure to answer in the following format
             First, reason about the answer between <REASONING></REASONING> headers,
@@ -464,7 +466,9 @@ def RAG(llm: Any, query: str,vectorstore:PineconeVectorStore, top: int = 10, k: 
         response = llm.invoke(ans_prompt)
         
         # Parse and return response
+        logging.debug(f"RAW LLM RESPONSE:\n{response.content}")
         parsed = parse_xml_and_check(response.content)
+        logging.debug(f"PARSED FINAL RESPONSE: {parsed}")
         #logging.info(f"RESPONSE: {parsed}\nRETRIEVED: {reranked}")
         logging.info(f"RAG Finished: {time.time()-start}\n---\n")
         return parsed, reranked
