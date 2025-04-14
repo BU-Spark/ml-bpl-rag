@@ -88,6 +88,7 @@ class HistoricalImageSearchApp:
                           save_images: bool = True) -> Dict:
         """
         Scrape images from Digital Commonwealth, generate captions, and store in Pinecone
+        using the field-based approach
         
         :param queries: List of search queries to use for diversity
         :param limit_items: Maximum number of items to process per query
@@ -157,31 +158,38 @@ class HistoricalImageSearchApp:
                             description = analysis.get('description', '')
                             tags = analysis.get('tags', [])
                             
-                            # Add analysis to image metadata
-                            image['caption'] = caption
-                            image['detailed_description'] = description
-                            image['tags'] = tags
+                            # Extract metadata from BPL
+                            bpl_metadata = image.get('metadata', {})
                             
-                            # Store in Pinecone
-                            logger.info("Adding image and descriptions to Pinecone")
-                            image_id, desc_id = self.pinecone_manager.process_image_with_captions(
+                            # Create combined metadata
+                            combined_metadata = {
+                                'url': image_url,
+                                'source_page': item_url,
+                                'alt': image.get('alt', ''),
+                                'item_id': item_id,
+                                'source': 'Digital Commonwealth',
+                                'query': query  # Add the search query used to find this image
+                            }
+                            
+                            # Add BPL metadata if available
+                            if bpl_metadata:
+                                # Add title, description, subject, etc. from BPL
+                                for key, value in bpl_metadata.items():
+                                    if value:  # Only add non-empty values
+                                        combined_metadata[key] = value
+                            
+                            # Store in Pinecone using the field-based approach
+                            logger.info("Adding image and fields to Pinecone")
+                            source_id = self.pinecone_manager.process_image_with_fields(
                                 image_source=image_source,
                                 caption=caption,
                                 detailed_description=description,
                                 tags=tags,
-                                metadata={
-                                    'url': image_url,
-                                    'source_page': item_url,
-                                    'alt': image.get('alt', ''),
-                                    'item_id': item_id,
-                                    'source': 'Digital Commonwealth',
-                                    'query': query  # Add the search query used to find this image
-                                }
+                                metadata=combined_metadata
                             )
                             
                             processed_images.append({
-                                'image_id': image_id,
-                                'description_id': desc_id,
+                                'source_id': source_id,
                                 'url': image_url,
                                 'local_path': local_path,
                                 'caption': caption,
@@ -200,12 +208,10 @@ class HistoricalImageSearchApp:
                                     'image_url': image_url,
                                     'local_path': local_path,
                                     'analysis': analysis,
-                                    'pinecone_ids': {
-                                        'image_id': image_id,
-                                        'description_id': desc_id
-                                    }
+                                    'source_id': source_id,
+                                    'bpl_metadata': bpl_metadata
                                 }, f, indent=2)
-                            
+                        
                     except Exception as e:
                         logger.error(f"Error processing image: {e}")
                 
@@ -242,7 +248,7 @@ class HistoricalImageSearchApp:
     
     def search(self, query: str, top_k: int = 5) -> Dict:
         """
-        Search for images using the Pinecone manager
+        Search for images using the field-based approach
         
         :param query: Search query
         :param top_k: Number of results to return
@@ -257,37 +263,45 @@ class HistoricalImageSearchApp:
         
         logger.info(f"Searching for: '{query}'")
         
-        # Create embedding from query
-        query_embedding = self.pinecone_manager.embed_text(query)
-        
-        # Search in both namespaces
-        results = self.pinecone_manager.search(query, top_k=top_k)
+        # Search using field-based approach
+        results = self.pinecone_manager.search_fields(query, top_k=top_k)
         
         # Format results for display
         formatted_results = []
         
         for match in results.get('matches', []):
-            result = {}
+            source_id = match.get('source_id')
+            fields = match.get('fields', {})
             
-            if match['type'] == 'image':
-                # Image result
-                metadata = match['metadata']
-                result = {
-                    'type': 'image',
-                    'score': match['score'],
-                    'caption': metadata.get('caption', 'No caption available'),
-                    'url': metadata.get('url', ''),
-                    'source_page': metadata.get('source_page', ''),
-                    'tags': metadata.get('tags', [])
-                }
-            else:
-                # Text result
-                result = {
-                    'type': 'text',
-                    'score': match['score'],
-                    'content': match['content'],
-                    'image_id': match['metadata'].get('image_id', '')
-                }
+            # Construct result with available fields
+            result = {
+                'type': 'image',
+                'score': match.get('score', 0),
+                'source_id': source_id,
+                'url': match.get('url', '')
+            }
+            
+            # Add caption if available
+            if 'caption' in fields:
+                result['caption'] = fields['caption'].get('content', 'No caption available')
+            
+            # Add description if available
+            if 'description' in fields:
+                result['description'] = fields['description'].get('content', '')
+            
+            # Add tags if available
+            if 'tags' in fields:
+                tags_content = fields['tags'].get('content', [])
+                if isinstance(tags_content, list):
+                    result['tags'] = tags_content
+                else:
+                    # Handle case where tags might be stored as string
+                    result['tags'] = str(tags_content).split()
+            
+            # Add other BPL metadata fields
+            for field_type, field_data in fields.items():
+                if field_type not in ['caption', 'description', 'tags', 'image']:
+                    result[field_type] = field_data.get('content')
             
             formatted_results.append(result)
         
@@ -316,7 +330,7 @@ class HistoricalImageSearchApp:
         
         logger.info(f"Performing natural language search: '{query}'")
         
-        # Use the OpenAI query interface
+        # Use the OpenAI query interface directly
         response = self.query_interface.generate_response(
             query=query,
             top_k=top_k,
@@ -417,6 +431,8 @@ def main():
                 print(f"\n{i+1}. {res.get('caption', res.get('content', ''))}")
                 if 'url' in res:
                     print(f"   URL: {res['url']}")
+                if 'source_id' in res:
+                    print(f"   Source ID: {res['source_id']}")
                 if 'tags' in res and res['tags']:
                     print(f"   Tags: {', '.join(res['tags'][:10])}")
                 print(f"   Score: {res['score']}")

@@ -348,6 +348,134 @@ class MultimodalPineconeManager:
         
         return image_id, desc_id
     
+    def process_image_with_fields(self, image_source: Union[str, bytes, Image.Image],
+                                caption: str,
+                                detailed_description: Optional[str] = None,
+                                tags: Optional[List[str]] = None,
+                                metadata: Optional[Dict] = None) -> str:
+        """
+        Process an image using a field-based approach where each aspect is stored separately
+        but references a common source ID
+        
+        :param image_source: Image source
+        :param caption: Short caption of the image
+        :param detailed_description: Detailed description of the image
+        :param tags: List of tags/keywords
+        :param metadata: Additional metadata (source URL, etc.)
+        :return: Source ID that all fields reference
+        """
+        if metadata is None:
+            metadata = {}
+            
+        # Generate a unique source ID for this image
+        import uuid
+        source_id = f"src_{str(uuid.uuid4())[:8]}"
+        
+        # Create base metadata with source ID reference
+        base_meta = {"source_id": source_id}
+        
+        # Add source metadata to base metadata
+        for key, value in metadata.items():
+            # Don't overwrite source_id if it's in metadata
+            if key != "source_id":
+                base_meta[key] = value
+        
+        # Create a list to collect all vectors to upsert
+        vectors = []
+        
+        # Add image embedding
+        image_embedding = self.embed_image(image_source)
+        if image_embedding:
+            vectors.append({
+                "id": f"{source_id}_image",
+                "values": image_embedding,
+                "metadata": {
+                    **base_meta,
+                    "field_type": "image",
+                    "url": metadata.get("url", ""),
+                    "caption": caption  # Include caption with image for convenience
+                }
+            })
+        
+        # Add caption as separate field
+        if caption:
+            caption_embedding = self.embed_text(caption)
+            vectors.append({
+                "id": f"{source_id}_caption",
+                "values": caption_embedding,
+                "metadata": {
+                    **base_meta,
+                    "field_type": "caption",
+                    "content": caption
+                }
+            })
+        
+        # Add detailed description as separate field
+        if detailed_description:
+            desc_embedding = self.embed_text(detailed_description)
+            vectors.append({
+                "id": f"{source_id}_description",
+                "values": desc_embedding,
+                "metadata": {
+                    **base_meta,
+                    "field_type": "description",
+                    "content": detailed_description
+                }
+            })
+        
+        # Add tags as separate field
+        if tags and len(tags) > 0:
+            tags_text = " ".join(tags)
+            tags_embedding = self.embed_text(tags_text)
+            vectors.append({
+                "id": f"{source_id}_tags",
+                "values": tags_embedding,
+                "metadata": {
+                    **base_meta, 
+                    "field_type": "tags",
+                    "content": tags
+                }
+            })
+        
+        # Process any additional metadata fields from BPL that need their own entries
+        for key, value in metadata.items():
+            # Skip already processed fields or empty values
+            if key in ['url', 'source_id'] or not value:
+                continue
+                
+            # Create embedding for this metadata field
+            if isinstance(value, str):
+                field_embedding = self.embed_text(value)
+                vectors.append({
+                    "id": f"{source_id}_{key}",
+                    "values": field_embedding,
+                    "metadata": {
+                        **base_meta,
+                        "field_type": key,
+                        "content": value
+                    }
+                })
+            elif isinstance(value, list) and all(isinstance(item, str) for item in value):
+                # Handle list of strings (like multiple subjects)
+                field_text = " ".join(value)
+                field_embedding = self.embed_text(field_text)
+                vectors.append({
+                    "id": f"{source_id}_{key}",
+                    "values": field_embedding,
+                    "metadata": {
+                        **base_meta,
+                        "field_type": key,
+                        "content": value
+                    }
+                })
+        
+        # Upsert all vectors to Pinecone
+        if vectors:
+            self.index.upsert(vectors=vectors, namespace=f"{self.namespace}_fields")
+            logger.info(f"Added {len(vectors)} field vectors for source_id: {source_id}")
+        
+        return source_id
+    
     def search(self, query: str, top_k: int = 5, filter_dict: Optional[Dict] = None, mode: str = "all") -> Dict:
         """
         Search for vectors using text query
@@ -407,6 +535,70 @@ class MultimodalPineconeManager:
         results['matches'] = sorted(results['matches'], key=lambda x: x['score'], reverse=True)[:top_k]
         
         return results
+    
+    def search_fields(self, query: str, top_k: int = 5, filter_dict: Optional[Dict] = None) -> Dict:
+        """
+        Search for images using the field-based approach
+        
+        :param query: Text query
+        :param top_k: Number of results to return
+        :param filter_dict: Filter to apply to query
+        :return: Search results grouped by source_id
+        """
+        # Generate embedding for query
+        query_embedding = self.embed_text(query)
+        
+        # Search in the fields namespace
+        search_results = self.index.query(
+            vector=query_embedding,
+            top_k=top_k * 2,  # Get more results since we'll group them
+            namespace=f"{self.namespace}_fields",
+            include_metadata=True,
+            filter=filter_dict
+        )
+        
+        # Group results by source_id
+        grouped_results = {}
+        
+        for match in search_results.get('matches', []):
+            metadata = match.get('metadata', {})
+            source_id = metadata.get('source_id')
+            
+            if not source_id:
+                continue
+                
+            # Initialize source entry if not exists
+            if source_id not in grouped_results:
+                grouped_results[source_id] = {
+                    'source_id': source_id,
+                    'score': match.get('score', 0),  # Use the highest score for now
+                    'fields': {},
+                    'url': metadata.get('url', '')
+                }
+            elif match.get('score', 0) > grouped_results[source_id]['score']:
+                # Update score if this match has a higher one
+                grouped_results[source_id]['score'] = match.get('score', 0)
+            
+            # Add field data to grouped result
+            field_type = metadata.get('field_type')
+            if field_type:
+                grouped_results[source_id]['fields'][field_type] = {
+                    'content': metadata.get('content'),
+                    'score': match.get('score', 0)
+                }
+                
+                # Update URL if not already set
+                if field_type == 'image' and 'url' in metadata and not grouped_results[source_id]['url']:
+                    grouped_results[source_id]['url'] = metadata.get('url', '')
+        
+        # Convert to list and sort by score
+        results_list = list(grouped_results.values())
+        results_list.sort(key=lambda x: x['score'], reverse=True)
+        
+        # Limit to top_k after grouping
+        results_list = results_list[:top_k]
+        
+        return {'matches': results_list}
 
 # Example usage
 if __name__ == "__main__":
@@ -447,8 +639,8 @@ if __name__ == "__main__":
             description = captioner.generate_caption(image_path, detail_level="detailed")
             tags = captioner.generate_tags(image_path)
             
-            # Process image with captions
-            image_id, desc_id = pinecone_manager.process_image_with_captions(
+            # Process image with fields
+            source_id = pinecone_manager.process_image_with_fields(
                 image_source=image_path,
                 caption=caption,
                 detailed_description=description,
@@ -456,21 +648,19 @@ if __name__ == "__main__":
                 metadata={"source": "sample"}
             )
             
-            print(f"Stored image with ID: {image_id}")
-            print(f"Stored description with ID: {desc_id}")
+            print(f"Stored image with fields, source ID: {source_id}")
             
             # Test search
             search_query = "historic photograph"
-            results = pinecone_manager.search(search_query, top_k=3)
+            results = pinecone_manager.search_fields(search_query, top_k=3)
             
             print(f"\nSearch results for '{search_query}':")
             for i, match in enumerate(results.get('matches', [])):
                 print(f"Result {i+1}:")
                 print(f"  Score: {match['score']:.4f}")
-                print(f"  Type: {match['type']}")
+                print(f"  Source ID: {match['source_id']}")
+                print(f"  Fields: {', '.join(match['fields'].keys())}")
                 
-                if match['type'] == 'text':
-                    print(f"  Content: {match['content'][:100]}...")
-                else:
-                    print(f"  Caption: {match['metadata'].get('caption', 'No caption')[:100]}...")
+                if 'caption' in match['fields']:
+                    print(f"  Caption: {match['fields']['caption']['content'][:100]}...")
                 print()
