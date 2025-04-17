@@ -88,21 +88,22 @@ def display_sources(sources: List) -> None:
         return
 
     st.subheader("Sources")
-    for i, doc in enumerate(sources, 1):
+    for doc in sources:
         try:
-            with st.expander(f"Source {i}"):
+            source = doc.metadata.get("source", "Unknown Source")
+            title = doc.metadata.get("title_info_primary_tsi", "Unknown Title")
+
+            with st.expander(f"{title}"):
                 # Content preview
                 if hasattr(doc, 'page_content'):
                     st.markdown(f"**Content:** {doc.page_content[:100]} ...")
 
-                # Extract source and URL
-                source = doc.metadata.get("source", "N/A")
+                # Extract URL
                 doc_url = doc.metadata.get("URL", "").strip()
-
                 if not doc_url and source:
                     doc_url = f"https://www.digitalcommonwealth.org/search/{source}"
 
-                st.markdown(f"**Source:** {source}")
+                st.markdown(f"**Source ID:** {source}")
                 st.markdown(f"**URL:** {doc_url}")
 
                 # Try to show an image
@@ -116,66 +117,99 @@ def display_sources(sources: List) -> None:
                         shutil.rmtree(output_dir)
                     downloaded_files = scraper.download_images(images)
                     st.image(downloaded_files, width=400, caption=[
-                        img.get('alt', f'Image {i}') for i, img in enumerate(images)
+                        img.get('alt', f'Image') for img in images
                     ])
         except Exception as e:
-            logger.warning(f"[display_sources] Error displaying document {i}: {e}")
-            st.error(f"Error displaying source {i}")
+            logger.warning(f"[display_sources] Error displaying document: {e}")
+            st.error("Error displaying one of the sources.")
 
 
 def main():
-    st.title("Digital Commonwealth RAG")
-    
+    st.title("Digital Commonwealth RAG 🤖")
+
     INDEX_NAME = 'bpl-rag'
 
     # Initialize session state
     if "messages" not in st.session_state:
         st.session_state.messages = []
-    
-    # Initialize models
+
+    if "show_settings" not in st.session_state:
+        st.session_state.show_settings = False
+
+    if "num_sources" not in st.session_state:
+        st.session_state.num_sources = 10
+        
+
     initialize_models()
 
-    # Display chat history
+    # 🔵 Settings button
+    open_settings = st.button("⚙️ Settings")
+
+    if open_settings:
+        st.session_state.show_settings = True
+
+    if st.session_state.show_settings:
+        with st.container():
+            st.markdown("---")
+            st.markdown("### ⚙️ Settings")
+
+            num_sources = st.number_input(
+                "Number of Sources to Display",
+                min_value=1,
+                max_value=100,
+                value=st.session_state.num_sources,
+                step=1,
+            )
+            st.session_state.num_sources = num_sources
+
+            close_settings = st.button("❌ Close Settings")
+            if close_settings:
+                st.session_state.show_settings = False
+            st.markdown("---")
+
+    # Show chat history
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-    
-    # Chat input
-    user_input = st.chat_input("Type your query here...")
+
+    # ⬇️ CHAT INPUT BOX always stuck to bottom
+    user_input = st.chat_input("Type your question here...")
+
     if user_input:
-        # Display user message
         with st.chat_message("user"):
             st.markdown(user_input)
         st.session_state.messages.append({"role": "user", "content": user_input})
-        
-        # Process and display assistant response
+
         with st.chat_message("assistant"):
-            with st.spinner("Thinking... Please be patient, I'm a little slow right now..."):
+            with st.spinner("Thinking... Please be patient..."):
                 response, sources = process_message(
                     query=user_input,
                     llm=st.session_state.llm,
                     vectorstore=st.session_state.vectorstore
                 )
-                
+
                 if isinstance(response, str):
                     st.markdown(response)
                     st.session_state.messages.append({
                         "role": "assistant",
                         "content": response
                     })
-                    
-                    # Display sources
-                    display_sources(sources)
+
+                    display_sources(sources[:int(st.session_state.num_sources)])
                 else:
                     st.error("Received an invalid response format")
-    
-    # Footer
+
+    # Footer (optional, will be above chat input)
     st.markdown("---")
     st.markdown(
         "Built with Langchain + Streamlit + Pinecone",
         help="Natural Language Querying for Digital Commonwealth"
     )
-    st.markdown("The Digital Commonwealth site provides access to photographs, manuscripts, books, audio recordings, and other materials of historical interest that have been\ndigitized and made available by members of Digital Commonwealth, a statewide consortium of libraries, museums, archives, and historical societies from across Massachusetts.")
+    st.markdown(
+        "The Digital Commonwealth site provides access to photographs, manuscripts, books, "
+        "audio recordings, and other materials of historical interest that have been digitized "
+        "and made available by members of Digital Commonwealth."
+    )
 
 if __name__ == "__main__":
     main()
