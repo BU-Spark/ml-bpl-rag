@@ -82,7 +82,7 @@ def process_message(
         return f"Error processing message: {str(e)}", []
 
 def display_sources(sources: List) -> None:
-    """Display sources with minimal output: content preview, source, URL, and image if available."""
+    """Display sources with minimal output: content preview, source, URL, and image/audio if available."""
     if not sources:
         st.info("No sources available for this response.")
         return
@@ -90,38 +90,54 @@ def display_sources(sources: List) -> None:
     st.subheader("Sources")
     for doc in sources:
         try:
-            source = doc.metadata.get("source", "Unknown Source")
-            title = doc.metadata.get("title_info_primary_tsi", "Unknown Title")
+            metadata = doc.metadata
+            source = metadata.get("source", "Unknown Source")
+            title = metadata.get("title_info_primary_tsi", "Unknown Title")
+            format_type = metadata.get("format", "").lower()
 
-            with st.expander(f"{title}"):
+            is_audio = "audio" in format_type
+
+            expander_title = f"🔊 {title}" if is_audio else title
+
+            with st.expander(expander_title):
                 # Content preview
                 if hasattr(doc, 'page_content'):
-                    st.markdown(f"**Content:** {doc.page_content[:100]} ...")
+                    st.markdown(f"**Content:** {doc.page_content[:300]} ...")
 
-                # Extract URL
-                doc_url = doc.metadata.get("URL", "").strip()
+                # URL building
+                doc_url = metadata.get("URL", "").strip()
                 if not doc_url and source:
                     doc_url = f"https://www.digitalcommonwealth.org/search/{source}"
 
                 st.markdown(f"**Source ID:** {source}")
+                st.markdown(f"**Format:** {format_type if format_type else 'Not specified'}")
                 st.markdown(f"**URL:** {doc_url}")
 
-                # Try to show an image
-                scraper = DigitalCommonwealthScraper()
-                images = scraper.extract_images(doc_url)
-                images = images[:1]
+                # 🔊 Try to show audio if it's an audio entry and there's a media file
+                if is_audio:
+                    # Try to find a playable media file — if metadata has audio URLs
+                    # For now, just embed a dummy player or placeholder
+                    st.info("This is an audio entry.")
+                    # Optionally:
+                    # st.audio("https://example.com/audio-file.mp3")  # replace with real audio URL
+                else:
+                    # 🖼️ Show image if it's not audio
+                    scraper = DigitalCommonwealthScraper()
+                    images = scraper.extract_images(doc_url)
+                    images = images[:1]
 
-                if images:
-                    output_dir = 'downloaded_images'
-                    if os.path.exists(output_dir):
-                        shutil.rmtree(output_dir)
-                    downloaded_files = scraper.download_images(images)
-                    st.image(downloaded_files, width=400, caption=[
-                        img.get('alt', f'Image') for img in images
-                    ])
+                    if images:
+                        output_dir = 'downloaded_images'
+                        if os.path.exists(output_dir):
+                            shutil.rmtree(output_dir)
+                        downloaded_files = scraper.download_images(images)
+                        st.image(downloaded_files, width=400, caption=[
+                            img.get('alt', f'Image') for img in images
+                        ])
         except Exception as e:
             logger.warning(f"[display_sources] Error displaying document: {e}")
             st.error("Error displaying one of the sources.")
+
 
 
 def main():
