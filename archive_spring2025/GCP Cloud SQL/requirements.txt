@@ -1,0 +1,8 @@
+ijson
+psycopg2-binary
+tqdm
+python-dotenv
+langchain-community
+sentence-transformers
+torch
+transformers

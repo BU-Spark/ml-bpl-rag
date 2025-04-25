@@ -14,17 +14,8 @@ import requests
 import psycopg2
 from collections import defaultdict
 from typing import Dict, Any, Optional, List, Tuple
-from RAG_cloudsql_vector import CloudSQLVectorStore
 import json
 import logging
-
-USE_DB_FOR_METADATA = os.getenv("USE_DB_FOR_METADATA", "True").lower() == "true"
-# Database connection details
-DB_HOST = os.getenv("DB_HOST", "127.0.0.1")  # Default to local proxy
-DB_PORT = os.getenv("DB_PORT", "5432")
-DB_NAME = "bpl_metadata_new"
-DB_USER = "postgres"
-DB_PASSWORD = os.getenv("DB_PASSWORD")
 
 def retrieve(query: str,vectorstore:PineconeVectorStore, k: int = 1000) -> Tuple[List[Document], List[float]]:    
     start = time.time()
