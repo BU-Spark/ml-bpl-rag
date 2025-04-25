@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 from RAG import RAG
 import logging
 from image_scraper import DigitalCommonwealthScraper
-from RAG_cloudsql_vector import CloudSQLVectorStore
 import shutil
 
 # Configure logging
