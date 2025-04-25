@@ -31,7 +31,8 @@ index = pc.Index(INDEX_NAME)
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
 vector_store = PineconeVectorStore(index=index, embedding=embeddings)
 
-FILE_PATH = "/projectnb/sparkgrp/ml-bpl-rag-data/extraneous/metadata/bpl_data.json"
+#FILE_PATH = "/projectnb/sparkgrp/ml-bpl-rag-data/extraneous/metadata/bpl_data.json"
+FILE_PATH = "selected_items.json"
 NUM_WORKERS = 6
 BATCH_SIZE = 10 
 
@@ -112,7 +113,7 @@ def process_item(item):
         print(f"Processed item: {id} with {len(documents)} documents")
         return documents
     except Exception as e:
-        print(f"⚠️ Error on {item.get('id')}: {e}")
+        print(f"Error on {item.get('id')}: {e}")
         return []
 
 
@@ -135,9 +136,9 @@ with open(FILE_PATH, 'rb') as f:
                 try:
                     vector_store.add_documents(documents=documents, ids=uuids)
                     total_embedded += len(documents)
-                    print(f"✅ Total embedded so far: {total_embedded}")
+                    print(f"Total embedded so far: {total_embedded}")
                 except Exception as e:
-                    print(f"⚠️ Error inserting documents: {e}")
+                    print(f"Error inserting documents: {e}")
 
             if total_processed % BATCH_SIZE == 0:
                 print(f"Processed {total_processed} items, embedded {total_embedded} documents so far.")
