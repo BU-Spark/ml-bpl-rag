@@ -227,3 +227,67 @@ This will run the app on port 8501. When querying, please be patient, sometimes 
   - Currently we are linearly hitting the Digital Commonwealth API for metadata once we retrieve the top 100 vectors in order to perform reranking and contextual addition to the prompt. This is really slow. We recommend that you either forego this method for some other or parallelize your calls (we tried parallelization, however found that rate limiting was too severe). A solution might be to create a metadata database and initialize it only on startup for referencing or to create proxies for api parallelization.
 
   Thank You and Best of Luck!
+
+Continuing Development: Audio and Image Query Results
+Recent updates have added major improvements to handling audio and image results from the Digital Commonwealth metadata.
+
+Summary of Current Features
+Audio Metadata Grouping:
+
+A custom script (group_audio_metadata.py) retrieves and groups separate metadata fields (e.g., title, description, notes) that belong to the same source_id.
+
+This allows full reconstruction of individual audio records despite Pinecone storing fields separately.
+
+Grouped audio results are now available to be retrieved and presented through the Streamlit app.
+
+Image Retrieval and Display:
+
+Images associated with records are retrieved from the Digital Commonwealth URLs.
+
+Downloaded images are displayed inside the chat UI alongside the document's title and description.
+
+UI Enhancements:
+
+The Streamlit app was updated to recognize audio entries and display them with an appropriate 🔊 icon.
+
+Future support for audio players (e.g., st.audio()) is ready to be plugged in once direct audio URLs are available.
+
+Image displays were enhanced to better match the look and feel of BPL's original digital repository.
+
+Future Engineering Directions
+To continue or improve the project from here, the following areas are recommended:
+
+1. Full Audio Player Integration
+Current state: Audio entries are labeled but do not embed playable audio yet.
+
+Next step: Identify and extract actual audio file URLs (if available) from Digital Commonwealth or metadata fields.
+
+Implementation idea: Use st.audio(url) to directly embed playable audio clips into the Streamlit app.
+
+2. Smarter Multimedia Querying
+Current state: Queries retrieve relevant entries, but audio/image prioritization is basic.
+
+Next step: Add format-aware reranking — e.g., prioritize or separate "Audio" results when queries mention "listen", "hear", "recordings", etc.
+
+Implementation idea: Build a simple query classifier to detect if a query is asking for audio or visual content, and then boost those entries accordingly.
+
+3. Metadata Preloading and Caching
+Current state: Each API call retrieves metadata individually (slow).
+
+Next step:
+
+Build a pre-cached metadata database (e.g., a local SQLite DB or a hosted lightweight database) initialized once at startup.
+
+Future retrievals could hit this database instead of calling the API repeatedly, massively speeding up the app.
+
+4. Parallel API Calls for Metadata
+Current state: Metadata enrichment is sequential, causing slowdowns.
+
+Next step: Implement parallel requests with rate limiting awareness or a batch API retrieval method (if supported).
+
+Implementation idea: Use asyncio + backoff retries to batch metadata pulls without exceeding API limits.
+
+5. Expand Grouping Logic to Other Formats
+Current state: Grouping is focused mainly on audio records.
+
+Next step: Extend grouping scripts to other types (e.g., manuscripts, video) by dynamically adjusting which fields to combine for each media type.
