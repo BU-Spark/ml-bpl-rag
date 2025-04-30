@@ -35,7 +35,7 @@ The system is organized into two main pipelines: **Data Preparation** and **Quer
 - Scrape metadata from the Digital Commonwealth API.
 - Preprocess fields (title, abstract, creator, date).
 - Combine key fields into a single text block for better embedding.
-- Embed records using the `all-MiniLM-L6-v2` model from Hugging Face.
+- Embed records using the `all-mpnet-base-v2` model from Hugging Face.
 - Store embeddings in a Pinecone vector database.
 
 ### Query Handling Pipeline
@@ -114,7 +114,7 @@ Run the following to upload the embeddings:
 python load_pinecone.py <BEGIN_INDEX> <END_INDEX> <PATH_TO_JSON> <PINECONE_INDEX_NAME>
 ```
 
-Make sure your Pinecone index is created beforehand with the correct vector dimension (384 for MiniLM-L6-v2).
+Make sure your Pinecone index is created beforehand with the correct vector dimension (786 for all-mpnet-base-v2).
 
 ---
 
