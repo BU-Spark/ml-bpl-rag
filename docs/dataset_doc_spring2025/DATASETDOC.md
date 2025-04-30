@@ -15,15 +15,21 @@ Eben English
 * What class was this project part of?
 Spark! Machine Learning X-Lab Practicum (CS549)
 
-***Dataset Information***
+## ***Dataset Information***
 
-* What data sets did you use in your project? Please provide a link to the data sets, this could be a link to a folder in your GitHub Repo, Spark\! owned Google Drive Folder for this project, or a path on the SCC, etc.  
+### What data sets did you use in your project?
+
 We used metadata records from the Digital Commonwealth API, which provides access to digitized materials from libraries, museums, and historical societies across Massachusetts. The data includes structured metadata for over 1.2 million items, including images, audio recordings, text files, and more.
 
-API Endpoint (for reference):
+**API Endpoint (for reference):**  
 https://www.digitalcommonwealth.org/search.json
 
-* Please provide a link to any data dictionaries for the datasets in this project. If one does not exist, please create a data dictionary for the datasets used in this project. **(Example of data dictionary)**   
+---
+
+### Please provide a link to any data dictionaries for the datasets in this project.
+
+Below is a sample data dictionary representing key fields we used from the metadata.
+
 | Field Name                | Description                                                                 |
 |--------------------------|-----------------------------------------------------------------------------|
 | `id`                     | Unique item identifier (e.g., `commonwealth:4b29gx20r`)                     |
@@ -36,9 +42,12 @@ https://www.digitalcommonwealth.org/search.json
 | `identifier_uri`         | Direct URL to the item on Digital Commonwealth                              |
 | `type`                   | Type of digital object (e.g., Still Image, Sound Recording, Manuscript)     |
 
-This is a selected subset of metadata fields used. The full dataset includes up to 135 fields.
+> This is a selected subset of metadata fields used. The full dataset includes up to 135 fields.
 
-* What keywords or tags would you attach to the data set?  
+---
+
+### What keywords or tags would you attach to the data set?
+
 - Retrieval-Augmented Generation (RAG)  
 - Digital Libraries  
 - Metadata Search  
@@ -54,15 +63,16 @@ This is a selected subset of metadata fields used. The full dataset includes up 
 - Boston Public Library  
 - Streamlit
 
-  * Domain(s) of Application: Computer Vision, Object Detection, OCR, Image Classification, Image Segmentation, Facial Recognition, NLP, Topic Modeling, Sentiment Analysis, Named Entity Recognition, Text Classification, Summarization, Anomaly Detection, Other   
-  * Sustainability, Health, Civic Tech, Voting, Housing, Policing, Budget, Education, Transportation, etc. 
+---
 
-  - **Natural Language Processing (NLP)**  
+### Domain(s) of Application
+
+- **Natural Language Processing (NLP)**  
   - Semantic Search  
   - Summarization  
   - Named Entity Recognition (future extension)
 
-- **Computer Vision (Metadata-level only)**  
+- **Computer Vision (metadata-level only)**  
   - Image Retrieval via metadata  
   - Image Preview Display  
 
@@ -71,11 +81,11 @@ This is a selected subset of metadata fields used. The full dataset includes up 
   - Digital Humanities  
   - Library Tech Innovation  
 
-*The following questions pertain to the datasets you used in your project.*   
-*Motivation* 
+---
 
-* For what purpose was the dataset created? Was there a specific task in mind? Was there a specific gap that needed to be filled? Please provide a description. 
+### Motivation
 
+**For what purpose was the dataset created?**  
 The metadata was created to catalog and preserve access to Massachusetts’s cultural and historical records. However, the default keyword search interface provided by the Digital Commonwealth lacks semantic understanding and contextual relevance.
 
 **Our project’s goal** was to make this data more accessible through natural language queries by building a Retrieval-Augmented Generation (RAG) system that semantically retrieves and ranks the most relevant materials, while supporting modern features like image/audio display and source traceability.
