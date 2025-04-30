@@ -101,7 +101,7 @@ OPENAI_API_KEY=your-openai-api-key
 Run the following to download metadata:
 
 ```bash
-python load_script.py <BEGIN_PAGE> <END_PAGE>
+python load_scraper.py <BEGIN_PAGE> <END_PAGE>
 ```
 
 This will save a `.json` file of metadata entries for the specified page range.
