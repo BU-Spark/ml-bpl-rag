@@ -1,18 +1,40 @@
-***Project Information*** 
+## Project Overview
 
-* What is the project name?  
+### What is the project name?
 LibRAG - Boston Public Library
-* What is the link to your project’s GitHub repository?   
-https://github.com/BU-Spark/ml-bpl-rag/tree/dev
-* What is the link to your project’s Google Drive folder? \*\**This should be a Spark\! Owned Google Drive folder \- please contact your PM if you do not have access\*\**  
-https://drive.google.com/drive/folders/1X0ngdjpJyWnabFjFd0gONESmX_Zomqg1?usp=drive_link
-* In your own words, what is this project about? What is the goal of this project?
-This project, LIBRAG, is about building a smarter way to search the Boston Public Library’s massive digital archive using AI. Instead of relying on keyword search, which can be limiting or confusing, the goal is to let users ask natural language questions and get back relevant documents, images, or audio from the collection — along with helpful summaries and direct source links. It's designed to make historical information more accessible, accurate, and user-friendly for researchers, students, and the public.
-* Who is the client for the project?  
+
+---
+
+### What is the link to your project’s GitHub repository?
+[https://github.com/BU-Spark/ml-bpl-rag/tree/dev](https://github.com/BU-Spark/ml-bpl-rag/tree/dev)
+
+---
+
+### What is the link to your project’s Google Drive folder?
+**Note:** This should be a Spark! owned Google Drive folder.  
+[https://drive.google.com/drive/folders/1X0ngdjpJyWnabFjFd0gONESmX_Zomqg1?usp=drive_link](https://drive.google.com/drive/folders/1X0ngdjpJyWnabFjFd0gONESmX_Zomqg1?usp=drive_link)
+
+---
+
+### In your own words, what is this project about? What is the goal of this project?
+
+This project, LIBRAG, is about building a smarter way to search the Boston Public Library’s massive digital archive using AI.  
+Instead of relying on keyword search, which can be limiting or confusing, the goal is to let users ask natural language questions and get back relevant documents, images, or audio from the collection — along with helpful summaries and direct source links.  
+It's designed to make historical information more accessible, accurate, and user-friendly for researchers, students, and the public.
+
+---
+
+### Who is the client for the project?
 Boston Public Library
-* Who are the client contacts for the project?  
+
+---
+
+### Who are the client contacts for the project?
 Eben English
-* What class was this project part of?
+
+---
+
+### What class was this project part of?
 Spark! Machine Learning X-Lab Practicum (CS549)
 
 ## ***Dataset Information***
