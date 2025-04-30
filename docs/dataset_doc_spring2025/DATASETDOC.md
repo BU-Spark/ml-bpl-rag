@@ -112,63 +112,197 @@ The metadata was created to catalog and preserve access to Massachusetts’s cul
 
 **Our project’s goal** was to make this data more accessible through natural language queries by building a Retrieval-Augmented Generation (RAG) system that semantically retrieves and ranks the most relevant materials, while supporting modern features like image/audio display and source traceability.
 
-*Composition*
+## ***Composition***
 
-* What do the instances that comprise the dataset represent (e.g., documents, photos, people, countries)? Are there multiple types of instances (e.g., movies, users, and ratings; people and interactions between them; nodes and edges)? What is the format of the instances (e.g., image data, text data, tabular data, audio data, video data, time series, graph data, geospatial data, multimodal (please specify), etc.)? Please provide a description.   
-* How many instances are there in total (of each type, if appropriate)?  
-* Does the dataset contain all possible instances or is it a sample (not necessarily random) of instances from a larger set? If the dataset is a sample, then what is the larger set? Is the sample representative of the larger set? If so, please describe how this representativeness was validated/verified. If it is not representative of the larger set, please describe why not (e.g., to cover a more diverse range of instances, because instances were withheld or unavailable).  
-* What data does each instance consist of? “Raw” data (e.g., unprocessed text or images) or features? In either case, please provide a description.   
-* Is there any information missing from individual instances? If so, please provide a description, explaining why this information is missing (e.g., because it was unavailable). This does not include intentionally removed information, but might include redacted text.   
-* Are there recommended data splits (e.g., training, development/validation, testing)? If so, please provide a description of these splits, explaining the rationale behind them  
-* Are there any errors, sources of noise, or redundancies in the dataset? If so, please provide a description.   
-* Is the dataset self-contained, or does it link to or otherwise rely on external resources (e.g., websites, tweets, other datasets)? If it links to or relies on external resources,   
-  * Are there guarantees that they will exist, and remain constant, over time;  
-  * Are there official archival versions of the complete dataset (i.e., including the external resources as they existed at the time the dataset was created)?  
-  * Are there any restrictions (e.g., licenses, fees) associated with any of the external resources that might apply to a dataset consumer? Please provide descriptions of all external resources and any restrictions associated with them, as well as links or other access points as appropriate.   
-* Does the dataset contain data that might be considered confidential (e.g., data that is protected by legal privilege or by doctor-patient confidentiality, data that includes the content of individuals’ non-public communications)? If so, please provide a description.   
-* Does the dataset contain data that, if viewed directly, might be offensive, insulting, threatening, or might otherwise cause anxiety? If so, please describe why.   
-* Is it possible to identify individuals (i.e., one or more natural persons), either directly or indirectly (i.e., in combination with other data) from the dataset? If so, please describe how.   
-* Dataset Snapshot, if there are multiple datasets please include multiple tables for each dataset. 
+### What do the instances that comprise the dataset represent?
+The instances represent metadata records associated with digitized historical items from the Digital Commonwealth archive. These include records for still images, audio recordings, text documents, manuscripts, and other digitized formats. Each instance is composed of descriptive metadata, including title, abstract, creator, subject tags, format, and date.
 
+The dataset is **multimodal** in nature, though it only contains metadata:
+- **Text**: Descriptions, titles, authors, dates
+- **Linked media**: References to image/audio files (via URLs)
+- **Tabular**: Structured metadata in JSON format
 
-| Size of dataset |  |
-| :---- | :---- |
-| Number of instances |  |
-| Number of fields  |  |
-| Labeled classes |  |
-| Number of labels  |  |
+---
 
+### How many instances are there in total?
+- Total metadata records: ~1.2 million
+  - Still Images: ~600,000+
+  - OCR Text Docs: ~147,000
+  - Other (audio, video, manuscripts): < 100,000
 
-  
-*Collection Process*
+---
 
-* What mechanisms or procedures were used to collect the data (e.g., API, artificially generated, crowdsourced \- paid, crowdsourced \- volunteer, scraped or crawled, survey, forms, or polls, taken from other existing datasets, provided by the client, etc)? How were these mechanisms or procedures validated?  
-* If the dataset is a sample from a larger set, what was the sampling strategy (e.g., deterministic, probabilistic with specific sampling probabilities)?  
-* Over what timeframe was the data collected? Does this timeframe match the creation timeframe of the data associated with the instances (e.g., recent crawl of old news articles)? If not, please describe the timeframe in which the data associated with the instances was created. 
+### Is this dataset complete or a sample?
+This is a **partial sample** of the full Digital Commonwealth repository. Due to cost and performance constraints, we embedded a subset (~600k records) for the demo version. The dataset is representative, as we scraped evenly across page ranges to reflect the diversity of formats and collections.
 
-*Preprocessing/cleaning/labeling* 
+---
 
-* Was any preprocessing/cleaning/labeling of the data done (e.g., discretization or bucketing, tokenization, part-of-speech tagging, SIFT feature extraction, removal of instances, processing of missing values)? If so, please provide a description. If not, you may skip the remaining questions in this section.   
-* Were any transformations applied to the data (e.g., cleaning mismatched values, cleaning missing values, converting data types, data aggregation, dimensionality reduction, joining input sources, redaction or anonymization, etc.)? If so, please provide a description.   
-* Was the “raw” data saved in addition to the preprocessed/cleaned/labeled data (e.g., to support unanticipated future uses)? If so, please provide a link or other access point to the “raw” data, this could be a link to a folder in your GitHub Repo, Spark\! owned Google Drive Folder for this project, or a path on the SCC, etc.  
-* Is the code that was used to preprocess/clean the data available? If so, please provide a link to it (e.g., EDA notebook/EDA script in the GitHub repository). 
+### What data does each instance consist of?
+Each instance contains **structured metadata**, not the raw media content. Fields include:
+- `title`, `abstract`, `creator`, `format`, `date`, `subject`, `uri`
+- Some fields may be missing depending on the completeness of the original record
 
-*Uses* 
+---
 
-* What tasks has the dataset been used for so far? Please provide a description.   
-* What (other) tasks could the dataset be used for?  
-* Is there anything about the composition of the dataset or the way it was collected and preprocessed/cleaned/labeled that might impact future uses?   
-* Are there tasks for which the dataset should not be used? If so, please provide a description.
+### Is there any missing information?
+Yes. Some records lack:
+- Creator names
+- Abstracts or descriptions
+- Subject tags
 
-*Distribution*
+This is due to the variability of metadata completeness from original contributing institutions.
 
-* Based on discussions with the client, what access type should this dataset be given (eg., Internal (Restricted), External Open Access, Other)?
+---
 
-*Maintenance* 
+### Are there recommended data splits?
+No formal splits are used. This dataset is used solely for retrieval-based applications, not training machine learning models.
 
-* If others want to extend/augment/build on/contribute to the dataset, is there a mechanism for them to do so? If so, please provide a description. 
+---
 
-*Other*
+### Are there errors, noise, or redundancies?
+Yes. Common issues include:
+- Duplicate records across collections
+- Misspellings or inconsistently formatted names and subjects
+- Missing or malformed dates
 
-* Is there any other additional information that you would like to provide that has not already been covered in other sections?
+These inconsistencies come from upstream data sources and have not been corrected programmatically.
 
+---
+
+### Is the dataset self-contained?
+No. The metadata records link to external resources (e.g., Digital Commonwealth URLs pointing to media).
+
+- **Are external resources stable?**  
+  Not guaranteed. BPL hosts and maintains them but offers no permanence guarantees.
+- **Are archival versions available?**  
+  No. We recommend periodic scraping if long-term reproducibility is needed.
+- **Are there usage restrictions?**  
+  Yes. Each item’s license varies (public domain, Creative Commons, etc.). Usage should follow the rights noted in the `rights` field of each record when present.
+
+---
+
+### Does the dataset contain confidential or sensitive data?
+No. All metadata is publicly available and part of open cultural collections.
+
+---
+
+### Could the dataset cause harm or discomfort?
+Unlikely. However, some historical items may reference outdated or offensive language or subject matter due to the nature of historical archives.
+
+---
+
+### Is it possible to identify individuals?
+Indirectly, yes. Some records may mention full names of historical figures or authors (e.g., in creator fields), but the data does not include personal identifiers or modern private information.
+
+---
+
+### Dataset Snapshot
+
+| Property               | Value                                |
+|------------------------|--------------------------------------|
+| Size of dataset        | ~1.2 million metadata records        |
+| Number of instances    | ~1.2 million                         |
+| Number of fields       | Up to 135 fields (core ~8 used)      |
+| Labeled classes        | N/A (not used for classification)    |
+| Number of labels       | N/A                                  |
+
+---
+
+## ***Collection Process***
+
+### What mechanisms were used to collect the data?
+- **Method**: API-based scraping
+- **Tool**: Python script (`load_script.py`)
+- **Source**: [https://www.digitalcommonwealth.org/search.json](https://www.digitalcommonwealth.org/search.json)
+
+---
+
+### What was the sampling strategy?
+For the live demo, we selected metadata from a **range of pages** in the API results. This ensured a diverse sample across collections, without manual filtering or stratification.
+
+---
+
+### Timeframe of data collection
+- Metadata collection: Spring 2025
+- The underlying metadata reflects items from the 1600s through 2000s
+- The crawl was recent, but the data describes historical artifacts
+
+---
+
+## ***Preprocessing / Cleaning / Labeling***
+
+### Was any preprocessing done?
+Yes. Preprocessing steps included:
+- Combining selected fields (`title`, `abstract`, `creator`, `date`) into a unified block for embedding
+- Filtering out metadata with null/empty critical fields
+- Normalizing text (removal of extra whitespace, special character fixes)
+
+---
+
+### Were transformations applied?
+Yes:
+- Removed newline/escape characters
+- Filled missing fields with empty strings (if embedding required)
+- Removed duplicate metadata entries by `id`
+
+---
+
+### Was raw data preserved?
+Yes. Raw JSON metadata was stored in the `data/metadata_chunks/` folder.
+
+---
+
+### Is preprocessing code available?
+Yes. Located in the GitHub repository under:
+[https://github.com/BU-Spark/ml-bpl-rag/tree/dev/scripts](https://github.com/BU-Spark/ml-bpl-rag/tree/dev/scripts)
+
+---
+
+## ***Uses***
+
+### What tasks has the dataset been used for?
+- Retrieval-Augmented Generation (RAG)
+- Document ranking and summarization
+- Metadata-aware reranking using BM25
+- Image and audio-based document discovery via metadata
+
+---
+
+### What other tasks could this dataset be used for?
+- Named Entity Recognition (NER)
+- Clustering or topic modeling of cultural collections
+- Historical trend analysis (based on creator/date/subject metadata)
+
+---
+
+### Any risks for future use?
+Yes. Inconsistent metadata formatting and missing values may impact downstream performance in tasks that require clean, structured data.
+
+---
+
+### Are there tasks for which this dataset should not be used?
+- Tasks requiring raw media content (e.g., image classification, audio transcription)
+- Privacy-sensitive applications (data is public, but not anonymized for modern individuals)
+
+---
+
+## ***Distribution***
+
+### What access level should be given?
+**External Open Access** – All metadata was collected from a public source and remains non-confidential.
+
+---
+
+## ***Maintenance***
+
+### Can others contribute or extend the dataset?
+Yes. The project is open-source, and additional metadata fields, modalities (e.g., OCR text), or collections can be added by:
+- Extending the scraping logic
+- Adding embedding pipelines for new modalities
+- Updating Streamlit UI for new metadata fields
+
+---
+
+## ***Other***
+
+No additional notes at this time.
