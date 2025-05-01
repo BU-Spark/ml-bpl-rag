@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 # Import application components
 from image_scraper import DigitalCommonwealthScraper
-from archive_spring2025.image_captioning import ImageCaptioner
+from image_captioning import ImageCaptioner
 from archive_spring2025.pinecone_manager import MultimodalPineconeManager
 from archive_spring2025.openai_query import OpenAIQueryInterface
 
