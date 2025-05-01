@@ -26,7 +26,12 @@ st.set_page_config(
 def initialize_models() -> Tuple[Optional[ChatOpenAI], HuggingFaceEmbeddings]:
     """Initialize the language model and embeddings."""
     try:
-        load_dotenv()
+        load_dotenv()  # Load environment variables from the .env file
+        
+        # Get Pinecone index name from environment variable (PINECONE_INDEX_NAME)
+        PINECONE_INDEX_NAME = os.getenv("PINECONE_INDEX_NAME", "default-index-name")  # Default if not set
+
+        logger.info(f"Using Pinecone Index: {PINECONE_INDEX_NAME}")
         
         if "llm" not in st.session_state:
             # Initialize OpenAI model
@@ -46,15 +51,12 @@ def initialize_models() -> Tuple[Optional[ChatOpenAI], HuggingFaceEmbeddings]:
 
         if "pinecone" not in st.session_state:
             pinecone_api_key = os.getenv("PINECONE_API_KEY")
-            INDEX_NAME = 'bpl-test'
-            #initialize vectorstore
+            # Initialize Pinecone with the environment's index name
             pc = Pinecone(api_key=pinecone_api_key)
-            
-            index = pc.Index(INDEX_NAME)
+            index = pc.Index(PINECONE_INDEX_NAME)
             st.session_state.pinecone = PineconeVectorStore(index=index, embedding=st.session_state.embeddings)
         
         if "vectorstore" not in st.session_state:
-            #st.session_state.vectorstore = CloudSQLVectorStore(embedding=st.session_state.embeddings)
             st.session_state.vectorstore = st.session_state.pinecone
         
     except Exception as e:
@@ -66,7 +68,6 @@ def process_message(
     query: str,
     llm: ChatOpenAI,
     vectorstore: PineconeVectorStore,
-
 ) -> Tuple[str, List]:
     """Process the user message using the RAG system."""
     try:
@@ -114,11 +115,7 @@ def display_sources(sources: List) -> None:
 
                 # 🔊 Try to show audio if it's an audio entry and there's a media file
                 if is_audio:
-                    # Try to find a playable media file — if metadata has audio URLs
-                    # For now, just embed a dummy player or placeholder
                     st.info("This is an audio entry.")
-                    # Optionally:
-                    # st.audio("https://example.com/audio-file.mp3")  # replace with real audio URL
                 else:
                     # 🖼️ Show image if it's not audio
                     scraper = DigitalCommonwealthScraper()
@@ -130,19 +127,13 @@ def display_sources(sources: List) -> None:
                         if os.path.exists(output_dir):
                             shutil.rmtree(output_dir)
                         downloaded_files = scraper.download_images(images)
-                        st.image(downloaded_files, width=400, caption=[
-                            img.get('alt', f'Image') for img in images
-                        ])
+                        st.image(downloaded_files, width=400, caption=[img.get('alt', f'Image') for img in images])
         except Exception as e:
             logger.warning(f"[display_sources] Error displaying document: {e}")
             st.error("Error displaying one of the sources.")
 
-
-
 def main():
     st.title("Digital Commonwealth RAG 🤖")
-
-    INDEX_NAME = 'bpl-rag'
 
     # Initialize session state
     if "messages" not in st.session_state:
@@ -154,7 +145,6 @@ def main():
     if "num_sources" not in st.session_state:
         st.session_state.num_sources = 10
         
-
     initialize_models()
 
     # 🔵 Settings button
@@ -211,8 +201,7 @@ def main():
                     })
 
                     display_sources(sources[:int(st.session_state.num_sources)])
-                else:
-                    st.error("Received an invalid response format")
+
 
     # Footer (optional, will be above chat input)
     st.markdown("---")
