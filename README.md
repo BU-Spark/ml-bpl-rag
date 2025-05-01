@@ -59,6 +59,24 @@ The system is organized into two main pipelines: **Data Preparation** and **Quer
 - **Cost Optimization**: Open-source embeddings and GPT-4o-mini model are used to minimize API costs while maintaining quality.
 - **Hosting**: Deployed publicly through Hugging Face Spaces for accessibility.
 
+### Audio and Image Processing
+
+This project processes both images and audio metadata alongside the textual metadata from the Digital Commonwealth archive.
+
+- **Images**: If you enable image processing (by not using the `--no-images` flag), the system fetches image metadata and processes captions or other image-related descriptions. The `DigitalCommonwealthScraper` is used to scrape image URLs, and the `ImageCaptioner` analyzes the content, providing relevant captions and tags. These images and their metadata are included in the search results, making it easier for users to find visual references along with the text-based content.
+
+- **Audio**: If you enable audio processing (by not using the `--no-audio` flag), the system fetches and embeds audio files associated with metadata records. The `AudioEmbedder` is responsible for embedding the audio content into the system, ensuring that audio files are accessible and can be linked alongside the retrieved results. Audio content is treated as metadata and, when available, is displayed in the search results.
+
+### Models Used
+
+- **Hugging Face Embeddings (all-mpnet-base-v2)**: We use the `all-mpnet-base-v2` model from Hugging Face for embedding metadata, enabling semantic search. This model has been specifically trained for general language understanding tasks and is efficient in representing the content in a vector space that allows for similarity-based retrieval.
+
+- **OpenAI GPT-4o-mini**: The GPT-4o-mini model is used for natural language processing and generating responses. It enables the system to understand user queries and generate meaningful summaries based on the retrieved documents.
+
+- **BM25**: We use the BM25 ranking algorithm to improve the relevance of search results. It ranks the retrieved documents by considering keyword matches and their importance within the context of the query.
+
+By using these models together, the system provides accurate, contextually relevant results, enhancing the experience of querying historical documents from the Digital Commonwealth archive.
+
 ---
 
 ## Setup Instructions
@@ -90,6 +108,7 @@ Configure your `.env` file:
 ```plaintext
 PINECONE_API_KEY=your-pinecone-api-key
 OPENAI_API_KEY=your-openai-api-key
+PINECONE_INDEX_NAME=your-pinecone-index-name
 ```
 
 ---
@@ -111,20 +130,19 @@ This will save a `.json` file of metadata entries for the specified page range.
 Run the following to upload the embeddings:
 
 ```bash
-python load_pinecone.py <BEGIN_INDEX> <END_INDEX> <PATH_TO_JSON> <PINECONE_INDEX_NAME>
+python load_pinecone.py <BEGIN_INDEX> <END_INDEX> <PATH_TO_JSON> <PINECONE_INDEX_NAME> [--static] [--no-images] [--no-audio]
 ```
+
+### Flags:
+- `--static`: Use this flag when you want to process the data without dynamic data fetching from the Digital Commonwealth API (e.g., for faster processing when metadata is already pre-fetched).
+- `--no-images`: Skips the image processing (useful when you don't want to fetch or process images).
+- `--no-audio`: Skips the audio embedding (useful if your data doesn't contain any audio or you want to speed up processing).
 
 Make sure your Pinecone index is created beforehand with the correct vector dimension (786 for all-mpnet-base-v2).
 
 ---
 
 ## Running the Application
-
-Update `streamlit_app.py` with your Pinecone index name:
-
-```python
-INDEX_NAME = "your-pinecone-index-name"
-```
 
 Launch the application:
 
@@ -139,7 +157,7 @@ Response times may vary depending on dataset size and retrieval/re-ranking opera
 
 ## Current Limitations
 
-- **Speed**: Retrieval and metadata enrichment can take 25–70 seconds due to sequential Digital Commonwealth API calls.
+- **Speed**: Retrieval and metadata enrichment can take 10–40 seconds due to sequential Digital Commonwealth API calls.
 - **Metadata Bottleneck**: After retrieving vector matches, full metadata is fetched live for reranking, adding delay.
 - **Scaling Costs**: Pinecone costs scale with the volume of embedded vectors; full ingestion of the archive is costly.
 

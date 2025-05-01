@@ -621,7 +621,7 @@ if __name__ == "__main__":
     
     # Test search
     if os.path.exists("sample_images"):
-        from archive_spring2025.image_captioning import ImageCaptioner
+        from image_captioning import ImageCaptioner
         
         # Create image captioner
         captioner = ImageCaptioner()
