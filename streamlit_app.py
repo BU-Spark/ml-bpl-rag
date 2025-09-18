@@ -26,12 +26,17 @@ st.set_page_config(
 def initialize_models() -> Tuple[Optional[ChatOpenAI], HuggingFaceEmbeddings]:
     """Initialize the language model and embeddings."""
     try:
-        load_dotenv()
+        load_dotenv()  # Load environment variables from the .env file
+        
+        # Get Pinecone index name from environment variable (PINECONE_INDEX_NAME)
+        PINECONE_INDEX_NAME = os.getenv("PINECONE_INDEX_NAME", "default-index-name")  # Default if not set
+
+        logger.info(f"Using Pinecone Index: {PINECONE_INDEX_NAME}")
         
         if "llm" not in st.session_state:
             # Initialize OpenAI model
             st.session_state.llm = ChatOpenAI(
-                model="gpt-4",  # Changed from gpt-4o-mini which appears to be a typo
+                model="gpt-3.5-turbo", 
                 temperature=0,
                 timeout=60,  # Added reasonable timeout
                 max_retries=2
@@ -40,17 +45,19 @@ def initialize_models() -> Tuple[Optional[ChatOpenAI], HuggingFaceEmbeddings]:
         if "embeddings" not in st.session_state:
             # Initialize embeddings
             st.session_state.embeddings = HuggingFaceEmbeddings(
-                model_name="sentence-transformers/all-MiniLM-L6-v2"
+                model_name="sentence-transformers/all-mpnet-base-v2"
+                #model_name="sentence-transformers/all-MiniLM-L6-v2"
             )
 
         if "pinecone" not in st.session_state:
             pinecone_api_key = os.getenv("PINECONE_API_KEY")
-            INDEX_NAME = 'bpl-rag'
-            #initialize vectorstore
+            # Initialize Pinecone with the environment's index name
             pc = Pinecone(api_key=pinecone_api_key)
-            
-            index = pc.Index(INDEX_NAME)
+            index = pc.Index(PINECONE_INDEX_NAME)
             st.session_state.pinecone = PineconeVectorStore(index=index, embedding=st.session_state.embeddings)
+        
+        if "vectorstore" not in st.session_state:
+            st.session_state.vectorstore = st.session_state.pinecone
         
     except Exception as e:
         logger.error(f"Error initializing models: {str(e)}")
@@ -61,7 +68,6 @@ def process_message(
     query: str,
     llm: ChatOpenAI,
     vectorstore: PineconeVectorStore,
-
 ) -> Tuple[str, List]:
     """Process the user message using the RAG system."""
     try:
@@ -76,109 +82,138 @@ def process_message(
         return f"Error processing message: {str(e)}", []
 
 def display_sources(sources: List) -> None:
-    """Display sources in expandable sections with proper formatting."""
+    """Display sources with minimal output: content preview, source, URL, and image/audio if available."""
     if not sources:
         st.info("No sources available for this response.")
         return
 
     st.subheader("Sources")
-    for i, doc in enumerate(sources, 1):
+    for doc in sources:
         try:
-            with st.expander(f"Source {i}"):
+            metadata = doc.metadata
+            source = metadata.get("source", "Unknown Source")
+            title = metadata.get("title_info_primary_tsi", "Unknown Title")
+            format_type = metadata.get("format", "").lower()
+
+            is_audio = "audio" in format_type
+
+            expander_title = f"🔊 {title}" if is_audio else title
+
+            with st.expander(expander_title):
+                # Content preview
                 if hasattr(doc, 'page_content'):
-                    st.markdown(f"**Content:** {doc.page_content[0:100] + ' ...'}")
-                    if hasattr(doc, 'metadata'):
-                        for key, value in doc.metadata.items():
-                            st.markdown(f"**{key.title()}:** {value}")
-                            
-                        # Web Scraper to display images of sources
-                        # Especially helpful if the sources are images themselves
-                        # or are OCR'd text files
-                        scraper = DigitalCommonwealthScraper()
-                        images = scraper.extract_images(doc.metadata["URL"])
-                        images = images[:1]
-                        
-                        # If there are no images then don't display them
-                        if not images:
-                                st.warning("No images found on the page.")
-                                return
-                                
-                        # Download the images
-                        # Delete the directory if it already exists
-                        # to clear the existing cache of images for each listed source
+                    st.markdown(f"**Content:** {doc.page_content[:300]} ...")
+
+                # URL building
+                doc_url = metadata.get("URL", "").strip()
+                if not doc_url and source:
+                    doc_url = f"https://www.digitalcommonwealth.org/search/{source}"
+
+                st.markdown(f"**Source ID:** {source}")
+                st.markdown(f"**Format:** {format_type if format_type else 'Not specified'}")
+                st.markdown(f"**URL:** {doc_url}")
+
+                # 🔊 Try to show audio if it's an audio entry and there's a media file
+                if is_audio:
+                    st.info("This is an audio entry.")
+                else:
+                    # 🖼️ Show image if it's not audio
+                    scraper = DigitalCommonwealthScraper()
+                    images = scraper.extract_images(doc_url)
+                    images = images[:1]
+
+                    if images:
                         output_dir = 'downloaded_images'
                         if os.path.exists(output_dir):
                             shutil.rmtree(output_dir)
-                        
-                        # Download the main image to a local directory
                         downloaded_files = scraper.download_images(images)
-                
-                        # Display the image using st.image
-                        # Display the title of the image using img.get
-                        st.image(downloaded_files, width=400, caption=[
-                            img.get('alt', f'Image {i+1}') for i, img in enumerate(images)
-                            ])
-
-                else:
-                    st.markdown(f"**Content:** {str(doc)}")
-                    
+                        st.image(downloaded_files, width=400, caption=[img.get('alt', f'Image') for img in images])
         except Exception as e:
-            logger.error(f"Error displaying source {i}: {str(e)}")
-            st.error(f"Error displaying source {i}")
+            logger.warning(f"[display_sources] Error displaying document: {e}")
+            st.error("Error displaying one of the sources.")
 
 def main():
-    st.title("Digital Commonwealth RAG")
-    
-    INDEX_NAME = 'bpl-rag'
+    st.title("Digital Commonwealth RAG 🤖")
 
     # Initialize session state
     if "messages" not in st.session_state:
         st.session_state.messages = []
-    
-    # Initialize models
+
+    if "show_settings" not in st.session_state:
+        st.session_state.show_settings = False
+
+    if "num_sources" not in st.session_state:
+        st.session_state.num_sources = 10
+        
     initialize_models()
 
-    # Display chat history
+    # 🔵 Settings button
+    open_settings = st.button("⚙️ Settings")
+
+    if open_settings:
+        st.session_state.show_settings = True
+
+    if st.session_state.show_settings:
+        with st.container():
+            st.markdown("---")
+            st.markdown("### ⚙️ Settings")
+
+            num_sources = st.number_input(
+                "Number of Sources to Display",
+                min_value=1,
+                max_value=100,
+                value=st.session_state.num_sources,
+                step=1,
+            )
+            st.session_state.num_sources = num_sources
+
+            close_settings = st.button("❌ Close Settings")
+            if close_settings:
+                st.session_state.show_settings = False
+            st.markdown("---")
+
+    # Show chat history
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
-    
-    # Chat input
-    user_input = st.chat_input("Type your query here...")
+
+    # ⬇️ CHAT INPUT BOX always stuck to bottom
+    user_input = st.chat_input("Type your question here...")
+
     if user_input:
-        # Display user message
         with st.chat_message("user"):
             st.markdown(user_input)
         st.session_state.messages.append({"role": "user", "content": user_input})
-        
-        # Process and display assistant response
+
         with st.chat_message("assistant"):
-            with st.spinner("Thinking... Please be patient, I'm a little slow right now..."):
+            with st.spinner("Thinking... Please be patient..."):
                 response, sources = process_message(
                     query=user_input,
                     llm=st.session_state.llm,
-                    vectorstore=st.session_state.pinecone
+                    vectorstore=st.session_state.vectorstore
                 )
-                
+
                 if isinstance(response, str):
                     st.markdown(response)
                     st.session_state.messages.append({
                         "role": "assistant",
                         "content": response
                     })
-                    
-                    # Display sources
-                    display_sources(sources)
-                else:
-                    st.error("Received an invalid response format")
-    
-    # Footer
+
+                    display_sources(sources[:int(st.session_state.num_sources)])
+
+
+    # Footer (optional, will be above chat input)
     st.markdown("---")
     st.markdown(
         "Built with Langchain + Streamlit + Pinecone",
         help="Natural Language Querying for Digital Commonwealth"
     )
-    st.markdown("The Digital Commonwealth site provides access to photographs, manuscripts, books, audio recordings, and other materials of historical interest that have been\ndigitized and made available by members of Digital Commonwealth, a statewide consortium of libraries, museums, archives, and historical societies from across Massachusetts.")
+    st.markdown(
+        "The Digital Commonwealth site provides access to photographs, manuscripts, books, "
+        "audio recordings, and other materials of historical interest that have been digitized "
+        "and made available by members of Digital Commonwealth."
+    )
 
 if __name__ == "__main__":
     main()
