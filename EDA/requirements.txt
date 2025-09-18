@@ -1,5 +1,0 @@
-numpy==1.26.4
-seaborn==0.13.2
-pandas==2.2.2
-textblob==0.18.0.post0
-matplotlib==3.9.2

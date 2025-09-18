@@ -1,0 +1,1927 @@
+[
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth:2j62s565w"
+    },
+    "data": {
+      "id": "commonwealth:2j62s565w",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth:2j62s565w",
+        "system_create_dtsi": "2013-09-11T02:46:56Z",
+        "system_modified_dtsi": "2023-11-04T20:47:55Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "Boston elevated twisted into new shapes, after Molasses Disaster",
+        "genre_basic_ssim": [
+          "Photographs"
+        ],
+        "genre_specific_ssim": [
+          "Glass negatives"
+        ],
+        "date_tsim": [
+          "January 15, 1919"
+        ],
+        "date_type_ssm": [
+          "dateCreated"
+        ],
+        "date_edtf_ssm": [
+          "1919-01-15"
+        ],
+        "date_start_dtsi": "1919-01-15T00:00:00Z",
+        "date_end_dtsi": "1919-01-15T23:59:59.999Z",
+        "name_tsim": [
+          "Jones, Leslie, 1886-1967"
+        ],
+        "name_role_tsim": [
+          "Photographer"
+        ],
+        "name_facet_ssim": [
+          "Jones, Leslie, 1886-1967"
+        ],
+        "related_item_host_ssim": [
+          "Leslie Jones Collection"
+        ],
+        "related_item_series_ssi": "Accidents: Miscellaneous",
+        "subject_topic_tsim": [
+          "Accidents",
+          "Floods",
+          "Elevated railroads",
+          "Molasses Disaster, Boston, Mass., 1919"
+        ],
+        "subject_facet_ssim": [
+          "Accidents",
+          "Floods",
+          "Elevated railroads",
+          "Molasses Disaster, Boston, Mass., 1919"
+        ],
+        "subject_coordinates_geospatial": [
+          "42.365,-71.05"
+        ],
+        "subject_point_geospatial": [
+          "42.365,-71.05"
+        ],
+        "subject_geojson_facet_ssim": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.05,42.365]},\"properties\":{\"placename\":\"North End, MA\"}}"
+        ],
+        "subject_hiergeo_geojson_ssm": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.05,42.365]},\"properties\":{\"continent\":\"North and Central America\",\"country\":\"United States\",\"state\":\"Massachusetts\",\"county\":\"Suffolk\",\"city\":\"Boston\",\"city_section\":\"North End\"}}"
+        ],
+        "physical_location_ssim": [
+          "Boston Public Library"
+        ],
+        "sub_location_tsi": "Arts Department",
+        "identifier_uri_ss": "https://ark.digitalcommonwealth.org/ark:/50959/2j62s565w",
+        "identifier_iiif_manifest_ss": "https://ark.digitalcommonwealth.org/ark:/50959/2j62s565w/manifest",
+        "identifier_local_accession_tsim": [
+          "08_06_000041"
+        ],
+        "note_tsim": [
+          "Title and date from information provided by Leslie Jones or the Boston Public Library on the negative or negative sleeve."
+        ],
+        "rights_ss": "Copyright (c) Leslie Jones.",
+        "license_ss": "All rights reserved.",
+        "reuse_allowed_ssi": "all rights reserved",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "1 negative : glass, black & white ; 4 x 5 in.",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth",
+          "bpl"
+        ],
+        "hosting_status_ssi": "hosted",
+        "harvesting_status_bsi": true,
+        "exemplary_image_ssi": "commonwealth:2j62s5665",
+        "exemplary_image_key_base_ss": "images/commonwealth:2j62s5665",
+        "admin_set_name_ssi": "Leslie Jones Collection",
+        "admin_set_ark_id_ssi": "commonwealth:2j62s484w",
+        "institution_name_ssi": "Boston Public Library",
+        "institution_ark_id_ssi": "commonwealth:sf268508b",
+        "collection_name_ssim": [
+          "Leslie Jones Collection"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth:2j62s484w"
+        ],
+        "filenames_ssim": [
+          "08_06_000041",
+          "commonwealth:2j62s565w_metadata"
+        ],
+        "mods_xml_ss": "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",
+        "_version_": 1792999576482873344,
+        "timestamp": "2024-03-08T22:40:45.419Z",
+        "subject_geographic_sim": [
+          "Boston",
+          "Massachusetts",
+          "North End",
+          "North and Central America",
+          "Suffolk (county)",
+          "United States"
+        ],
+        "date_facet_yearly_itim": [
+          1919
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth-oai:w0895g04t"
+    },
+    "data": {
+      "id": "commonwealth-oai:w0895g04t",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth-oai:w0895g04t",
+        "system_create_dtsi": "2023-07-26T19:24:27Z",
+        "system_modified_dtsi": "2023-07-26T19:29:36Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "101st Infantry Regiment passing the Massachusetts State House in the Victory Parade",
+        "genre_basic_ssim": [
+          "Photographs"
+        ],
+        "date_tsim": [
+          "April 25, 1919"
+        ],
+        "date_type_ssm": [
+          "dateCreated"
+        ],
+        "date_edtf_ssm": [
+          "1919-04-25"
+        ],
+        "date_start_dtsi": "1919-04-25T00:00:00Z",
+        "date_end_dtsi": "1919-04-25T23:59:59.999Z",
+        "name_tsim": [
+          "Boston (Mass.)"
+        ],
+        "name_role_tsim": [
+          "Creator"
+        ],
+        "name_facet_ssim": [
+          "Boston (Mass.)"
+        ],
+        "related_item_host_ssim": [
+          "Boston Landmarks Commission image collection (5210.004)"
+        ],
+        "subject_topic_tsim": [
+          "Massachusetts State House (Boston, Mass.)",
+          "World War, 1914-1918",
+          "Beacon Hill (Boston, Mass.)",
+          "Massachusetts. National Guard. Infantry Division, 26th",
+          "Parades"
+        ],
+        "subject_facet_ssim": [
+          "Massachusetts State House (Boston, Mass.)",
+          "World War, 1914-1918",
+          "Beacon Hill (Boston, Mass.)",
+          "Massachusetts. National Guard. Infantry Division, 26th",
+          "Parades"
+        ],
+        "subject_coordinates_geospatial": [
+          "42.35,-71.0667"
+        ],
+        "subject_point_geospatial": [
+          "42.35,-71.0667"
+        ],
+        "subject_geojson_facet_ssim": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.0667,42.35]},\"properties\":{\"placename\":\"Beacon Hill, MA\"}}"
+        ],
+        "subject_hiergeo_geojson_ssm": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.0667,42.35]},\"properties\":{\"continent\":\"North and Central America\",\"country\":\"United States\",\"state\":\"Massachusetts\",\"county\":\"Suffolk\",\"city\":\"Boston\",\"city_section\":\"Beacon Hill\"}}"
+        ],
+        "physical_location_ssim": [
+          "Boston City Archives"
+        ],
+        "identifier_local_other_tsim": [
+          "5210004_004_0572"
+        ],
+        "identifier_uri_ss": "https://cityofboston.access.preservica.com/uncategorized/IO_252ad044-c2ce-479a-a953-7c77dd133347/",
+        "identifier_uri_preview_ss": "https://cityofboston.access.preservica.com/download/thumbnail/IO_252ad044-c2ce-479a-a953-7c77dd133347",
+        "rights_ss": "No copyright - United States",
+        "license_ss": "Contact host institution for more information.",
+        "reuse_allowed_ssi": "contact host",
+        "abstract_tsi": "Photograph shows a large crowd of people watching the 101st Infantry Regiment in the Victory Parade.",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "lang_term_ssim": [
+          "English"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth"
+        ],
+        "hosting_status_ssi": "harvested",
+        "harvesting_status_bsi": true,
+        "oai_header_id_ssi": "252ad044-c2ce-479a-a953-7c77dd133347",
+        "exemplary_image_ssi": "commonwealth-oai:ns067d24b",
+        "exemplary_image_key_base_ss": "metadata/commonwealth-oai:ns067d24b",
+        "admin_set_name_ssi": "Beacon Hill Landmarks Photographs",
+        "admin_set_ark_id_ssi": "commonwealth-oai:z890w150b",
+        "institution_name_ssi": "Boston City Archives",
+        "institution_ark_id_ssi": "commonwealth:r207v3411",
+        "collection_name_ssim": [
+          "Beacon Hill Landmarks Photographs"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth-oai:z890w150b"
+        ],
+        "filenames_ssim": [
+          "commonwealth-oai:w0895g04t_metadata"
+        ],
+        "mods_xml_ss": "eJzVV1lv2zgQfu+vIPTUAtHhK4qDWkWb7jYBkqZo2u2+FTRFS9xQpJak7Li/foc6bMpHmmLvh7oROcc33wyHw5evHgqOllRpJsXMGwSRh6ggMmUim3mfP/3sn3mvkmcvC5nqc/uDQF7o8wfOxP3My40pz8NwtVoFq1EgVRYOptNpWO96nahmhwSHUTQIf725viM5LbDPhDZYENppWV89NS5JkMllaDfC5cjbgh4FMWhpdq5rU9eSYFNvHNdGB7as/xQr2G+F6v/9kR8HDzr1kmcINTQYZji9EguJKo0zOvNKxQqs1h5KmS45Xl/jOeWb5a/tam2hZyMZRANtEJjCwqg1+kgzVlBhUIm1hgQgk1N0A39jkleaGqPRncGGoksJn4iJWuAXRowE7Q9Y4ZS+DB37FnLYx7wNQ+CCupDsN9gwyRupjRToufUcvGgNbHYdDSV5a8Fd+URVgcy6BGIMfTAewpXJpWJmPfOAD6IoxwDYWf/88WqTLJZuErKERM4rDhSGrY6GrGNe0acrhODOSy4UtV9tKB3INpSwF4sTrpNxiOZ28ZFqWSlCkzvDOEeQ3GxDd19go5hRoahLQFZkJfmh0DOFy5yRG8i7Ypg/nYJdxdBkRRTF8XCwW6iAkirMveRDLo2s9XQbWB3ANh7AnDHR1VG3moKLmmKaOs1jNSKpWXjonq7fwtbMW1PtJYPpYOpHY384aT04yg7/fUeNG45FVgHnrutu7bGiY1qejqb+cP5DvHdaT+a7UwipyLzkJ5FxpvM2HBemE6UbURMPnmujMDFOKpDO5UojjMBLRhFRcpUiuUAllSWnaIUNybtmcayhHGwVQYti43ODQlfz3ygxLomc6Pz7/HX7jOqwNaL7fU+WjCTHe9rzpvmcoF7zabS2vLWm/y7Aj2b8kEao87PJYHw2HJ0eiPaLVDxFX7A6QVD9Yx9+zv6dwPaxvaGYQK+/tA3tP8H9d4olQO/ryx1z9K6CyzrYFvtbtmR2IDhBw1OT/58qJ5rG8XhwIPTmnOo/EYvJxJFQ6s4VZEDqOqBpFdaSe/APSIVxNJhEUdTDmzO4QRQ0IoL5Oyrbu6c/HBBZCbNO7qrFQvL7Noh2cV9QrZPPgtkrpe4P2pVXewrCMAGNLnkvlckRDHLoAj7hUkOvC7j+CN6od5I9A9q66FdaR3K90/cGTLZDUmeV7YUAK3eQC6hH94w58t2uO4Q8xmJrF0awbl3vkiAV3LyWq2Q8DEaTEz+Gef70NN7EvhVwve7ZPFZf9VBF0ytDu7s2Bxb259rtfNAfd9vB8hrSA4PgvUYXsiiYtoe2maYQkZw3vKDnk+EgCqJo/MIdYXvA+0NtuItxC5ylkHG2AHZb3HAkMfcl3InKS6wj8PO1/jeJh62lrdIjhirFvMSeFQ2HxaZVLuZ1lAEmhEIbLRXVVC0howGRRVgJeJzQDE7jN5qGV7dfh5MhTqPx2CdDQv1xPMU+nk7g0UHiOE0Ho9FoHIePIOLta8dNQpmvtS2h7iXUEX8B+NBrW1/LzXnak3WmE3fpqLNK8b13UBP7zJNNP4Lpw547O5f9Y1wBrF2UHSpws2R09UNYUrkSXOI0NHlVzAVm/KmA+niOUtu4vZAiZXX5t+UFI5FtZoqWSqZVfTJ2p3fOCBXavnKAYxjjkD2UyL6nmalqWwupUCGVfTHCn0XteTP89f3+FYBgdM/tTf5eQtrLdf2JfHSomx/1riiBZrX70GhWbZxwEO6at9YjtX1IfM/abf3SSG5fX/kfbi4hsN8rqk3PQiviNpktunbJ/iTP/gAa2PiD",
+        "_version_": 1772512649644343296,
+        "timestamp": "2023-07-26T19:29:49.471Z",
+        "subject_geographic_sim": [
+          "Beacon Hill",
+          "Boston",
+          "Massachusetts",
+          "North and Central America",
+          "Suffolk (county)",
+          "United States"
+        ],
+        "date_facet_yearly_itim": [
+          1919
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth:5h73vx18p"
+    },
+    "data": {
+      "id": "commonwealth:5h73vx18p",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth:5h73vx18p",
+        "system_create_dtsi": "2013-09-18T16:40:57Z",
+        "system_modified_dtsi": "2021-11-08T05:32:24Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "Police strike of 1919, state militia trucked in at Union Station",
+        "genre_basic_ssim": [
+          "Photographs"
+        ],
+        "genre_specific_ssim": [
+          "Film negatives"
+        ],
+        "date_tsim": [
+          "1919"
+        ],
+        "date_type_ssm": [
+          "dateCreated"
+        ],
+        "date_edtf_ssm": [
+          "1919"
+        ],
+        "date_start_dtsi": "1919-01-01T00:00:00Z",
+        "date_end_dtsi": "1919-12-31T23:59:59.999Z",
+        "name_tsim": [
+          "Jones, Leslie, 1886-1967"
+        ],
+        "name_role_tsim": [
+          "Photographer"
+        ],
+        "name_facet_ssim": [
+          "Jones, Leslie, 1886-1967"
+        ],
+        "related_item_host_ssim": [
+          "Leslie Jones Collection"
+        ],
+        "related_item_series_ssi": "Crime/Police: Miscellaneous",
+        "subject_topic_tsim": [
+          "Militias",
+          "Trucks",
+          "Police Strike, Boston, Mass., 1919"
+        ],
+        "subject_facet_ssim": [
+          "Militias",
+          "Trucks",
+          "Police Strike, Boston, Mass., 1919"
+        ],
+        "physical_location_ssim": [
+          "Boston Public Library"
+        ],
+        "sub_location_tsi": "Arts Department",
+        "identifier_uri_ss": "https://ark.digitalcommonwealth.org/ark:/50959/5h73vx18p",
+        "identifier_iiif_manifest_ss": "https://ark.digitalcommonwealth.org/ark:/50959/5h73vx18p/manifest",
+        "identifier_local_accession_tsim": [
+          "08_06_020834"
+        ],
+        "note_tsim": [
+          "Title and date from information provided by Leslie Jones or the Boston Public Library on the negative or negative sleeve."
+        ],
+        "rights_ss": "Copyright (c) Leslie Jones.",
+        "license_ss": "All rights reserved.",
+        "reuse_allowed_ssi": "all rights reserved",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "1 negative : film, black & white ; 4 x 5 in.",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth",
+          "bpl"
+        ],
+        "hosting_status_ssi": "hosted",
+        "harvesting_status_bsi": true,
+        "exemplary_image_ssi": "commonwealth:5h73vx19z",
+        "exemplary_image_key_base_ss": "images/commonwealth:5h73vx19z",
+        "admin_set_name_ssi": "Leslie Jones Collection",
+        "admin_set_ark_id_ssi": "commonwealth:2j62s484w",
+        "institution_name_ssi": "Boston Public Library",
+        "institution_ark_id_ssi": "commonwealth:sf268508b",
+        "collection_name_ssim": [
+          "Leslie Jones Collection"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth:2j62s484w"
+        ],
+        "filenames_ssim": [
+          "08_06_020834",
+          "commonwealth:5h73vx18p_metadata"
+        ],
+        "mods_xml_ss": "eJzNWNtu2zgQfe9XEHpY7AKxJdlxfGmtouuiQBYJGtQpsNiXgpbGEhuKFEjKjv9+hzJlS74kabPANg+Ow+FcOXN4mHfvH3NOVqA0k2Lqhd3AIyBimTCRTr2v9586I+999OZdLhM9sR8E9ws9eeRMPEy9zJhi4vvr9bq77nelSv1wPB77ldSrt2p2amMvCEL/79ubeZxBTjtMaENFDLWW9dVS4zLupnLlW4G/6nv7oPvdIWppNtGVqRsZU1MJzmuTEyLrP6EK5W5T9bvT7wy7jzrxojeEbMtgmOFwLZaSlJqmMPUKxXKqNh5JmC443dzQBfDd8je3Wllo2YjuJGcxEG0UewAilyQch+ML/JsaIDnjzDBKjCrjB0gIE4Qa8lVgamRuqhTf+Q1jNj6/HeA+ZkFzIGZT2GixblJQ7hFamkwqZjZTD4uAK80IrcYdVSb6SwrQF+QGNGfgPOyEJxScmwRz8KJwNLrqhOOr4ROKSm6jb6/cg8qdKQOPphUtljVWwKmRqrH+9cv17sxZsjvXFaa2KDmehO90NDYP5SW8XMEvMuNFd5k0MlW0yEC5fOpIXT5+K6FGzo3uwZQ+L7+AlqWKIZobxjnBRknr2h5s2CmmIBQ0q5DmaRH/UP5V7Cy+xaNRjPKX1+FQ0TdpHgTDYS88bHqMEpRtpX2xtEusSuBXzqc/HvYP89EFxGzJYi/6xHhOBKQ4eSs4kxPGnTJRj169akdhpgA/kwa4rvtxYpYeeYDNRxRNvQ1oHBhEAGe7odbopraLrYMi22iGA/wRdKxYYaGh5R81DOWfK81IwVKqnBobjZPUDlv7GgZw/kCYKNylTyZkieW4IAtO4wfyG82Lt2SdMYStt+SSPJIBwlXXmXXaDXtMYN0FmFtIGL3Hfo+qAfC/F5A6peMtL9A3bLl8jf73oveUupOdqbZDQWkgurcATPA6IfYMyVLJHOuxLbuF70LJFUuw/ouNw1VSoSyRipgMyJ9SG9x2Vy7wfiA3bKGwaQmuWOHuDHDz7rvmACuoK14FsQtJl4vvEJsW3MfY8P/nqF0NRlftC1EWLI5ut3dePV3bxX3lXSa/dGoh/vROpHZvr/HXJaaz5/Oq5Qy074w8k9ApDV9no0EYXPYGlydScbRlXtGWC9etF+SWat29IA0EezbN6n6F5NpAfddnaOyYKe0RtU2gWsMzk5yj9RO86Awz8g9jeCowjWdsAfqloc2Q/YG/LdWE3DIdA+dUgCz168ND8BAIdgyUi65UzIvs2Wo8XKoeug7LY5nnUqyBcpNVtBtlE38QjAdjf5AN+6vHcFTUmLcz+oSjiih2aByDtuzbi4LRt+DqW9ALRv3LJwxxx8qb9auBtGbs0UncO0DdmxOGMsntnTpneXFIJWNZbK730FsLG3O2M/hBGU0+QoH0NMcE9j3bdrk7mZOmnewoIrfeLMP5wpSKH70ttiWfenILDPgaiKWomPFrzx29HTqvnRUKVgzWP+/CN1mZLwRl/Lwze1tNPcbYspNTwZagX5GTX5to+ztb/m2mMykSVl3Nbpz09vpWgFd1UlagcsgM7WALjW+cD0jgkTJl2D0KECZWkNQX8YH1/8Lt1pMXzbD7qu/k9/iPFot41rmCWKrkkKVuV2e2qYSZbx8fTw3kqf3H5ix/ReeW4R5z36gX9MJOGHaC0X0wmPR7k97lP23zDf0T1jMqUvhp2zvtY8uOA2PzUkvXLChA0tI+ZsmI7mmJQ/t5OaPYrhLFaRuM6h2Nty1GDa23LdPyqj/u9BY/xGFqrRdzl1rBB5F6EX7UE9IIsYVo57Nzj4w9G567/6QcPtkbW7woZVlcvzuOVVsX4L5b3ZL9iN78C05af/s=",
+        "_version_": 1826693353510535168,
+        "timestamp": "2025-03-15T20:28:55.193Z",
+        "date_facet_yearly_itim": [
+          1919
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth:fx71d9445"
+    },
+    "data": {
+      "id": "commonwealth:fx71d9445",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth:fx71d9445",
+        "system_create_dtsi": "2020-04-15T00:53:42Z",
+        "system_modified_dtsi": "2021-10-09T10:27:32Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "Kennedy homes, Hyannis Port, Mass.",
+        "genre_basic_ssim": [
+          "Cards"
+        ],
+        "genre_specific_ssim": [
+          "Postcards"
+        ],
+        "date_tsim": [
+          "1960\u20131970"
+        ],
+        "date_type_ssm": [
+          "dateIssued"
+        ],
+        "date_edtf_ssm": [
+          "1960/1970"
+        ],
+        "date_start_dtsi": "1960-01-01T00:00:00Z",
+        "date_end_dtsi": "1970-12-31T23:59:59.999Z",
+        "related_item_host_ssim": [
+          "Historical Society of Old Yarmouth Image Collection"
+        ],
+        "subject_topic_tsim": [
+          "Houses",
+          "Presidents"
+        ],
+        "subject_facet_ssim": [
+          "Houses",
+          "Presidents",
+          "Kennedy, John F. (John Fitzgerald), 1917-1963",
+          "Kennedy, Robert F., 1925-1968"
+        ],
+        "subject_name_tsim": [
+          "Kennedy, John F. (John Fitzgerald), 1917-1963",
+          "Kennedy, Robert F., 1925-1968"
+        ],
+        "subject_coordinates_geospatial": [
+          "41.6333,-70.3"
+        ],
+        "subject_point_geospatial": [
+          "41.6333,-70.3"
+        ],
+        "subject_geojson_facet_ssim": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-70.3,41.6333]},\"properties\":{\"placename\":\"Hyannis Port, MA\"}}"
+        ],
+        "subject_hiergeo_geojson_ssm": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-70.3,41.6333]},\"properties\":{\"continent\":\"North and Central America\",\"country\":\"United States\",\"state\":\"Massachusetts\",\"county\":\"Barnstable\",\"city\":\"Hyannis Port\"}}"
+        ],
+        "physical_location_ssim": [
+          "Historical Society of Old Yarmouth"
+        ],
+        "identifier_uri_ss": "https://ark.digitalcommonwealth.org/ark:/50959/fx71d9445",
+        "identifier_iiif_manifest_ss": "https://ark.digitalcommonwealth.org/ark:/50959/fx71d9445/manifest",
+        "identifier_local_accession_tsim": [
+          "2006.105.78"
+        ],
+        "note_date_tsim": [
+          "Date from item or accompanying material."
+        ],
+        "note_tsim": [
+          "Title from item or accompanying material.",
+          "Distributed by E. D. West, Co., South Yarmouth, Mass."
+        ],
+        "rights_ss": "Rights status not evaluated for all images. If you wish to publish this image please contact the Historical Society of Old Yarmouth at info@hsoy.org for information regarding use.",
+        "license_ss": "This work is licensed for use under a Creative Commons Attribution Non-Commercial No Derivatives License (CC BY-NC-ND).",
+        "reuse_allowed_ssi": "creative commons",
+        "license_uri_ss": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "1 photograph : color print ; sheet 3.5 x 5.5 in. (postcard format)",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth"
+        ],
+        "hosting_status_ssi": "hosted",
+        "harvesting_status_bsi": true,
+        "exemplary_image_ssi": "commonwealth:fx71d945f",
+        "exemplary_image_key_base_ss": "images/commonwealth:fx71d945f",
+        "admin_set_name_ssi": "Historical Society of Old Yarmouth Archives and Local History Collection",
+        "admin_set_ark_id_ssi": "commonwealth:xg94j5668",
+        "institution_name_ssi": "Historical Society of Old Yarmouth",
+        "institution_ark_id_ssi": "commonwealth:xg94j5650",
+        "collection_name_ssim": [
+          "Historical Society of Old Yarmouth Archives and Local History Collection"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth:xg94j5668"
+        ],
+        "filenames_ssim": [
+          "2006_105_78a",
+          "2006_105_78b",
+          "commonwealth:fx71d9445_metadata"
+        ],
+        "mods_xml_ss": "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",
+        "_version_": 1826609553913937920,
+        "timestamp": "2025-03-14T22:16:57.670Z",
+        "subject_geographic_sim": [
+          "Barnstable (county)",
+          "Hyannis Port",
+          "Massachusetts",
+          "North and Central America",
+          "United States"
+        ],
+        "date_facet_yearly_itim": [
+          1960,
+          1961,
+          1962,
+          1963,
+          1964,
+          1965,
+          1966,
+          1967,
+          1968,
+          1969,
+          1970
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth:fx71d9712"
+    },
+    "data": {
+      "id": "commonwealth:fx71d9712",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth:fx71d9712",
+        "system_create_dtsi": "2020-04-15T00:56:04Z",
+        "system_modified_dtsi": "2021-10-09T10:29:02Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "President John F. Kennedy summer home, Hyannis Port, Massachusetts",
+        "genre_basic_ssim": [
+          "Cards"
+        ],
+        "genre_specific_ssim": [
+          "Postcards"
+        ],
+        "date_tsim": [
+          "1960\u20131963"
+        ],
+        "date_type_ssm": [
+          "dateIssued"
+        ],
+        "date_edtf_ssm": [
+          "1960/1963"
+        ],
+        "date_start_dtsi": "1960-01-01T00:00:00Z",
+        "date_end_dtsi": "1963-12-31T23:59:59.999Z",
+        "related_item_host_ssim": [
+          "Historical Society of Old Yarmouth Image Collection"
+        ],
+        "subject_topic_tsim": [
+          "Houses",
+          "Presidents"
+        ],
+        "subject_facet_ssim": [
+          "Houses",
+          "Presidents",
+          "Kennedy, John F. (John Fitzgerald), 1917-1963"
+        ],
+        "subject_name_tsim": [
+          "Kennedy, John F. (John Fitzgerald), 1917-1963"
+        ],
+        "subject_coordinates_geospatial": [
+          "41.6333,-70.3"
+        ],
+        "subject_point_geospatial": [
+          "41.6333,-70.3"
+        ],
+        "subject_geojson_facet_ssim": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-70.3,41.6333]},\"properties\":{\"placename\":\"Hyannis Port, MA\"}}"
+        ],
+        "subject_hiergeo_geojson_ssm": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-70.3,41.6333]},\"properties\":{\"continent\":\"North and Central America\",\"country\":\"United States\",\"state\":\"Massachusetts\",\"county\":\"Barnstable\",\"city\":\"Hyannis Port\"}}"
+        ],
+        "physical_location_ssim": [
+          "Historical Society of Old Yarmouth"
+        ],
+        "identifier_uri_ss": "https://ark.digitalcommonwealth.org/ark:/50959/fx71d9712",
+        "identifier_iiif_manifest_ss": "https://ark.digitalcommonwealth.org/ark:/50959/fx71d9712/manifest",
+        "identifier_local_accession_tsim": [
+          "2006.105.88"
+        ],
+        "note_resp_tsim": [
+          "Fred Keenan"
+        ],
+        "note_date_tsim": [
+          "Date from item or accompanying material."
+        ],
+        "note_tsim": [
+          "Title from item or accompanying material."
+        ],
+        "rights_ss": "Rights status not evaluated for all images. If you wish to publish this image please contact the Historical Society of Old Yarmouth at info@hsoy.org for information regarding use.",
+        "license_ss": "This work is licensed for use under a Creative Commons Attribution Non-Commercial No Derivatives License (CC BY-NC-ND).",
+        "reuse_allowed_ssi": "creative commons",
+        "license_uri_ss": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "1 photograph : color print ; sheet 3.5 x 5.5 in. (postcard format)",
+        "publisher_tsi": "Bromley & Company, Inc.",
+        "pubplace_tsi": "Boston, Mass.",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth"
+        ],
+        "hosting_status_ssi": "hosted",
+        "harvesting_status_bsi": true,
+        "exemplary_image_ssi": "commonwealth:fx71d972b",
+        "exemplary_image_key_base_ss": "images/commonwealth:fx71d972b",
+        "admin_set_name_ssi": "Historical Society of Old Yarmouth Archives and Local History Collection",
+        "admin_set_ark_id_ssi": "commonwealth:xg94j5668",
+        "institution_name_ssi": "Historical Society of Old Yarmouth",
+        "institution_ark_id_ssi": "commonwealth:xg94j5650",
+        "collection_name_ssim": [
+          "Historical Society of Old Yarmouth Archives and Local History Collection"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth:xg94j5668"
+        ],
+        "filenames_ssim": [
+          "2006_105_88a",
+          "2006_105_88b",
+          "commonwealth:fx71d9712_metadata"
+        ],
+        "mods_xml_ss": "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",
+        "_version_": 1826609577927376896,
+        "timestamp": "2025-03-14T22:17:20.571Z",
+        "subject_geographic_sim": [
+          "Barnstable (county)",
+          "Hyannis Port",
+          "Massachusetts",
+          "North and Central America",
+          "United States"
+        ],
+        "date_facet_yearly_itim": [
+          1960,
+          1961,
+          1962,
+          1963
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth:fx71d959s"
+    },
+    "data": {
+      "id": "commonwealth:fx71d959s",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth:fx71d959s",
+        "system_create_dtsi": "2020-04-15T00:55:02Z",
+        "system_modified_dtsi": "2021-10-09T10:28:20Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "Aerial view of Kennedy Compound, Hyannis Port, Mass.",
+        "genre_basic_ssim": [
+          "Cards"
+        ],
+        "genre_specific_ssim": [
+          "Postcards"
+        ],
+        "date_tsim": [
+          "1960\u20131970"
+        ],
+        "date_type_ssm": [
+          "dateIssued"
+        ],
+        "date_edtf_ssm": [
+          "1960/1970"
+        ],
+        "date_start_dtsi": "1960-01-01T00:00:00Z",
+        "date_end_dtsi": "1970-12-31T23:59:59.999Z",
+        "related_item_host_ssim": [
+          "Historical Society of Old Yarmouth Image Collection"
+        ],
+        "subject_topic_tsim": [
+          "Houses"
+        ],
+        "subject_facet_ssim": [
+          "Houses"
+        ],
+        "subject_coordinates_geospatial": [
+          "41.6333,-70.3"
+        ],
+        "subject_point_geospatial": [
+          "41.6333,-70.3"
+        ],
+        "subject_geojson_facet_ssim": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-70.3,41.6333]},\"properties\":{\"placename\":\"Hyannis Port, MA\"}}"
+        ],
+        "subject_hiergeo_geojson_ssm": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-70.3,41.6333]},\"properties\":{\"continent\":\"North and Central America\",\"country\":\"United States\",\"state\":\"Massachusetts\",\"county\":\"Barnstable\",\"city\":\"Hyannis Port\"}}"
+        ],
+        "physical_location_ssim": [
+          "Historical Society of Old Yarmouth"
+        ],
+        "identifier_uri_ss": "https://ark.digitalcommonwealth.org/ark:/50959/fx71d959s",
+        "identifier_iiif_manifest_ss": "https://ark.digitalcommonwealth.org/ark:/50959/fx71d959s/manifest",
+        "identifier_local_accession_tsim": [
+          "2006.105.83"
+        ],
+        "note_resp_tsim": [
+          "Color photo by Craig Studio"
+        ],
+        "note_date_tsim": [
+          "Date from item or accompanying material."
+        ],
+        "note_tsim": [
+          "Title from item or accompanying material."
+        ],
+        "rights_ss": "Rights status not evaluated for all images. If you wish to publish this image please contact the Historical Society of Old Yarmouth at info@hsoy.org for information regarding use.",
+        "license_ss": "This work is licensed for use under a Creative Commons Attribution Non-Commercial No Derivatives License (CC BY-NC-ND).",
+        "reuse_allowed_ssi": "creative commons",
+        "license_uri_ss": "https://creativecommons.org/licenses/by-nc-nd/4.0/",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "1 photograph : color print ; sheet 3.5 x 5.5 in. (postcard format)",
+        "publisher_tsi": "Bromley & Company, Inc.",
+        "pubplace_tsi": "Boston, Mass.",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth"
+        ],
+        "hosting_status_ssi": "hosted",
+        "harvesting_status_bsi": true,
+        "exemplary_image_ssi": "commonwealth:fx71d960j",
+        "exemplary_image_key_base_ss": "images/commonwealth:fx71d960j",
+        "admin_set_name_ssi": "Historical Society of Old Yarmouth Archives and Local History Collection",
+        "admin_set_ark_id_ssi": "commonwealth:xg94j5668",
+        "institution_name_ssi": "Historical Society of Old Yarmouth",
+        "institution_ark_id_ssi": "commonwealth:xg94j5650",
+        "collection_name_ssim": [
+          "Historical Society of Old Yarmouth Archives and Local History Collection"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth:xg94j5668"
+        ],
+        "filenames_ssim": [
+          "2006_105_83a",
+          "2006_105_83b",
+          "commonwealth:fx71d959s_metadata"
+        ],
+        "mods_xml_ss": "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",
+        "_version_": 1826609563199078400,
+        "timestamp": "2025-03-14T22:17:06.525Z",
+        "subject_geographic_sim": [
+          "Barnstable (county)",
+          "Hyannis Port",
+          "Massachusetts",
+          "North and Central America",
+          "United States"
+        ],
+        "date_facet_yearly_itim": [
+          1960,
+          1961,
+          1962,
+          1963,
+          1964,
+          1965,
+          1966,
+          1967,
+          1968,
+          1969,
+          1970
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth-oai:mc87qf31g"
+    },
+    "data": {
+      "id": "commonwealth-oai:mc87qf31g",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth-oai:mc87qf31g",
+        "system_create_dtsi": "2018-07-06T18:14:02Z",
+        "system_modified_dtsi": "2024-05-22T19:53:57Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "Manuscript plan of Worcester County, 30 March 1785",
+        "genre_basic_ssim": [
+          "Manuscripts",
+          "Maps"
+        ],
+        "date_tsim": [
+          "March 30, 1785"
+        ],
+        "date_type_ssm": [
+          "dateCreated"
+        ],
+        "date_edtf_ssm": [
+          "1785-03-30"
+        ],
+        "date_start_dtsi": "1785-03-30T00:00:00Z",
+        "date_end_dtsi": "1785-03-30T23:59:59.999Z",
+        "name_tsim": [
+          "Putnam, Rufus, 1738-1824"
+        ],
+        "name_role_tsim": [
+          "Cartographer"
+        ],
+        "name_facet_ssim": [
+          "Putnam, Rufus, 1738-1824"
+        ],
+        "related_item_host_ssim": [
+          "Massachusetts Historical Society Collection"
+        ],
+        "subject_topic_tsim": [
+          "Maps, Manuscript--1785"
+        ],
+        "subject_facet_ssim": [
+          "Maps, Manuscript--1785"
+        ],
+        "subject_geo_other_ssm": [
+          "Worcester County (Mass.)",
+          "Massachusetts"
+        ],
+        "subject_coordinates_geospatial": [
+          "42.25,-71.8"
+        ],
+        "subject_point_geospatial": [
+          "42.25,-71.8"
+        ],
+        "subject_geojson_facet_ssim": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.8,42.25]},\"properties\":{\"placename\":\"Worcester, MA\"}}"
+        ],
+        "subject_hiergeo_geojson_ssm": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.8,42.25]},\"properties\":{\"continent\":\"North and Central America\",\"country\":\"United States\",\"state\":\"Massachusetts\",\"county\":\"Worcester\",\"city\":\"Worcester\"}}"
+        ],
+        "physical_location_ssim": [
+          "Massachusetts Historical Society"
+        ],
+        "identifier_local_other_tsim": [
+          "nuview_1723"
+        ],
+        "identifier_uri_ss": "https://www.masshist.org/database/1723",
+        "identifier_uri_preview_ss": "http://www.masshist.org/database/images/5099_work_ref.jpg",
+        "rights_ss": "Item from the collections of the Massachusetts Historical Society. Image use and licensing information: www.masshist.org/library/permissions",
+        "license_ss": "Contact host institution for more information.",
+        "reuse_allowed_ssi": "contact host",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "53.1 cm x 73.3 cm",
+        "abstract_tsi": "Rufus Putnam (1738-1824), a farmer, surveyor, and soldier, made this \"New Plan of Several Towns in the County of Worcester,\" in 1785 when he lived in Rutland, Massachusetts. This is a remarkable overview map of many (but not all) towns within Worcester County, Massachusetts. The manuscript map shows town lines, roads, ponds, rivers, meeting houses, mills, meadows, hills, and other places of interest for the following towns: Greenwich, Petersham, Barre, Hubbardston, Princeton, Holden, Paxton, Spencer, Sturbridge, Charleton, Brookfield, Western (now Warren), Brimfield, Ware, Hardwick, New Braintree, Oakham, and Rutland. Notable rivers and ponds include the Ware River, the Quaboug River, the Swift River, the Merrimac River, the Quaboug Pond and Wickboug Pond. Handwritten title on map: \"A New Plan of Several Towns in the County of Worcester\"",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "lang_term_ssim": [
+          "English"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth"
+        ],
+        "hosting_status_ssi": "harvested",
+        "harvesting_status_bsi": true,
+        "oai_header_id_ssi": "oai:masshist.org:nuview/1723",
+        "exemplary_image_ssi": "commonwealth-oai:bk129p40j",
+        "exemplary_image_key_base_ss": "metadata/commonwealth-oai:bk129p40j",
+        "admin_set_name_ssi": "Selected items from the collections of the Massachusetts Historical Society",
+        "admin_set_ark_id_ssi": "commonwealth-oai:mc87pw973",
+        "institution_name_ssi": "Massachusetts Historical Society",
+        "institution_ark_id_ssi": "commonwealth:6m311p37v",
+        "collection_name_ssim": [
+          "Selected items from the collections of the Massachusetts Historical Society"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth-oai:mc87pw973"
+        ],
+        "filenames_ssim": [
+          "commonwealth-oai:mc87qf31g_metadata"
+        ],
+        "mods_xml_ss": "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",
+        "_version_": 1799783860381155328,
+        "timestamp": "2024-05-22T19:54:02.728Z",
+        "subject_geographic_sim": [
+          "Massachusetts",
+          "North and Central America",
+          "United States",
+          "Worcester",
+          "Worcester (county)",
+          "Worcester County (Mass.)"
+        ],
+        "date_facet_yearly_itim": [
+          1785
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth-oai:mc87qf39p"
+    },
+    "data": {
+      "id": "commonwealth-oai:mc87qf39p",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth-oai:mc87qf39p",
+        "system_create_dtsi": "2018-07-06T18:14:57Z",
+        "system_modified_dtsi": "2024-05-22T19:54:07Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "Map of western Massachusetts, circa 1785",
+        "genre_basic_ssim": [
+          "Manuscripts",
+          "Maps"
+        ],
+        "date_tsim": [
+          "[ca. 1785]"
+        ],
+        "date_type_ssm": [
+          "dateCreated"
+        ],
+        "date_edtf_ssm": [
+          "1785~"
+        ],
+        "date_start_dtsi": "1785-01-01T00:00:00Z",
+        "date_end_dtsi": "1785-12-31T23:59:59.999Z",
+        "name_tsim": [
+          "Bonner, John, approximately 1643-1726"
+        ],
+        "name_role_tsim": [
+          "Cartographer"
+        ],
+        "name_facet_ssim": [
+          "Bonner, John, approximately 1643-1726"
+        ],
+        "related_item_host_ssim": [
+          "Massachusetts Historical Society Collection"
+        ],
+        "subject_topic_tsim": [
+          "Maps, Manuscript--1785"
+        ],
+        "subject_facet_ssim": [
+          "Maps, Manuscript--1785"
+        ],
+        "subject_geo_other_ssm": [
+          "Berkshire County (Mass.)",
+          "Hampden County (Mass.)",
+          "Hampshire County (Mass.)",
+          "Franklin County (Mass.)",
+          "Worcester County (Mass.)"
+        ],
+        "subject_coordinates_geospatial": [
+          "42.05,-72.4",
+          "42.25,-71.8"
+        ],
+        "subject_point_geospatial": [
+          "42.05,-72.4",
+          "42.25,-71.8"
+        ],
+        "subject_geojson_facet_ssim": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-72.4,42.05]},\"properties\":{\"placename\":\"Hampden, MA\"}}",
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.8,42.25]},\"properties\":{\"placename\":\"Worcester, MA\"}}"
+        ],
+        "subject_hiergeo_geojson_ssm": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-72.4,42.05]},\"properties\":{\"continent\":\"North and Central America\",\"country\":\"United States\",\"state\":\"Massachusetts\",\"county\":\"Hampden\",\"city\":\"Hampden\"}}",
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.8,42.25]},\"properties\":{\"continent\":\"North and Central America\",\"country\":\"United States\",\"state\":\"Massachusetts\",\"county\":\"Worcester\",\"city\":\"Worcester\"}}"
+        ],
+        "physical_location_ssim": [
+          "Massachusetts Historical Society"
+        ],
+        "identifier_local_other_tsim": [
+          "nuview_1731"
+        ],
+        "identifier_uri_ss": "https://www.masshist.org/database/1731",
+        "identifier_uri_preview_ss": "http://www.masshist.org/database/images/5091_work_ref.jpg",
+        "rights_ss": "Item from the collections of the Massachusetts Historical Society. Image use and licensing information: www.masshist.org/library/permissions",
+        "license_ss": "Contact host institution for more information.",
+        "reuse_allowed_ssi": "contact host",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "38 cm x 49 cm",
+        "abstract_tsi": "A manuscript map of the western part of Massachusetts showing towns located in Berkshire, Hampden, Hampshire, Franklin, and Worcester counties, as well as the Connecticut River. From the the Wendell family papers",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "lang_term_ssim": [
+          "English"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth"
+        ],
+        "hosting_status_ssi": "harvested",
+        "harvesting_status_bsi": true,
+        "oai_header_id_ssi": "oai:masshist.org:nuview/1731",
+        "exemplary_image_ssi": "commonwealth-oai:34850v91h",
+        "exemplary_image_key_base_ss": "metadata/commonwealth-oai:34850v91h",
+        "admin_set_name_ssi": "Selected items from the collections of the Massachusetts Historical Society",
+        "admin_set_ark_id_ssi": "commonwealth-oai:mc87pw973",
+        "institution_name_ssi": "Massachusetts Historical Society",
+        "institution_ark_id_ssi": "commonwealth:6m311p37v",
+        "collection_name_ssim": [
+          "Selected items from the collections of the Massachusetts Historical Society"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth-oai:mc87pw973"
+        ],
+        "filenames_ssim": [
+          "commonwealth-oai:mc87qf39p_metadata"
+        ],
+        "mods_xml_ss": "eJzVWEtz2zYQvudXYHhqZyxSL+vhiZhJnKZxx24ycTLpzQODEIkYBBgAtKx/3wUJUKRkWXbHadODJRlY7O632CdevrrLObqlSjMpFsEg7AeICiITJtJF8OXzu94seBW/eJnLRJ/YDwT0Qp/ccSZuFkFmTHESRavVKlyNQqnSaDCfz6NqN/Ckmt1HOOz3B9FfF+eXJKM57jGhDRaE+lNWVucYlyRM5W1kN6LbUbBRehRO4ZRmJ7pidS4JNtXG/tPoni0rP8EK9h1R9d0b9abhnU6C+AVCtRkMM5yeiaVEpcYpXQSFYjlW6wAlTBccr8/xNeXN8pVbrTh0eMQXuEByiVZUG6oEusBaY5KVmhqjjxBhimA0mM6OX0atQ1aPqKvIRjeBc4rMurBagX2kwDxAuDSZVMysF4HAy9b/Xz6dNVZiSWMJv8+ojixDDcbGvKSPJY/Ecb8/Hg77sw5mu/cRKxO/kUJQdYT+kJlwUJq9e+gdngQbGsS4KJS8A8MaytdoMBmPeoPpcPIAGyVro3VXPlOVO8aG3pmOkeDWiKIcG6kOG+sW3O265HDRkTtzwFz3HIiISYP4FBSXqcJFRpXD4zV1eKIOoBbmlnMCpA/LT1TLUhEaXxrGOQJzpdQ7TZegOZhSoWjbCmmeFuRJ+CvdGbmAu1EM88fbYftgZNK8PxgOZ5PtmAItqQKfhtARpSaKFUY7YBWAnxhPfzKcDB7AU+wBAsqmTPgw96s2Gk4Vhc+klbBXI5IYiPAbun4LW4tgbYP3e4k5WzKqFkErfIK4lVpa7Fqu1RVdC+ZYpCW4U1sZv/ZQUDEtJ6N5b3j9pCvwpx5ten8gogJC6jeRcqYzB6etZgtlG1GNp8jWmhHM39LaxaCadGwPVjGYf6isEyu6lAoMam/C7XijduhaDMA2VJh4NEMkR3doPIdvd8ZtbbTbo0vNCF9rozAx8WuUNwEBP6uyYjLalJbC5lFY65QYpDO5Ar9BRq6ERtwWTgDBBHpD1Y3OmKJH6D3Oi4SK+odbe6ewuIEaf4SgZKKvEhKJFYOILIUtA7CuQTRkHvi2apzajE8MI6VBnxhU7hB4yLzas39fqUgs+RLnDNJ6gW3xcgZoMDaodXn9Dbi1vYsTnT2tsDkmuluWZcFIFYtHaJNher12Ea5INvfj+Pwb2qVUuswSNxcEpgWbr9Ev9mbDX5sU0lAe1nSPCHfxzyDgx5qi8cufXlMfNs+tKMQt3ydzE5zPK9SkYo9xqmQcppBg1iFNyqii3Mne91DBSDCezyaTDpQMyha0Y5lNgb93lN3QVGln7R3WgXCLu4RqHX8RzCa6SwP5Trfp1c4ByGfCJuQ/pTJZle5O4V8o2eh1DsWd4Oa4p+ww0FZE3Mm63sjVTlca20XBPAa38JA9HJemjWREb8ORChoFizoeD8P+8VFvOgzHDYTNblvkDsP/2E2m/cF4Mp7+UzdpIuJ/7ig7OH6kqwytqwzC2XO5SjX50OTMUN8wZlKb3RF50/ZuT87tPuY90zBGWZzoUhJGIc2dSs5txyF9JDXD857xOdrWa6Msg3g0VQPtdC0VC2Lrodq9IeSgTgZKVC8b0Evja6xpNJiOBo7vhsUDbKtE3pPQEKkgFuUto6urAzy4e+xoG853jP4h5KCxtjrN8xZP3yK3l/YKLhXfeRLBBJxULwJZpwYofjYA7HDwNAMC721RnnWhqDVVzfBBftUcrKPj/nxwtZLq5gp69/BbkXZl7MVcC4ReNmF2wzuDplW4KwqjVVJWPrc95nFGqNAwcsFhA70sst6O7JsXM2XFC2YIlEtoYpioxwlYDH0H3JX7HArBSJLZRqUKwKVvxUkTNNoPEId8J0Rn1qjIC62R2qGiBeQE7dwJZ9fKzmvQ6OdM24c8fQitogSyzvYgXK9au0J0XNaPGo90+PuO7nB209uH12e9jxfvwajfS8i6HQ6bAa+zXGvqluxH/OJvHjZ4uw==",
+        "_version_": 1799783870211555328,
+        "timestamp": "2024-05-22T19:54:12.103Z",
+        "subject_geographic_sim": [
+          "Berkshire County (Mass.)",
+          "Franklin County (Mass.)",
+          "Hampden",
+          "Hampden (county)",
+          "Hampden County (Mass.)",
+          "Hampshire County (Mass.)",
+          "Massachusetts",
+          "North and Central America",
+          "United States",
+          "Worcester",
+          "Worcester (county)",
+          "Worcester County (Mass.)"
+        ],
+        "date_facet_yearly_itim": [
+          1785
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth:z603vg83r"
+    },
+    "data": {
+      "id": "commonwealth:z603vg83r",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth:z603vg83r",
+        "system_create_dtsi": "2016-12-06T22:10:44Z",
+        "system_modified_dtsi": "2023-09-15T14:47:13Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "A Map of the seat of the late war at Boston in the state of Massachusetts",
+        "title_info_uniform_tsim": [
+          "Columbian magazine, or, Monthly miscellany (Philadelphia, Pa.)"
+        ],
+        "title_info_uniform_ssim": [
+          "Columbian magazine, or, Monthly miscellany (Philadelphia, Pa.)"
+        ],
+        "genre_basic_ssim": [
+          "Maps"
+        ],
+        "date_tsim": [
+          "[1789]"
+        ],
+        "date_type_ssm": [
+          "dateIssued"
+        ],
+        "date_edtf_ssm": [
+          "1789"
+        ],
+        "date_start_dtsi": "1789-01-01T00:00:00Z",
+        "date_end_dtsi": "1789-12-31T23:59:59.999Z",
+        "name_tsim": [
+          "Trenchard, James, 1747-"
+        ],
+        "name_role_tsim": [
+          "Engraver"
+        ],
+        "name_facet_ssim": [
+          "Trenchard, James, 1747-"
+        ],
+        "related_item_host_ssim": [
+          "American Antiquarian Society Collection"
+        ],
+        "related_item_isreferencedby_ssm": [
+          "{\"url\":\"http://catalog.mwa.org/vwebv/holdingsInfo?bibId=476388\"}"
+        ],
+        "subject_topic_tsim": [
+          "Massachusetts--Maps",
+          "United States--History--Revolution, 1775-1783--Maps"
+        ],
+        "subject_facet_ssim": [
+          "Massachusetts--Maps",
+          "United States--History--Revolution, 1775-1783--Maps"
+        ],
+        "subject_coordinates_geospatial": [
+          "42.25,-71.8333",
+          "ENVELOPE(-71.45, -70.8, 42.5, 42.16666)"
+        ],
+        "subject_point_geospatial": [
+          "42.25,-71.8333"
+        ],
+        "subject_bbox_geospatial": [
+          "ENVELOPE(-71.45, -70.8, 42.5, 42.16666)"
+        ],
+        "subject_geojson_facet_ssim": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.8333,42.25]},\"properties\":{\"placename\":\"Massachusetts\"}}",
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[-71.45,42.16666],[-70.8,42.16666],[-70.8,42.5],[-71.45,42.5],[-71.45,42.16666]]]},\"bbox\":[-71.45,42.16666,-70.8,42.5]}"
+        ],
+        "subject_hiergeo_geojson_ssm": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.8333,42.25]},\"properties\":{\"continent\":\"North and Central America\",\"country\":\"United States\",\"state\":\"Massachusetts\"}}"
+        ],
+        "physical_location_ssim": [
+          "American Antiquarian Society"
+        ],
+        "identifier_uri_ss": "https://ark.digitalcommonwealth.org/ark:/50959/z603vg83r",
+        "identifier_iiif_manifest_ss": "https://ark.digitalcommonwealth.org/ark:/50959/z603vg83r/manifest",
+        "note_date_tsim": [
+          "This date is inferred."
+        ],
+        "note_tsim": [
+          "From the July, 1789 issue of the Columbian magazine, Philadelphia.",
+          "Probably engraved by James Trenchard. See Stauffer, D. American engravers, 1907, no. 3286."
+        ],
+        "scale_tsim": [
+          "Scale not given"
+        ],
+        "rights_ss": "Public Domain/No known restrictions on use. Contact host institution to download image.",
+        "license_ss": "Contact host institution for more information.",
+        "reuse_allowed_ssi": "contact host",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "1 map ; 18 x 27 cm., on sheet 22 x 28 cm.",
+        "abstract_tsi": "Subject: Map of part of the state of Massachusetts extending from Chelmsford and Marblehead to the north, down to Marshfield to the south, and west to Worcester. The battles which took place in Lexington, Concord and Boston are marked.",
+        "publisher_tsi": "[s.n.]",
+        "pubplace_tsi": "Philadelphia",
+        "issuance_tsi": "monographic",
+        "type_of_resource_ssim": [
+          "Cartographic"
+        ],
+        "lang_term_ssim": [
+          "English"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "nblmc",
+          "commonwealth",
+          "argo"
+        ],
+        "hosting_status_ssi": "hosted",
+        "harvesting_status_bsi": true,
+        "exemplary_image_ssi": "commonwealth:6108vt50v",
+        "exemplary_image_key_base_ss": "images/commonwealth:6108vt50v",
+        "admin_set_name_ssi": "Maps from AAS",
+        "admin_set_ark_id_ssi": "commonwealth:z603vf985",
+        "institution_name_ssi": "American Antiquarian Society",
+        "institution_ark_id_ssi": "commonwealth:z603vf97w",
+        "collection_name_ssim": [
+          "American Revolutionary War-Era Maps (Collection of Distinction)",
+          "Maps from AAS"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth:dn39z222j",
+          "commonwealth:z603vf985"
+        ],
+        "filenames_ssim": [
+          "476388_0001",
+          "commonwealth:z603vg83r_metadata"
+        ],
+        "mods_xml_ss": "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",
+        "_version_": 1824412578635317248,
+        "timestamp": "2025-02-18T16:16:58.773Z",
+        "subject_geographic_sim": [
+          "Massachusetts",
+          "North and Central America",
+          "United States"
+        ],
+        "date_facet_yearly_itim": [
+          1789
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth:70796j511"
+    },
+    "data": {
+      "id": "commonwealth:70796j511",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth:70796j511",
+        "system_create_dtsi": "2015-04-23T16:44:49Z",
+        "system_modified_dtsi": "2021-10-18T14:56:31Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "Afraid of Eagle, Sioux",
+        "genre_basic_ssim": [
+          "Photographs"
+        ],
+        "genre_specific_ssim": [
+          "Platinum prints",
+          "Portrait photographs"
+        ],
+        "date_tsim": [
+          "(c) 1898"
+        ],
+        "date_type_ssm": [
+          "copyrightDate"
+        ],
+        "date_edtf_ssm": [
+          "1898"
+        ],
+        "date_start_dtsi": "1898-01-01T00:00:00Z",
+        "date_end_dtsi": "1898-12-31T23:59:59.999Z",
+        "name_tsim": [
+          "Rinehart, F. A. (Frank A.)"
+        ],
+        "name_role_tsim": [
+          "Photographer"
+        ],
+        "name_facet_ssim": [
+          "Rinehart, F. A. (Frank A.)"
+        ],
+        "related_item_host_ssim": [
+          "Photographs of the American West"
+        ],
+        "related_item_series_ssi": "Frank A. Rinehart Photographs",
+        "subject_topic_tsim": [
+          "Indians of North America",
+          "Dakota Indians"
+        ],
+        "subject_facet_ssim": [
+          "Indians of North America",
+          "Dakota Indians",
+          "Trans-Mississippi and International Exposition (1898 : Omaha, Neb.)"
+        ],
+        "subject_name_tsim": [
+          "Trans-Mississippi and International Exposition (1898 : Omaha, Neb.)"
+        ],
+        "physical_location_ssim": [
+          "Boston Public Library"
+        ],
+        "sub_location_tsi": "Arts Department",
+        "identifier_uri_ss": "https://ark.digitalcommonwealth.org/ark:/50959/70796j511",
+        "identifier_iiif_manifest_ss": "https://ark.digitalcommonwealth.org/ark:/50959/70796j511/manifest",
+        "identifier_local_other_invalid_tsim": [
+          "Cab 23.41.1"
+        ],
+        "identifier_local_accession_tsim": [
+          "09_06_000002"
+        ],
+        "note_tsim": [
+          "Rinehart No. 864"
+        ],
+        "rights_ss": "No known copyright restrictions.",
+        "license_ss": "No known restrictions on use.",
+        "reuse_allowed_ssi": "no restrictions",
+        "rightsstatement_ss": "No Copyright - United States",
+        "rightsstatement_uri_ss": "http://rightsstatements.org/vocab/NoC-US/1.0/",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "1 photographic print : platinum",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth",
+          "bpl"
+        ],
+        "hosting_status_ssi": "hosted",
+        "harvesting_status_bsi": true,
+        "exemplary_image_ssi": "commonwealth:70796j529",
+        "exemplary_image_key_base_ss": "images/commonwealth:70796j529",
+        "admin_set_name_ssi": "Photographs of the American West",
+        "admin_set_ark_id_ssi": "commonwealth:gm80j208x",
+        "institution_name_ssi": "Boston Public Library",
+        "institution_ark_id_ssi": "commonwealth:sf268508b",
+        "collection_name_ssim": [
+          "Photographs of the American West"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth:gm80j208x"
+        ],
+        "filenames_ssim": [
+          "09_06_000002",
+          "commonwealth:70796j511_metadata"
+        ],
+        "mods_xml_ss": "eJzVWFlv2zgQfu+vIPTUBWpLsuMTtYpssgUC5CjqBLvYl4KWxhITiRRIOo7//Q5lSpZkO0eDxXaDwIc4N2e+mfHnL09ZSh5BKib4zPG7nkOAhyJiPJ45d7dfO2PnS/DhcyYiNTUvBOm5mj6ljD/MnETrfOq66/W6u+53hYxdfzKZuMWpU5Iqdoiw53m++9fV5TxMIKMdxpWmPISSy+hqsKUi7Mbi0TUH7mPf2Rnd746QS7GpKkRdipDq4uA4NzlwZPRHVOK5JSreO/3OqPukIif4QMg2DJrpFC74UpCVojHMnFyyjMqNQyKm8pRuLukC0urxD/u0kNCQEZwuJWUREUvyB41T+ETmTKyePrs1EqPVbardWcJpBkRvcmMDRkNwmjqErnQiJNObmcPpsvb97vtFFRMWVX6X5wyUawQqDC1NV/BacpdPfN/r4cU3PDRn36jUwXfGIcEPn8jXLjntko9fJeUP+Ok361hFWeOWYut788ktyMz6q+FJN3zFUIcSUqqFfNnnR8yRxSrF23EtzwteH2Bw80Q7wbdEaBFLmicgrT+lpdYft+FQzedaRqFLN8vvoMRKhhDMNUtTgskTQ3n3TYKKMQYuoR6FOIvz8E3+F7az8IpqkIymr49Dm9HVceZ5o1HPbxcCWgkSU7MWLGUdKxz4pf0ZT0Ztf1QOIVuyEB3CVGB8lRGsda7/N06NvXH/GaeE1IhLmuQvXRdaHzNeYlL5NBT5Bg8SfY5aa91k3Q8jjYD0ABtzMnM2iDWBP56MrfQGY61Ymmq2SvJko1hI03NQoWS5Afy6DRFyaJreFJyBhKWQGdUaImJPrOgmXU0AwgtwHfi1ILBwe81kSnJ771aKJa6xIxlIDvoKIkZvsXqDopzd+xxiy7RP8gp+zZbL9/Df573n2O3ZkeBaYBd4OSWok2vRJePhSQlrQtfSQ60W9xDqeuqnoUre1pKskDd0pZLDVcl44A0H/vik2XtFzsLggqPfXJnme40Jn5DTDEskpCXiFkS7kFihv5hz/cHJQefO6YPQlFgf3+hSu4vbjhsKvgQJxYz2n8wYiBRDz2lOBdXscItDhepcMaXMf54zgtMcBsAkeTEO0pT88ZQLxcwX8tHADhbyTUYT+olcw+LYONLq10dCVwwFEF1oKAeURCi9P/LtsLI5CdY6o8lInUCZj5z8CUq3Z8IjU6HbNuY5CxXKNwj8WhvLuY1Uxb/fz99hIIsQQ7EDgbT2rSRzApMcCrODyoeuBetQZJnga6CpTopVAs+m7sCbDCbuyBtNhvcD3y9RrhL6jCJMO5p2aBiCMhuFE3iTH97wh2f+em8XJPD2cAZlHFOcRbbNndEF6fW7J373OdNSu7vU76QE43KvCX7HzMIU/rZapNiSLtlCYqdvIfflAUGJSE0jnrMsbw/XpvOaOzJNsuLaHWO6VwJPpVbkHHK8/wwd2BVEU2V11wdF27M9i+zzehiOB2Yl070NbHuJM0dswZlxgrBV7ArvzSTU1lZeKsslPDJY/7wKVyerbMEpS48rM6115jDGlp2McrYE9Q6f3FJEU9/R8G89PRPYTwr4LBb8aYJzVQXfxeCmcInGosa8UIXuYhJ1r8VZ527u+l3PdcraVlAAtIRcimgVGqntifSQRCe4FuSsnBNJh9xxZqa6uaEqQahl7XE3Xm8LVhpwBYX6By7WHKmVRnw2xAjZHDMRuv+e/m0sauqrWblhyIsWSAiFjNoT+/bpmakUrufbHfM5lDlEvy9OQpFFh7eAoOf1/I7vdfzxrX8yHQynff/vpvga/wHpCeUx/LTsintfst0FsCKx92JpI9JB1ODe3xZSFLdCJLpZnlGsQYHHcRNhS4raTxhodXOUYkoM+5NOb/Gm3bDkevVOWDK4wLGe8KUs+5qJDZg+7p1dtnZrwtz+iNb+ZaZG4gQxS8Jy/9pnbcwJu2y1j8xL8OEf+m0w3w==",
+        "_version_": 1826745867515723776,
+        "timestamp": "2025-03-16T10:23:36.451Z",
+        "date_facet_yearly_itim": [
+          1898
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth:6108z041f"
+    },
+    "data": {
+      "id": "commonwealth:6108z041f",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth:6108z041f",
+        "system_create_dtsi": "2022-07-28T15:11:09Z",
+        "system_modified_dtsi": "2022-07-28T16:40:45Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "19 portraits of Indian chiefs (here, \"A Winnebago\")",
+        "genre_basic_ssim": [
+          "Prints"
+        ],
+        "genre_specific_ssim": [
+          "Lithographs",
+          "Portrait prints"
+        ],
+        "date_tsim": [
+          "1830\u20131850"
+        ],
+        "date_type_ssm": [
+          "dateCreated"
+        ],
+        "date_edtf_ssm": [
+          "1830/1850"
+        ],
+        "date_start_dtsi": "1830-01-01T00:00:00Z",
+        "date_end_dtsi": "1850-12-31T23:59:59.999Z",
+        "name_tsim": [
+          "King, Charles Bird, 1785-1862"
+        ],
+        "name_role_tsim": [
+          "Artist"
+        ],
+        "name_facet_ssim": [
+          "King, Charles Bird, 1785-1862"
+        ],
+        "related_item_host_ssim": [
+          "Art and Artifacts Collection"
+        ],
+        "subject_topic_tsim": [
+          "Indigenous peoples",
+          "Indians of North America"
+        ],
+        "subject_facet_ssim": [
+          "Indigenous peoples",
+          "Indians of North America"
+        ],
+        "subject_coordinates_geospatial": [
+          "38,-98"
+        ],
+        "subject_point_geospatial": [
+          "38,-98"
+        ],
+        "subject_geojson_facet_ssim": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-98.0,38.0]},\"properties\":{\"placename\":\"United States\"}}"
+        ],
+        "subject_hiergeo_geojson_ssm": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-98.0,38.0]},\"properties\":{\"continent\":\"North and Central America\",\"country\":\"United States\"}}"
+        ],
+        "physical_location_ssim": [
+          "Nahant Public Library"
+        ],
+        "sub_location_tsi": "Special Collections",
+        "identifier_uri_ss": "https://ark.digitalcommonwealth.org/ark:/50959/6108z041f",
+        "identifier_iiif_manifest_ss": "https://ark.digitalcommonwealth.org/ark:/50959/6108z041f/manifest",
+        "identifier_local_other_tsim": [
+          "P1146847"
+        ],
+        "identifier_local_accession_tsim": [
+          "ART02.01.01"
+        ],
+        "note_resp_tsim": [
+          "Charles Bird King"
+        ],
+        "note_date_tsim": [
+          "Date from item or accompanying material."
+        ],
+        "note_tsim": [
+          "Title from item or accompanying material.",
+          "Pictured is one example of 19 similar portraits in the collection."
+        ],
+        "rights_ss": "No known copyright restrictions.",
+        "license_ss": "This work is licensed for use under a Creative Commons Attribution Share Alike License (CC BY-SA).",
+        "reuse_allowed_ssi": "creative commons",
+        "license_uri_ss": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "19 prints : hand-colored lithographs on paper ; each appr. 12\" x 18\" framed",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth"
+        ],
+        "hosting_status_ssi": "hosted",
+        "harvesting_status_bsi": true,
+        "exemplary_image_ssi": "commonwealth:6m314d61s",
+        "exemplary_image_key_base_ss": "images/commonwealth:6m314d61s",
+        "admin_set_name_ssi": "Art and Artifacts Collection",
+        "admin_set_ark_id_ssi": "commonwealth:ns066w35k",
+        "institution_name_ssi": "Nahant Public Library",
+        "institution_ark_id_ssi": "commonwealth:pg15bx50z",
+        "collection_name_ssim": [
+          "Art and Artifacts Collection"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth:ns066w35k"
+        ],
+        "filenames_ssim": [
+          "02-01-01_P1146847"
+        ],
+        "mods_xml_ss": "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",
+        "_version_": 1826695521575632896,
+        "timestamp": "2025-03-15T21:03:22.821Z",
+        "subject_geographic_sim": [
+          "North and Central America",
+          "United States"
+        ],
+        "date_facet_yearly_itim": [
+          1830,
+          1831,
+          1832,
+          1833,
+          1834,
+          1835,
+          1836,
+          1837,
+          1838,
+          1839,
+          1840,
+          1841,
+          1842,
+          1843,
+          1844,
+          1845,
+          1846,
+          1847,
+          1848,
+          1849,
+          1850
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth:8g84ms67v"
+    },
+    "data": {
+      "id": "commonwealth:8g84ms67v",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth:8g84ms67v",
+        "system_create_dtsi": "2020-05-20T19:35:53Z",
+        "system_modified_dtsi": "2021-11-10T00:53:52Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "A family of West Plains Indians with grandmother and granddaughter in foreground",
+        "genre_basic_ssim": [
+          "Cards"
+        ],
+        "genre_specific_ssim": [
+          "Postcards",
+          "Group portraits",
+          "Portrait prints"
+        ],
+        "date_tsim": [
+          "[ca. 1930\u20131945]"
+        ],
+        "date_type_ssm": [
+          "dateIssued"
+        ],
+        "date_edtf_ssm": [
+          "1930~/1945~"
+        ],
+        "date_start_dtsi": "1930-01-01T00:00:00Z",
+        "date_end_dtsi": "1945-12-31T23:59:59.999Z",
+        "related_item_host_ssim": [
+          "The Tichnor Brothers Collection"
+        ],
+        "related_item_series_ssi": "Other Postcards",
+        "subject_topic_tsim": [
+          "Indigenous peoples",
+          "Indians of North America"
+        ],
+        "subject_facet_ssim": [
+          "Indigenous peoples",
+          "Indians of North America"
+        ],
+        "physical_location_ssim": [
+          "Boston Public Library"
+        ],
+        "sub_location_tsi": "Arts Department",
+        "identifier_uri_ss": "https://ark.digitalcommonwealth.org/ark:/50959/8g84ms67v",
+        "identifier_iiif_manifest_ss": "https://ark.digitalcommonwealth.org/ark:/50959/8g84ms67v/manifest",
+        "identifier_local_other_tsim": [
+          "06_10_024077",
+          "88987"
+        ],
+        "note_physical_tsim": [
+          "Printed on linen texture (i.e., embossed) paper."
+        ],
+        "note_date_tsim": [
+          "Date supplied by cataloger."
+        ],
+        "note_tsim": [
+          "Title from item."
+        ],
+        "rights_ss": "No known copyright restrictions.",
+        "license_ss": "No known restrictions on use.",
+        "reuse_allowed_ssi": "no restrictions",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "1 print : color photomechanical on linen texture paper ; sheet 9 x 14 cm (postcard format)",
+        "publisher_tsi": "Made only by Tichnor Bros., Inc.",
+        "pubplace_tsi": "Boston, Mass.",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth",
+          "bpl"
+        ],
+        "hosting_status_ssi": "hosted",
+        "harvesting_status_bsi": true,
+        "exemplary_image_ssi": "commonwealth:8g84ms684",
+        "exemplary_image_key_base_ss": "images/commonwealth:8g84ms684",
+        "admin_set_name_ssi": "Tichnor Brothers Postcard Collection",
+        "admin_set_ark_id_ssi": "commonwealth:0p096w19r",
+        "institution_name_ssi": "Boston Public Library",
+        "institution_ark_id_ssi": "commonwealth:sf268508b",
+        "collection_name_ssim": [
+          "Tichnor Brothers Postcard Collection"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth:0p096w19r"
+        ],
+        "filenames_ssim": [
+          "06_10_024077",
+          "06_10_024077a",
+          "commonwealth:8g84ms67v_metadata"
+        ],
+        "mods_xml_ss": "eJzVWFtv2zYUfu+vIPTUArMlx3Fie7WKNsWGAEkTNCk27KWgqWOJDUVqJBXH/36HEmVLviRpM2ArENgJee7Xj3n77iEX5B604UrOgkE/CghIphIu01nw5fa33jh4F796m6vETN0HQXpppg+Cy7tZkFlbTMNwuVz2l8O+0mk4mEwmYXUbNKSG7yM8iqJB+OflxQ3LIKc9Lo2lkkHD5XR12IRi/VTdh+4ivB8GG6OH/VPkMnxqKlEXilFbXRzmJnuunP6Earz3RNV3b9g77T+YJIhfEVKHwXIr4FwuFCkNTWEWFJrnVK8CknBTCLq6oHMQ6+Ov/rSS0MiQSt4obeP35G3YOWjRVHriBc25WBG1IH+AseRaUAwVOZcJp/i95DYjqUbLc2Uz0AR/q/9OaJlmFk+4JAulIdWqlInXVot2HoVdl1pergq4WnwGo0rNIL6xXAiCDqXQ8HQJ1owpSA2EljZTmtvVLEjztGDB5uTL5/N1bniyjv895m1eCoxYiA4UGWeXFO3nVBhMNhUlfD9jaNMc6+xkfLKdHLQSNBVBfOZS7l2qTP8/ezIeRMNtT0wBjC84C+JrZSz7mdw5Ph1NDrvzO1ZsQQrsCk25/WmcGkfj48dyVLtDcDrIQ06h4SmXTT82pyiv7rOto1vQOXHdOAssPNgg/oB1oOQv5JIa0/ca1pReYrgt0gss54IbHCTxJU2AKImjZ74it5xlUmnyQSvT/wWnD1vLXTO0pCQYkXNjSkhay2Q5ZIldBOQOVh/xfhasAENdKAwDBshSbQPyd0kFxgn0LKBFodUDDhwLQTyYDCOvcCP7ZRpBJo/pOx7t1ecPuwnyoctWhjMqPoJhmhduBXUsRA5LxVXFGWvAmYy6LBrsbxp9HbqWAEwtSBsP6sohU8KUwJQUmbIqB5ZR6bRjyghuX5DE1UKJvVHQArfArwSTBJZMyAMZHBOWk9eFHxekNuWNN8Dr6SwrC/G104rW7sh/zfuANQH5XBkDyZtaYX+912ynwJwQLcFeAi6wWyzauNop4bcCUs+yS/IMfssXi5fwfyuOHmNvqn1/jjdh8n2YVFXkio6YsigEx8BhGyEwoUKlu9FpxfnWrWKy0Con3EK+n9KU82/AbHvuCYbT57+ce6Ph6KSDcawqOIsdUsHxpkpDClCFgGbm1deb2HqfnnDSZE/72NxzMKEX8oRz+zhCk41H0clogON8v1sOgCEu+4QjPSPvcwwGo891ToPA8CXnmGJfMxm2Y7CD/zZLoAsLbzNoT2WH/Qw5U0KgFqzKbZx3AOmF27Y8ZqBBB3GAPtvEqwqQboOSF5jEExxM1bj2FpWaB7HLpsF0Un3X98OTqTxXcglU2Kx6bODdNBxFk9EkHKfj49ycnN437b4W+ogirBMqelWUgzg6+TqIvkZHx9Hp6Q8LGY8n48e4hX/FdJaznz7NC8cvenLtdjAjF3yusT23RtXFHkGZEm5D3vC8EFuIgqli5XLhNsKaa3ONdbwW+F5bQz5CgZs7Rwc2ld5Vuc7pXtH+bscif94Ow+HAlFrsvMUoY2DwCanqIYKvIKZkjY9eWDGobVt5o6zQcM9h+eMqQpuV+VxSLg4rc6tgFnDOF70cl/4CzAt8ChsRXX0Hw197eqZw/LmLphENVC9PDQiikrIaQdsYGEsUpMG1+EmRO6mWEqmNxZnpiI3DFSilWXdbav4N/QioMtwDG/WuHqvDjiFPWqCBKZ1sg/P69MyVmLQ39ZP4sfbcR78rTkMV/gpI7ODa+Cg6GvQG+BPdRtF0NJyOjv7qim/x75GOkDGFH5a95t6V7MErljKVCFfdiICkw70LbwWKK7GFrxZnNUpCc7qjqaFovXfQagjaAIEbdTKc9I7m34WEGq5nI6CGIQSZBjF+NP3SMrEz3w57518HG0B54/8P1XYLRxprkQRxwnTeKN3D29mkm3L1R+4jfvUPjiP2sA==",
+        "_version_": 1826647572352073728,
+        "timestamp": "2025-03-15T08:21:14.878Z",
+        "date_facet_yearly_itim": [
+          1930,
+          1931,
+          1932,
+          1933,
+          1934,
+          1935,
+          1936,
+          1937,
+          1938,
+          1939,
+          1940,
+          1941,
+          1942,
+          1943,
+          1944,
+          1945
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth:cr56qx57k"
+    },
+    "data": {
+      "id": "commonwealth:cr56qx57k",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth:cr56qx57k",
+        "system_create_dtsi": "2023-02-06T14:32:30Z",
+        "system_modified_dtsi": "2023-02-06T14:39:59Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "In memory of Capt. Thomas Eaton",
+        "genre_basic_ssim": [
+          "Prints"
+        ],
+        "genre_specific_ssim": [
+          "Rubbings"
+        ],
+        "date_tsim": [
+          "1976"
+        ],
+        "date_type_ssm": [
+          "dateCreated"
+        ],
+        "date_edtf_ssm": [
+          "1976"
+        ],
+        "date_start_dtsi": "1976-01-01T00:00:00Z",
+        "date_end_dtsi": "1976-12-31T23:59:59.999Z",
+        "related_item_host_ssim": [
+          "Rubbings of the headstones in the Old Section of Laurel Hill Cemetery, 1976"
+        ],
+        "subject_topic_tsim": [
+          "Tombs & sepulchral monuments"
+        ],
+        "subject_facet_ssim": [
+          "Tombs & sepulchral monuments",
+          "Eaton, Thomas, d. 1787"
+        ],
+        "subject_name_tsim": [
+          "Eaton, Thomas, d. 1787"
+        ],
+        "subject_geo_other_ssm": [
+          "Laurel Hill Cemetery"
+        ],
+        "subject_coordinates_geospatial": [
+          "42.5167,-71.0833",
+          "42.52871,-71.10367"
+        ],
+        "subject_point_geospatial": [
+          "42.5167,-71.0833",
+          "42.52871,-71.10367"
+        ],
+        "subject_geojson_facet_ssim": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.0833,42.5167]},\"properties\":{\"placename\":\"Reading, MA\"}}",
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.10367,42.52871]},\"properties\":{\"placename\":\"Laurel Hill Cemetery\"}}"
+        ],
+        "subject_hiergeo_geojson_ssm": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.0833,42.5167]},\"properties\":{\"continent\":\"North and Central America\",\"country\":\"United States\",\"state\":\"Massachusetts\",\"county\":\"Middlesex\",\"city\":\"Reading\"}}"
+        ],
+        "physical_location_ssim": [
+          "Reading Public Library"
+        ],
+        "identifier_uri_ss": "https://ark.digitalcommonwealth.org/ark:/50959/cr56qx57k",
+        "identifier_iiif_manifest_ss": "https://ark.digitalcommonwealth.org/ark:/50959/cr56qx57k/manifest",
+        "identifier_local_other_tsim": [
+          "1.008"
+        ],
+        "note_date_tsim": [
+          "Date from accompanying material."
+        ],
+        "note_tsim": [
+          "Title from item.",
+          "Text from item: In memory of Capt. Thomas Eaton, who died, Jan. 15th 1787 in the 59 year of his age.",
+          "Design note: cherub."
+        ],
+        "rights_ss": "No known copyright restrictions.",
+        "license_ss": "This work is licensed for use under a Creative Commons Attribution Non-Commercial Share Alike License (CC BY-NC-SA).",
+        "reuse_allowed_ssi": "creative commons",
+        "license_uri_ss": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "3 prints on 3 sheets ; sheets 78 x 61 cm or smaller",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth"
+        ],
+        "hosting_status_ssi": "hosted",
+        "harvesting_status_bsi": true,
+        "exemplary_image_ssi": "commonwealth:4x51mg140",
+        "exemplary_image_key_base_ss": "images/commonwealth:4x51mg140",
+        "admin_set_name_ssi": "Laurel Hill Cemetery Gravestone Rubbings",
+        "admin_set_ark_id_ssi": "commonwealth:bg25bb930",
+        "institution_name_ssi": "Reading Public Library",
+        "institution_ark_id_ssi": "commonwealth:h702qg97w",
+        "collection_name_ssim": [
+          "Laurel Hill Cemetery Gravestone Rubbings"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth:bg25bb930"
+        ],
+        "filenames_ssim": [
+          "1_008",
+          "1_008_2",
+          "1_008_3"
+        ],
+        "mods_xml_ss": "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",
+        "_version_": 1826791433276751872,
+        "timestamp": "2025-03-16T22:27:51.347Z",
+        "subject_geographic_sim": [
+          "Laurel Hill Cemetery",
+          "Massachusetts",
+          "Middlesex (county)",
+          "North and Central America",
+          "Reading",
+          "United States"
+        ],
+        "date_facet_yearly_itim": [
+          1976
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth:3n206v73b"
+    },
+    "data": {
+      "id": "commonwealth:3n206v73b",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth:3n206v73b",
+        "system_create_dtsi": "2023-02-06T15:23:40Z",
+        "system_modified_dtsi": "2023-02-06T15:32:23Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "Loae Parker",
+        "genre_basic_ssim": [
+          "Prints"
+        ],
+        "genre_specific_ssim": [
+          "Rubbings"
+        ],
+        "date_tsim": [
+          "1976"
+        ],
+        "date_type_ssm": [
+          "dateCreated"
+        ],
+        "date_edtf_ssm": [
+          "1976"
+        ],
+        "date_start_dtsi": "1976-01-01T00:00:00Z",
+        "date_end_dtsi": "1976-12-31T23:59:59.999Z",
+        "related_item_host_ssim": [
+          "Rubbings of the headstones in the Old Section of Laurel Hill Cemetery, 1976"
+        ],
+        "subject_topic_tsim": [
+          "Tombs & sepulchral monuments"
+        ],
+        "subject_facet_ssim": [
+          "Tombs & sepulchral monuments",
+          "Parker, Loae, d. 1778"
+        ],
+        "subject_name_tsim": [
+          "Parker, Loae, d. 1778"
+        ],
+        "subject_geo_other_ssm": [
+          "Laurel Hill Cemetery"
+        ],
+        "subject_coordinates_geospatial": [
+          "42.5167,-71.0833",
+          "42.52871,-71.10367"
+        ],
+        "subject_point_geospatial": [
+          "42.5167,-71.0833",
+          "42.52871,-71.10367"
+        ],
+        "subject_geojson_facet_ssim": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.0833,42.5167]},\"properties\":{\"placename\":\"Reading, MA\"}}",
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.10367,42.52871]},\"properties\":{\"placename\":\"Laurel Hill Cemetery\"}}"
+        ],
+        "subject_hiergeo_geojson_ssm": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.0833,42.5167]},\"properties\":{\"continent\":\"North and Central America\",\"country\":\"United States\",\"state\":\"Massachusetts\",\"county\":\"Middlesex\",\"city\":\"Reading\"}}"
+        ],
+        "physical_location_ssim": [
+          "Reading Public Library"
+        ],
+        "identifier_uri_ss": "https://ark.digitalcommonwealth.org/ark:/50959/3n206v73b",
+        "identifier_iiif_manifest_ss": "https://ark.digitalcommonwealth.org/ark:/50959/3n206v73b/manifest",
+        "identifier_local_other_tsim": [
+          "13"
+        ],
+        "note_date_tsim": [
+          "Date from accompanying material."
+        ],
+        "note_tsim": [
+          "Title from item.",
+          "Text from item: Loae Parker (son of Mr. Asa Parker & Mrs. Hephzibah his wife) died Sep. 2d, 1778 Aged 16 months and 3 days.",
+          "Design note: cherub."
+        ],
+        "rights_ss": "No known copyright restrictions.",
+        "license_ss": "This work is licensed for use under a Creative Commons Attribution Non-Commercial Share Alike License (CC BY-NC-SA).",
+        "reuse_allowed_ssi": "creative commons",
+        "license_uri_ss": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "1 print ; sheet 61 x 43 cm",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth"
+        ],
+        "hosting_status_ssi": "hosted",
+        "harvesting_status_bsi": true,
+        "exemplary_image_ssi": "commonwealth:1z40pq73p",
+        "exemplary_image_key_base_ss": "images/commonwealth:1z40pq73p",
+        "admin_set_name_ssi": "Laurel Hill Cemetery Gravestone Rubbings",
+        "admin_set_ark_id_ssi": "commonwealth:bg25bb930",
+        "institution_name_ssi": "Reading Public Library",
+        "institution_ark_id_ssi": "commonwealth:h702qg97w",
+        "collection_name_ssim": [
+          "Laurel Hill Cemetery Gravestone Rubbings"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth:bg25bb930"
+        ],
+        "filenames_ssim": [
+          "13_031"
+        ],
+        "mods_xml_ss": "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",
+        "_version_": 1826789412878417920,
+        "timestamp": "2025-03-16T21:55:44.545Z",
+        "subject_geographic_sim": [
+          "Laurel Hill Cemetery",
+          "Massachusetts",
+          "Middlesex (county)",
+          "North and Central America",
+          "Reading",
+          "United States"
+        ],
+        "date_facet_yearly_itim": [
+          1976
+        ]
+      }
+    }
+  },
+  {
+    "links": {
+      "self": "https://www.digitalcommonwealth.org/search/commonwealth:n8712j541"
+    },
+    "data": {
+      "id": "commonwealth:n8712j541",
+      "type": "DigitalObject",
+      "attributes": {
+        "id": "commonwealth:n8712j541",
+        "system_create_dtsi": "2023-02-06T14:44:10Z",
+        "system_modified_dtsi": "2023-02-06T14:47:27Z",
+        "curator_model_ssi": "Curator::DigitalObject",
+        "curator_model_suffix_ssi": "DigitalObject",
+        "title_info_primary_tsi": "In memory of Mr. Nathaniel Bachelor",
+        "genre_basic_ssim": [
+          "Prints"
+        ],
+        "genre_specific_ssim": [
+          "Rubbings"
+        ],
+        "date_tsim": [
+          "1976"
+        ],
+        "date_type_ssm": [
+          "dateCreated"
+        ],
+        "date_edtf_ssm": [
+          "1976"
+        ],
+        "date_start_dtsi": "1976-01-01T00:00:00Z",
+        "date_end_dtsi": "1976-12-31T23:59:59.999Z",
+        "related_item_host_ssim": [
+          "Rubbings of the headstones in the Old Section of Laurel Hill Cemetery, 1976"
+        ],
+        "subject_topic_tsim": [
+          "Tombs & sepulchral monuments"
+        ],
+        "subject_facet_ssim": [
+          "Tombs & sepulchral monuments",
+          "Bachelor, Nathaniel, d. 1788"
+        ],
+        "subject_name_tsim": [
+          "Bachelor, Nathaniel, d. 1788"
+        ],
+        "subject_geo_other_ssm": [
+          "Laurel Hill Cemetery"
+        ],
+        "subject_coordinates_geospatial": [
+          "42.5167,-71.0833",
+          "42.52871,-71.10367"
+        ],
+        "subject_point_geospatial": [
+          "42.5167,-71.0833",
+          "42.52871,-71.10367"
+        ],
+        "subject_geojson_facet_ssim": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.0833,42.5167]},\"properties\":{\"placename\":\"Reading, MA\"}}",
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.10367,42.52871]},\"properties\":{\"placename\":\"Laurel Hill Cemetery\"}}"
+        ],
+        "subject_hiergeo_geojson_ssm": [
+          "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-71.0833,42.5167]},\"properties\":{\"continent\":\"North and Central America\",\"country\":\"United States\",\"state\":\"Massachusetts\",\"county\":\"Middlesex\",\"city\":\"Reading\"}}"
+        ],
+        "physical_location_ssim": [
+          "Reading Public Library"
+        ],
+        "identifier_uri_ss": "https://ark.digitalcommonwealth.org/ark:/50959/n8712j541",
+        "identifier_iiif_manifest_ss": "https://ark.digitalcommonwealth.org/ark:/50959/n8712j541/manifest",
+        "identifier_local_other_tsim": [
+          "2"
+        ],
+        "note_date_tsim": [
+          "Date from accompanying material."
+        ],
+        "note_tsim": [
+          "Title from item.",
+          "Text from item: In memory of Mr. Nathaniel Bachelor, who departed this life April ye. 24, 1788: In the 75 year of his age. Retire my friends, dry up your tears, Here I must lie til Christ appears.",
+          "Design note: cherub."
+        ],
+        "rights_ss": "No known copyright restrictions.",
+        "license_ss": "This work is licensed for use under a Creative Commons Attribution Non-Commercial Share Alike License (CC BY-NC-SA).",
+        "reuse_allowed_ssi": "creative commons",
+        "license_uri_ss": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "digital_origin_ssi": "reformatted_digital",
+        "extent_tsi": "1 print ; sheet 92 x 61 cm",
+        "type_of_resource_ssim": [
+          "Still image"
+        ],
+        "publishing_state_ssi": "published",
+        "processing_state_ssi": "complete",
+        "destination_site_ssim": [
+          "commonwealth"
+        ],
+        "hosting_status_ssi": "hosted",
+        "harvesting_status_bsi": true,
+        "exemplary_image_ssi": "commonwealth:mc87sm34p",
+        "exemplary_image_key_base_ss": "images/commonwealth:mc87sm34p",
+        "admin_set_name_ssi": "Laurel Hill Cemetery Gravestone Rubbings",
+        "admin_set_ark_id_ssi": "commonwealth:bg25bb930",
+        "institution_name_ssi": "Reading Public Library",
+        "institution_ark_id_ssi": "commonwealth:h702qg97w",
+        "collection_name_ssim": [
+          "Laurel Hill Cemetery Gravestone Rubbings"
+        ],
+        "collection_ark_id_ssim": [
+          "commonwealth:bg25bb930"
+        ],
+        "filenames_ssim": [
+          "2_003"
+        ],
+        "mods_xml_ss": "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",
+        "_version_": 1826791433279897600,
+        "timestamp": "2025-03-16T22:27:51.350Z",
+        "subject_geographic_sim": [
+          "Laurel Hill Cemetery",
+          "Massachusetts",
+          "Middlesex (county)",
+          "North and Central America",
+          "Reading",
+          "United States"
+        ],
+        "date_facet_yearly_itim": [
+          1976
+        ]
+      }
+    }
+  }
+]
