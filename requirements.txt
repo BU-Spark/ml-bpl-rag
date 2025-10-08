@@ -374,3 +374,5 @@ yarl==1.18.3
     # via aiohttp
 zstandard==0.23.0
     # via langsmith
+ragas
+psycopg2-binary
