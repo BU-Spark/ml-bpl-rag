@@ -1,3 +1,9 @@
+-- CREATE TABLE silver.bpl_combined (
+--     document_id TEXT PRIMARY KEY,
+--     summary_text TEXT
+-- );
+
+
 CREATE TABLE silver.bpl_combined AS
 SELECT
     id AS document_id,
@@ -15,3 +21,4 @@ SELECT
       'Collection:', flatten_jsonb_array(data->'collection_name_ssim')
     ) AS summary_text
 FROM bronze.bpl_metadata;
+
