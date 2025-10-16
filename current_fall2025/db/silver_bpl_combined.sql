@@ -19,6 +19,6 @@ SELECT
       'Date:',       flatten_jsonb_array(data->'date_tsim'),
       'Type:',       flatten_jsonb_array(data->'type_of_resource_ssim'),
       'Collection:', flatten_jsonb_array(data->'collection_name_ssim')
-    ) AS summary_text
+    ) AS summary_text,
+    data AS metadata
 FROM bronze.bpl_metadata;
-
