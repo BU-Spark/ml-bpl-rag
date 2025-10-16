@@ -53,17 +53,18 @@ def main():
         model = load_model()
 
         print("📖 Fetching data from silver.bpl_combined...")
-        cur.execute("SELECT document_id, summary_text FROM silver.bpl_combined;")
+        cur.execute("SELECT document_id, summary_text, metadata FROM silver.bpl_combined;")
         rows = cur.fetchall()
         total_docs = len(rows)
         print(f"✅ Retrieved {total_docs:,} records")
 
         insert_sql = """
-            INSERT INTO gold.bpl_embeddings (document_id, chunk_index, chunk_text, embedding)
-            VALUES (%s, %s, %s, %s)
+            INSERT INTO gold.bpl_embeddings (document_id, chunk_index, chunk_text, embedding, metadata)
+            VALUES (%s, %s, %s, %s, %s)
             ON CONFLICT (document_id, chunk_index)
-            DO UPDATE SET embedding = EXCLUDED.embedding;
+            DO UPDATE SET embedding = EXCLUDED.embedding, metadata = EXCLUDED.metadata;
         """
+
         
         batch, BATCH_SIZE = [], 100
         processed_docs, inserted_chunks = 0, 0
@@ -78,7 +79,7 @@ def main():
 
             embeddings = model.encode(chunks, batch_size=64, show_progress_bar=False)
             for idx, (chunk, emb) in enumerate(zip(chunks, embeddings)):
-                batch.append((document_id, idx, chunk, emb.tolist()))
+                batch.append((document_id, idx, chunk, emb.tolist(), metadata))
                 inserted_chunks += 1
 
                 if len(batch) >= BATCH_SIZE:
