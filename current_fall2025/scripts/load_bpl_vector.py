@@ -57,7 +57,7 @@ def main():
         rows = cur.fetchall()
         total_docs = len(rows)
         print(f"✅ Retrieved {total_docs:,} records")
-
+        
         insert_sql = """
             INSERT INTO gold.bpl_embeddings (document_id, chunk_index, chunk_text, embedding, metadata)
             VALUES (%s, %s, %s, %s, %s)
@@ -69,7 +69,7 @@ def main():
         batch, BATCH_SIZE = [], 100
         processed_docs, inserted_chunks = 0, 0
 
-        for document_id, text in tqdm(rows, desc="🧠 Embedding documents"):
+        for document_id, text, metadata in tqdm(rows, desc="🧠 Embedding documents"):
             if not text:
                 continue
 
