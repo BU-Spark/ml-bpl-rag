@@ -10,17 +10,22 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import ChatOpenAI
 from RAG import RAG
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    datefmt="%H:%M:%S",
+)
+logger = logging.getLogger(__name__)
+
 # ------------------------------------------------------------------------------
 # 🌎 INITIAL SETUP
 # ------------------------------------------------------------------------------
 st.set_page_config(
-    page_title="Boston Public Library Chatbot (pgvector)",
+    page_title="Boston Public Library Chatbot",
     page_icon="🤖",
     layout="wide"
 )
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 load_dotenv()
 
 
@@ -40,8 +45,6 @@ def load_llm():
         temperature=0,
         model_kwargs={"response_format": {"type": "json_object"}} 
     )
-
-
 
 # ------------------------------------------------------------------------------
 # 🧩 PER-SESSION POSTGRES CONNECTION (thread-safe)
@@ -132,7 +135,8 @@ def display_sources(sources: List) -> None:
 # 🚀 MAIN STREAMLIT APP
 # ------------------------------------------------------------------------------
 def main():
-    st.title("📖 Digital Commonwealth Chatbot (Postgres + LangChain RAG)")
+    st.title("📚 Boston Public Library RAG Chatbot 🤖")
+    st.caption("Ask about historical events, archives, or images in the Digital Commonwealth collection.")
 
     # Initialize system
     llm, embeddings, conn = initialize_all()
@@ -150,7 +154,7 @@ def main():
             st.markdown(msg["content"])
 
     # User input
-    user_input = st.chat_input("Ask about Boston Public Library archives...")
+    user_input = st.chat_input("Type your question here...")
     if user_input:
         with st.chat_message("user"):
             st.markdown(user_input)
@@ -164,7 +168,12 @@ def main():
                 display_sources(sources[:st.session_state.num_sources])
 
     st.markdown("---")
-    st.caption("Built with LangChain + Streamlit + PostgreSQL pgvector + OpenAI")
+    st.caption(
+        "Built with LangChain + Streamlit + PostgreSQL (pgvector) for the Boston Public Library’s Digital Commonwealth collections."
+    )
+    st.caption(
+        "Access digitized photographs, manuscripts, audio, and other historical materials directly through natural-language search."
+    )
 
 
 if __name__ == "__main__":
