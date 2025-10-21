@@ -35,7 +35,12 @@ def load_embeddings():
 @st.cache_resource
 def load_llm():
     logger.info("Initializing OpenAI Chat model...")
-    return ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    return ChatOpenAI(
+        model="gpt-4o-mini",
+        temperature=0,
+        model_kwargs={"response_format": {"type": "json_object"}} 
+    )
+
 
 
 # ------------------------------------------------------------------------------
