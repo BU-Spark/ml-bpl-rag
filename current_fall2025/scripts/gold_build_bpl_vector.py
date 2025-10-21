@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import json
 import os
 import torch
 import psycopg2
@@ -79,7 +80,7 @@ def main():
 
             embeddings = model.encode(chunks, batch_size=64, show_progress_bar=False)
             for idx, (chunk, emb) in enumerate(zip(chunks, embeddings)):
-                batch.append((document_id, idx, chunk, emb.tolist(), metadata))
+                batch.append((document_id, idx, chunk, emb.tolist(), json.dumps(metadata)))
                 inserted_chunks += 1
 
                 if len(batch) >= BATCH_SIZE:
