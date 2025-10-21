@@ -19,7 +19,7 @@ cur = conn.cursor()
 
 DATA_DIR = "../data/raw"  # path to your folder
 insert_sql = """
-INSERT INTO raw_metadata (id, data)
+INSERT INTO bronze.bpl_metadata (id, data)
 VALUES (%s, %s)
 ON CONFLICT (id) DO NOTHING;
 """
