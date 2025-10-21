@@ -69,7 +69,7 @@ def main():
         batch, BATCH_SIZE = [], 100
         processed_docs, inserted_chunks = 0, 0
 
-        for document_id, text in tqdm(rows, desc="🧠 Embedding documents"):
+        for document_id, text, metadata in tqdm(rows, desc="🧠 Embedding documents"):
             if not text:
                 continue
 
