@@ -16,7 +16,7 @@ from langchain_core.documents import Document
 from langchain_community.retrievers import BM25Retriever
 from enum import Enum
 from pydantic import BaseModel, ValidationError  
-from typing import Union, Any
+from typing import Union, List, Dict, Any
 
 class QueryRewrite(BaseModel):
     improved_query: str
@@ -29,7 +29,7 @@ class Validity(str, Enum):
 class RagResponse(BaseModel):
     reasoning: str
     valid: Validity
-    response: Union[str, List[Dict[str, Any]]]
+    response: Union[str, Dict[str, Any], List[Dict[str, Any]]]
 # ==============================================================================
 # 🔍 RETRIEVE: pgvector query (no Pinecone)
 # ==============================================================================
@@ -213,8 +213,24 @@ def parse_json_and_check(output: str) -> str:
     """
     Parse JSON response safely, validate via schema, and return final message.
     Handles both string and list-based responses.
+    Automatically strips markdown code fences (```json ... ```) if present.
     """
     try:
+        # Clean and normalize the model output
+        output = output.strip()
+        if output.startswith("```"):
+            # Remove leading ```json or ``` and trailing ```
+            output = re.sub(r"^```[a-zA-Z0-9]*\n?", "", output)
+            output = re.sub(r"```$", "", output)
+            output = output.strip()
+
+        # If still not valid JSON, attempt to extract the first JSON object
+        if not output.startswith("{"):
+            match = re.search(r"\{[\s\S]*\}", output)
+            if match:
+                output = match.group(0).strip()
+
+        # Try to parse the cleaned JSON
         data = json.loads(output)
         parsed = RagResponse(**data)
 
