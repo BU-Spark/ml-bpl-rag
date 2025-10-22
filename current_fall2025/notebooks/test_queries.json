@@ -1,0 +1,185 @@
+[
+    {
+        "id": 1,
+        "question": "What were some important historical events that happened in Boston in 1919?" ,
+        "ground_truth": "The Boston Molasses Disaster and the Police Strike were key events in 1919."
+
+    },
+    {
+        "id": 2,
+        "question": "What was the Great Fire of Boston in 1872?",
+        "ground_truth": "The Great Fire of Boston in 1872 burned 65 acres of the city’s business district, causing heavy property loss."
+    },
+    {
+        "id": 3,
+        "question": "What happened during the Boston Molasses Flood of 1919?",
+        "ground_truth": "On January 15, 1919, a storage tank in Boston’s North End burst, releasing over two million gallons of molasses that flooded the streets, destroying buildings and killing 21 people. The event became known as the Great Molasses Flood."
+    },
+    {
+        "id": 4,
+        "question": "Show me photographs from the 1919 Boston Police Strike.",
+        "ground_truth": "The 1919 Boston Police Strike involved officers walking out to demand better wages and working conditions, leading to riots and deployment of the state militia. The BPL collection includes photos of striking officers and soldiers patrolling the city"
+    },
+    {
+        "id": 5,
+        "question": "Find postcards of Cape Cod from the early 1900s.",
+        "ground_truth": "The collection features vintage postcards showing beaches, lighthouses, and seaside towns around Cape Cod from the early 20th century, capturing Massachusetts’ coastal heritage."
+    },
+    {
+        "id": 6,
+        "question": "Are there photographs of John F. Kennedy’s house on Cape Cod?",
+        "ground_truth": "Yes, the archive contains several images of the Kennedy family homes and compound in Hyannis Port, Massachusetts, including aerial views and portraits of President John F. Kennedy."
+    },
+    {
+        "id": 7,
+        "question": "Show me depictions of women working in Boston during the early 1900s.",
+        "ground_truth": "Photographs and illustrations from the BPL archive depict women working in factories, offices, and public spaces in Boston during the early 20th century, highlighting changing gender roles."
+    },
+    {
+        "id": 8,
+        "question": "Find materials related to abolitionist movements in Massachusetts.",
+        "ground_truth": "The collection includes newspapers, pamphlets, and portraits connected to 19th-century abolitionist figures and organizations active in Massachusetts, such as anti-slavery societies and speeches from reformers."
+    },
+    {
+        "id": 9,
+        "question": "Are there any maps of Worcester, Massachusetts from the 18th century?",
+        "ground_truth": "Several maps in the BPL collection show Worcester County and the broader Massachusetts area from the 1700s, including hand-drawn plans and early printed maps."
+    },
+    {
+        "id": 10,
+        "question": "Find old photographs of Beacon Hill, Boston.",
+        "ground_truth": "Historic photographs of Beacon Hill show its narrow streets, brick row houses, and landmarks such as the Massachusetts State House, reflecting the area’s architectural history."
+    },
+    {
+        "id": 11,
+        "question": "What was the Boston Tea Party and why did it happen?",
+        "ground_truth": "The Boston Tea Party was a political protest in December 1773 where American colonists, frustrated by British taxation without representation, dumped chests of tea into Boston Harbor as an act of resistance against the Tea Act."
+    },
+    {
+        "id": 12,
+        "question": "What events took place in Boston during the American Revolution?",
+        "ground_truth": "The Boston Public Library collection includes accounts of key Revolutionary War events such as the Boston Massacre, the Boston Tea Party, and the Siege of Boston, which marked the early stages of the conflict."
+    },
+    {
+        "id": 13,
+        "question": "Who was Crispus Attucks and what was his role in American history?",
+        "ground_truth": "Crispus Attucks was one of the first casualties of the American Revolution, killed during the Boston Massacre in 1770. He is remembered as an early symbol of the fight for liberty and civil rights."
+    },
+    {
+        "id": 14,
+        "question": "What caused the Great Fire of Boston in 1872?",
+        "ground_truth": "The Great Fire of 1872 destroyed large portions of Boston’s downtown area, caused by a fire that began in a dry-goods store on Summer Street. The blaze spread quickly through wooden buildings before being contained by firefighters."
+    },
+    {
+        "id": 15,
+        "question": "Find newspaper articles about the abolitionist movement in Boston.",
+        "ground_truth": "The BPL newspaper archives include articles, speeches, and letters by abolitionists such as William Lloyd Garrison and Frederick Douglass, published in 19th-century Boston papers advocating for the end of slavery."
+    },
+    {
+        "id": 16,
+        "question": "Are there any newspapers covering women’s suffrage in Massachusetts?",
+        "ground_truth": "Yes, several early 20th-century newspapers document rallies, speeches, and campaigns by women’s rights activists in Massachusetts advocating for voting rights before the 19th Amendment."
+    },
+    {
+        "id": 17,
+        "question": "Find documents or letters from the Civil War era written by Massachusetts soldiers.",
+        "ground_truth": "The collection contains personal letters, diaries, and reports written by Union soldiers from Massachusetts during the Civil War, offering firsthand accounts of battles and daily life at the front."
+    },
+    {
+        "id": 18,
+        "question": "Who was Phillis Wheatley and why is she significant in American literature?",
+        "ground_truth": "Phillis Wheatley was the first African American woman to publish a book of poetry. Enslaved in Boston, she gained recognition in the 1770s for her literary talent and contributions to early American poetry."
+    },
+    {
+        "id": 19,
+        "question": "What role did Frederick Douglass play in Massachusetts history?",
+        "ground_truth": "Frederick Douglass lived in Massachusetts for several years, where he became an influential abolitionist and orator. The collection includes his speeches and writings advocating for emancipation and civil rights."
+    },
+    {
+        "id": 20,
+        "question": "What did the Boston Public Library look like when it was built?",
+        "ground_truth": "The Boston Public Library (BPL) was founded in 1848, but its most famous and architecturally significant building, the McKim Building in Copley Square, was completed in 1895. When it was built, it reflected the Beaux-Arts architectural style, which was highly popular for grand public buildings in the late 19th century."
+    },
+
+    {
+        "id": 21,
+        "question": "Who was Andrew Craigie and what role did he play in Cambridge's development?",
+        "ground_truth": "Andrew Craigie was a speculator who attracted the Middlesex County courthouse and jail to East Cambridge by offering to donate new buildings in 1813."
+    },
+    {
+        "id": 22,
+        "question": "What significant infrastructure project opened in East Cambridge in 1809?",
+        "ground_truth": "East Cambridge was opened for development in 1809, when the Canal Bridge, adjacent to the present Museum of Science, was completed. The area was the city's major industrial center until the 1880s."
+    },
+    {
+        "id": 23,
+        "question": "What was the significance of the New England Glass Company in Cambridge's history?",
+        "ground_truth": "The New England Glass Company played a major role in Cambridge’s industrial history. Founded in 1818 in East Cambridge, it became one of the largest and most modern glassworks in the United States by the mid-19th century."
+    },
+    {
+        "id": 24,
+        "question": "Who was Samuel Adams and what did he do in Boston?",
+        "ground_truth": "Samuel Adams was a leading Patriot and political organizer in colonial Boston. He helped coordinate protests against British taxation, including the Boston Tea Party, and played a key role in forming the Sons of Liberty. Adams’ writings, speeches, and leadership galvanized public opinion in Boston and contributed to the city’s central role in the American Revolution."
+    },
+    {
+        "id": 25,
+        "question": "What was the role of the Boston Navy Yard?",
+        "ground_truth": "The Boston Navy Yard, established in 1801, was a major shipbuilding and repair facility for the U.S. Navy. It supported military operations during the War of 1812, the Civil War, and both World Wars. The yard attracted workers, stimulated local industry, and became an important economic and strategic asset for Boston, leaving a legacy in maritime infrastructure and naval history."
+    },
+    {
+        "id": 26,
+        "question": "What was the Old State House in Boston used for?",
+        "ground_truth": "The Old State House, built in 1713, served as the seat of colonial government in Massachusetts. It was the site of key events, including the reading of the Declaration of Independence in 1776. The building also witnessed protests and unrest, such as the Boston Massacre in 1770. Today, it is a museum preserving the history of Boston and the American Revolution."
+    },
+    {
+        "id": 27,
+        "question": "Who was Paul Revere and what was his significance?",
+        "ground_truth": "Paul Revere was a silversmith, engraver, and Patriot activist in colonial Boston. He is best known for his midnight ride on April 18, 1775, warning of British troop movements before the battles of Lexington and Concord. Revere’s work as an artisan and messenger contributed to the American Revolution, and his engravings documented colonial life and political events."
+    },
+    {
+        "id": 28,
+        "question": "What happened at the Boston Massacre?",
+        "ground_truth": "On March 5, 1770, British soldiers fired into a crowd of colonists in Boston, killing five people, including Crispus Attucks. The incident heightened tensions between colonists and Britain, was widely publicized through engravings and pamphlets, and became a powerful symbol of colonial resistance, galvanizing support for independence."
+    },
+    {
+        "id": 29,
+        "question": "Who were the Sons of Liberty?",
+        "ground_truth": "The Sons of Liberty were a group of colonial activists in Boston who opposed British taxation and policies. They organized protests, including the Boston Tea Party, and resisted enforcement of unpopular laws. Their actions fostered unity among colonists and helped ignite revolutionary sentiment, playing a critical role in the events leading up to the American Revolution."
+    },
+    {
+        "id": 30,
+        "question": "What is Faneuil Hall’s historical significance?",
+        "ground_truth": "Built in 1742, Faneuil Hall served as a marketplace and meeting hall in Boston. It was a site for revolutionary speeches, protests, and assemblies, including gatherings opposing British taxes. Faneuil Hall remains an iconic symbol of free speech, civic engagement, and Boston’s role in American independence."
+    },
+    {
+        "id": 31,
+        "question": "What was the Big Dig and why was it significant?",
+        "ground_truth": "The Big Dig, officially called the Central Artery/Tunnel Project, was a massive infrastructure project in Boston that aimed to reduce traffic congestion by rerouting the elevated Central Artery (Interstate 93) underground. Construction began in 1991 and included building tunnels, bridges, and the Ted Williams Tunnel, as well as the Leonard P. Zakim Bunker Hill Memorial Bridge. The project also created the Rose Kennedy Greenway, a series of parks and public spaces replacing the old elevated highway."
+    },
+    {
+        "id": 32,
+        "question": "What happened at the Boston Marathon Bombings?",
+        "ground_truth": "The Boston Marathon bombing, sometimes referred to as simply the Boston bombing, was an Islamist domestic terrorist attack that took place during the 117th annual Boston Marathon on April 15, 2013."
+    },
+    {
+        "id": 33,
+        "question": "What was the history of the Boston Common?",
+        "ground_truth": "Established in 1634, Boston Common is the oldest public park in the United States. It served as a pasture, military training ground, and site for public gatherings and protests. Over time, it became a central recreational and civic space, reflecting Boston’s urban development and social history."
+    },
+    {
+        "id": 34,
+        "question": "Why is Boston named Boston?",
+        "ground_truth": "Boston is named after Boston, Lincolnshire, in England. Early Puritan settlers from that English town founded the Massachusetts Bay Colony in 1630 and named their new settlement after their hometown. The name reflected the settlers’ desire to maintain a connection to their English roots while establishing a community based on their religious and social ideals in the New World."
+    },
+    {
+        "id": 35,
+        "question": "What are some significant books written by Bostonians?",
+        "ground_truth": "Boston has been home to many influential authors whose works shaped American literature. Notable examples include Ralph Waldo Emerson, who wrote Self-Reliance and essays on transcendentalism; Nathaniel Hawthorne, author of The Scarlet Letter; Louisa May Alcott, known for Little Women; and Henry David Thoreau, whose Walden reflects philosophical and naturalist ideas."
+    },
+    {
+        "id": 36,
+        "question": "What first editions are held at the Boston Public Library?",
+        "ground_truth": "The Boston Public Library holds first editions of major works, including Shakespeare’s plays, Little Women by Louisa May Alcott, Moby-Dick by Herman Melville, The Scarlet Letter by Nathaniel Hawthorne, and scientific texts like Newton’s Principia. It also houses rare religious texts and first editions of Walt Whitman’s works."
+    }
+
+]
