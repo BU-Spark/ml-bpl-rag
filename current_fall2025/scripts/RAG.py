@@ -7,7 +7,7 @@ import psycopg2
 import logging
 import requests
 
-from typing import Any, Dict, List, Tuple, Optional
+from typing import Any, Dict, List, Tuple, Optional, Union
 from collections import defaultdict
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.prompts import PromptTemplate
@@ -16,7 +16,6 @@ from langchain_core.documents import Document
 from langchain_community.retrievers import BM25Retriever
 from enum import Enum
 from pydantic import BaseModel, ValidationError  
-from typing import Union, List, Dict, Any
 
 class QueryRewrite(BaseModel):
     improved_query: str
