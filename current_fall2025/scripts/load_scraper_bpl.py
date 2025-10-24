@@ -6,8 +6,8 @@ import requests
 from multiprocessing import Pool
 from random import uniform
 
-# Use query 'a' to fetch all public entries in Boston Public Library
-BASE_URL = "https://www.digitalcommonwealth.org/search.json?f%5Bphysical_location_ssim%5D%5B%5D=Boston+Public+Library&per_page=100&q=a"
+# Use query '*' to fetch all public entries in Boston Public Library
+BASE_URL = "https://www.digitalcommonwealth.org/search.json?f%5Bphysical_location_ssim%5D%5B%5D=Boston+Public+Library&per_page=100&q=*"
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; DataCollector/1.0; +https://yourdomain.com/)"
@@ -16,7 +16,7 @@ HEADERS = {
 def fetch_pages(args):
     start_page, end_page = args
     file_name = f"out_{start_page}_{end_page}.json"
-    file_path = os.path.join("data/raw", file_name)
+    file_path = os.path.join("../data/raw", file_name)
     output = []
     
     print(f"ðŸ§µ Scraping pages {start_page} to {end_page}...")
@@ -63,7 +63,7 @@ def divide_work(start_page, end_page, chunks):
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
-        print("Usage: python scrape_parallel.py START_PAGE END_PAGE")
+        print("Usage: python load_scraper_bpl.py START_PAGE END_PAGE")
         sys.exit(1)
 
     start_page = int(sys.argv[1])

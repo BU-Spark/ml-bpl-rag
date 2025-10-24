@@ -3,6 +3,7 @@
 --     summary_text TEXT
 -- );
 
+DROP TABLE IF EXISTS silver.bpl_combined;
 
 CREATE TABLE silver.bpl_combined AS
 SELECT
@@ -22,3 +23,4 @@ SELECT
     ) AS summary_text,
     data AS metadata
 FROM bronze.bpl_metadata;
+
