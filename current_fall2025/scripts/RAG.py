@@ -7,15 +7,28 @@ import psycopg2
 import logging
 import requests
 
-from typing import Any, Dict, List, Tuple, Optional
+from typing import Any, Dict, List, Tuple, Optional, Union
 from collections import defaultdict
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain_core.documents import Document
 from langchain_community.retrievers import BM25Retriever
+from enum import Enum
+from pydantic import BaseModel, ValidationError  
 
+class QueryRewrite(BaseModel):
+    improved_query: str
+    expanded_query: Optional[str] = ""
 
+class Validity(str, Enum):
+    YES = "YES"
+    NO = "NO"
+
+class RagResponse(BaseModel):
+    reasoning: str
+    valid: Validity
+    response: Union[str, Dict[str, Any], List[Dict[str, Any]]]
 # ==============================================================================
 # 🔍 RETRIEVE: pgvector query (no Pinecone)
 # ==============================================================================
@@ -95,31 +108,41 @@ def extract_text_from_json(json_data: Dict) -> str:
 # ==============================================================================
 
 def rephrase_and_expand_query(query: str, llm: Any) -> str:
+    """
+    Rephrase and expand query using LLM, returning a validated JSON object.
+    Falls back to original query if validation fails.
+    """
     logging.info("🧠 Rephrasing and expanding query using LLM...")
     start = time.time()
 
-    prompt_template = PromptTemplate.from_template(
-        """
-        You are a professional librarian skilled at historical research.
-        Rewrite and expand the query to match metadata tags. Include related terms (synonyms, historical names, places, events).
-        
-        <IMPROVED_QUERY>your improved query here</IMPROVED_QUERY>
-        <EXPANDED_QUERY>your expanded query here</EXPANDED_QUERY>
+    prompt = f"""
+    You are a professional librarian skilled at historical research.
+    Rewrite and expand the user's query to match metadata tags.
+    Include related terms (synonyms, historical names, places, events).
 
-        Original Query: {query}
-        """
-    )
-    prompt = prompt_template.invoke({"query": query})
+    Respond ONLY in **valid JSON**, no commentary.
+    Example:
+    {{
+        "improved_query": "Boston 1919 historical events",
+        "expanded_query": "Boston 1919 molasses flood, North End disaster, early 20th century"
+    }}
+
+    Original Query: "{query}"
+    """
+    logging.info("📝 LLM prompt for rephrase:\n%s", prompt[:1500])  
+
     response = llm.invoke(prompt)
+    logging.info("📩 LLM raw response (rephrase): %s", response.content[:2000])
 
-    improved = re.search(r"<IMPROVED_QUERY>(.*?)</IMPROVED_QUERY>", response.content, re.DOTALL)
-    expanded = re.search(r"<EXPANDED_QUERY>(.*?)</EXPANDED_QUERY>", response.content, re.DOTALL)
-    improved_q = improved.group(1).strip() if improved else query
-    expanded_q = expanded.group(1).strip() if expanded else ""
-    final_q = f"{improved_q} {expanded_q}".strip()
-
-    logging.info(f"✅ Query rephrased in {time.time() - start:.2f}s: '{final_q}'")
-    return final_q
+    try:
+        data = json.loads(response.content)
+        parsed = QueryRewrite(**data)
+        final_q = f"{parsed.improved_query.strip()} {parsed.expanded_query.strip()}".strip()
+        logging.info(f"✅ Query rephrased in {time.time() - start:.2f}s: '{final_q}'")
+        return final_q
+    except (json.JSONDecodeError, ValidationError) as e:
+        logging.warning(f"⚠️ JSON parsing or validation failed: {e}")
+        return query  # graceful fallback
 
 
 # ==============================================================================
@@ -185,14 +208,54 @@ def rerank(docs: List[Document], query: str) -> List[Document]:
 # 🧩 RESPONSE PARSER
 # ==============================================================================
 
-def parse_xml_and_check(xml: str) -> str:
-    if not xml:
-        return "No response generated."
-    matches = re.findall(r"<(\w+)>(.*?)</\1>", xml, re.DOTALL)
-    parsed = dict(matches)
-    if parsed.get("VALID") == "NO":
-        return "Sorry, I couldn’t find direct answers, but here are related documents."
-    return parsed.get("RESPONSE", "No response found in output.")
+def parse_json_and_check(output: str) -> str:
+    """
+    Parse JSON response safely, validate via schema, and return final message.
+    Handles both string and list-based responses.
+    Automatically strips markdown code fences (```json ... ```) if present.
+    """
+    try:
+        # Clean and normalize the model output
+        output = output.strip()
+        if output.startswith("```"):
+            # Remove leading ```json or ``` and trailing ```
+            output = re.sub(r"^```[a-zA-Z0-9]*\n?", "", output)
+            output = re.sub(r"```$", "", output)
+            output = output.strip()
+
+        # If still not valid JSON, attempt to extract the first JSON object
+        if not output.startswith("{"):
+            match = re.search(r"\{[\s\S]*\}", output)
+            if match:
+                output = match.group(0).strip()
+
+        # Try to parse the cleaned JSON
+        data = json.loads(output)
+        parsed = RagResponse(**data)
+
+        # Handle "NO" case
+        if parsed.valid.strip().upper() == "NO":
+            return "Sorry, I couldn’t find direct answers, but here are related documents."
+
+        # Handle list-based structured responses (like image or multi-result queries)
+        if isinstance(parsed.response, list):
+            formatted = "\n".join(
+                f"- {item.get('title', 'Untitled')} ({item.get('date', 'Unknown')}): {item.get('description', '')}"
+                for item in parsed.response
+            )
+            return formatted or "No structured results provided."
+
+        # Handle string-based simple responses
+        if isinstance(parsed.response, str):
+            return parsed.response.strip()
+
+        # Unexpected type fallback
+        logging.warning("⚠️ Unexpected response type: %s", type(parsed.response))
+        return "Unexpected response format from model."
+
+    except (json.JSONDecodeError, ValidationError) as e:
+        logging.error(f"❌ JSON parsing/validation failed: {e}")
+        return "No valid response found in model output."
 
 
 # ==============================================================================
@@ -223,23 +286,40 @@ def RAG(llm: Any, conn, embeddings: HuggingFaceEmbeddings, query: str, top: int 
         logging.info("🗒️ Generating final LLM summary...")
         start = time.time()
 
-        prompt = PromptTemplate.from_template(
-            """Pretend you are a professional librarian. Summarize the following context as though you had retrieved it for a patron:
-            Some results may include image descriptions, captions, or mentions of places/people. Treat these as valid and relevant.
-            Context:{context}
-            Format:
-            <REASONING>...</REASONING>
-            <VALID>YES or NO</VALID>
-            <RESPONSE>summary answer</RESPONSE>
-            <QUERY>{query}</QUERY>"""
-        )
-        prompt_input = prompt.invoke({"context": context, "query": query})
-        response = llm.invoke(prompt_input)
+        logging.info("🗒️ Generating final LLM summary...")
+        start = time.time()
 
-        parsed = parse_xml_and_check(response.content)
+        # Prompt LLM to output strictly JSON
+        prompt = f"""
+        Pretend you are a professional librarian.
+        Summarize the following context as though you had retrieved it for a patron.
+        Some results may include image descriptions, captions, or mentions of places/people—treat these as valid and relevant.
+
+        Respond ONLY in **valid JSON**, no commentary.
+        Example:
+        {{
+          "reasoning": "Context mentions Boston 1919 Molasses Flood; relevant to the query.",
+          "valid": "YES",
+          "response": "The Great Molasses Flood occurred in Boston in 1919, killing 21 people."
+        }}
+
+        Context:
+        {context}
+
+        Query:
+        {query}
+        """
+
+        logging.info("📝 LLM prompt for summary:\n%s", prompt[:1500])
+        response = llm.invoke(prompt)
+        logging.info("📩 LLM raw response (summary): %s", response.content[:2000])
+
+        parsed = parse_json_and_check(response.content)
+
         logging.info(f"✅ Summary generated in {time.time() - start:.2f}s.")
         logging.info(f"🏁 RAG completed in {time.time() - total_start:.2f}s total.")
         return parsed, reranked
+
 
     except Exception as e:
         logging.error(f"❌ Error in RAG: {e}")
