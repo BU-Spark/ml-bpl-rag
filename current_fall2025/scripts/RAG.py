@@ -7,7 +7,8 @@ import psycopg2
 import logging
 import requests
 
-from typing import Any, Dict, List, Tuple, Optional, Union
+from typing import Any, Dict, List, Tuple, Optional
+from enum import Enum
 from collections import defaultdict
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.prompts import PromptTemplate
@@ -16,24 +17,57 @@ from langchain_core.documents import Document
 from langchain_community.retrievers import BM25Retriever
 from pydantic import BaseModel, ValidationError  
 
+
+# ==============================================================================
+# 📦 DATA MODELS
+# ==============================================================================
+
 class QueryRewrite(BaseModel):
     improved_query: str
     expanded_query: Optional[str] = ""
+
 
 class CatalogResponse(BaseModel):
     """Simplified response for catalog search - no YES/NO validation needed"""
     summary: str
 
+
+class MaterialType(str, Enum):
+    STILL_IMAGE = "Still image"
+    CARTOGRAPHIC = "Cartographic"
+    MANUSCRIPT = "Manuscript"
+    MOVING_IMAGE = "Moving image"
+    NOTATED_MUSIC = "Notated music"
+    ARTIFACT = "Artifact"
+    AUDIO = "Audio"
+
+
+class SearchFilters(BaseModel):
+    year_exact: Optional[int] = None
+    year_start: Optional[int] = None
+    year_end: Optional[int] = None
+    material_type: Optional[MaterialType] = None
+
+
 # ==============================================================================
-# 🔍 RETRIEVE: pgvector query (no Pinecone)
+# 🔍 RETRIEVE (pgvector query)
 # ==============================================================================
 
-def retrieve_from_pg(conn, embeddings: HuggingFaceEmbeddings, query: str, k: int = 100) -> Tuple[List[Document], List[float]]:
+def retrieve_from_pg(conn, embeddings: HuggingFaceEmbeddings, query: str, llm: Any, k: int = 100) -> Tuple[List[Document], List[float]]:
+    """
+    Retrieve relevant documents from PostgreSQL using pgvector similarity search,
+    with optional metadata filters (year range, material type) extracted by LLM.
+    """
     start = time.time()
     logging.info("🔍 Starting similarity search in PostgreSQL (pgvector)...")
 
+
+    filters = extract_filters_with_llm(query, llm)
+    where_clause, params = build_sql_filter(filters)
+    logging.info(f"🧩 Applied filters: {filters.dict()} → WHERE {where_clause}")
+
+
     qvec = embeddings.embed_query(query)
-    # pgvector expects ARRAY[...], not [...]
     qvec_str = "ARRAY[" + ",".join(f"{v:.8f}" for v in qvec) + "]"
 
     sql = f"""
@@ -44,14 +78,13 @@ def retrieve_from_pg(conn, embeddings: HuggingFaceEmbeddings, query: str, k: int
             metadata,
             1 - (embedding <=> {qvec_str}::vector) AS score
         FROM gold.bpl_embeddings
+        WHERE {where_clause}
         ORDER BY embedding <=> {qvec_str}::vector
         LIMIT %s;
     """
-
     with conn.cursor() as cur:
-        cur.execute(sql, (k,))
+        cur.execute(sql, (*params, k))
         rows = cur.fetchall()
-
     docs, scores = [], []
     for document_id, chunk_index, chunk_text, metadata, score in rows:
         if len(chunk_text) > 4000:
@@ -60,8 +93,9 @@ def retrieve_from_pg(conn, embeddings: HuggingFaceEmbeddings, query: str, k: int
         docs.append(Document(page_content=chunk_text, metadata={"source": document_id, **meta_dict}))
         scores.append(float(score))
 
-    logging.info(f"✅ Retrieved {len(docs)} chunks from Postgres in {time.time() - start:.2f}s.")
+    logging.info(f"✅ Retrieved {len(docs)} chunks (filters applied) in {time.time() - start:.2f}s.")
     return docs, scores
+
 
 
 # ==============================================================================
@@ -142,20 +176,14 @@ Query: "old photos of Harvard Square"
 
 Patron's Query: "{query}"
 """
-    
-    logging.info("📝 LLM prompt for rephrase:\n%s", prompt[:1500])  
-
     response = llm.invoke(prompt)
-    logging.info("📩 LLM raw response (rephrase): %s", response.content[:2000])
+    content = response.content.strip()
+    if content.startswith("```"):
+        content = re.sub(r"^```[a-zA-Z0-9]*\n?", "", content)
+        content = re.sub(r"```$", "", content)
+        content = content.strip()
 
     try:
-        # Clean potential markdown formatting
-        content = response.content.strip()
-        if content.startswith("```"):
-            content = re.sub(r"^```[a-zA-Z0-9]*\n?", "", content)
-            content = re.sub(r"```$", "", content)
-            content = content.strip()
-        
         data = json.loads(content)
         parsed = QueryRewrite(**data)
         final_q = f"{parsed.improved_query.strip()} {parsed.expanded_query.strip()}".strip()
@@ -163,7 +191,102 @@ Patron's Query: "{query}"
         return final_q
     except (json.JSONDecodeError, ValidationError) as e:
         logging.warning(f"⚠️ JSON parsing or validation failed: {e}")
-        return query  # graceful fallback
+        return query
+
+
+# ==============================================================================
+# 🧭 FILTER EXTRACTION (no location for now)
+# ==============================================================================
+
+def extract_filters_with_llm(query: str, llm: Any) -> SearchFilters:
+    """
+    Extract temporal and material filters from a natural-language query.
+    Ensures strict JSON and null handling.
+    """
+    prompt = f"""
+You are a metadata extraction assistant for the Boston Public Library's catalog.
+
+Extract structured search filters from this query:
+"{query}"
+
+Return a JSON object with these fields (use null if not applicable):
+- year_exact: Single year (integer)
+- year_start: Start year if a range (integer)
+- year_end: End year if a range (integer)
+- material_type: ONE of the following EXACT values:
+  ["Still image", "Cartographic", "Manuscript", "Moving image", "Notated music", "Artifact", "Audio"]
+
+Rules:
+- Use "year_exact" if the query refers to a specific year (e.g., "in 1919").
+- Use "year_start" and "year_end" if it refers to a century or decade (e.g., "18th century" → 1700–1799, "1920s" → 1920–1929).
+- Set missing or irrelevant fields explicitly to null.
+- Respond ONLY in valid JSON using exactly these keys.
+- Do NOT include markdown or explanations.
+
+Examples:
+
+Query: "photographs of Boston in 1919"
+{{
+  "year_exact": 1919,
+  "year_start": null,
+  "year_end": null,
+  "material_type": "Still image"
+}}
+
+Query: "18th century maps of New England"
+{{
+  "year_exact": null,
+  "year_start": 1700,
+  "year_end": 1799,
+  "material_type": "Cartographic"
+}}
+
+Query: "old manuscripts"
+{{
+  "year_exact": null,
+  "year_start": null,
+  "year_end": null,
+  "material_type": "Manuscript"
+}}
+"""
+    try:
+        response = llm.invoke(prompt)
+        content = response.content.strip()
+        if content.startswith("```"):
+            content = re.sub(r"^```[a-zA-Z0-9]*\n?", "", content)
+            content = re.sub(r"```$", "", content)
+            content = content.strip()
+
+        data = json.loads(content)
+        parsed = SearchFilters(**data)
+        logging.info(f"🎯 Extracted filters: {parsed.dict()}")
+        return parsed
+
+    except ValidationError as ve:
+        logging.warning(f"⚠️ LLM response validation failed: {ve}")
+        return SearchFilters()
+    except Exception as e:
+        logging.warning(f"⚠️ Filter extraction error: {e}")
+        return SearchFilters()
+
+
+def build_sql_filter(filters: SearchFilters) -> Tuple[str, List[Any]]:
+    """Convert SearchFilters → SQL WHERE clause + parameters for PostgreSQL."""
+    conditions, params = [], []
+
+    if filters.year_exact:
+        conditions.append("(%s BETWEEN date_start AND date_end)")
+        params.append(filters.year_exact)
+    elif filters.year_start and filters.year_end:
+        conditions.append("(date_start <= %s AND date_end >= %s)")
+        params.extend([filters.year_end, filters.year_start])
+
+    if filters.material_type:
+        conditions.append("(metadata->'type_of_resource_ssim' @> %s::jsonb)")
+        params.append(json.dumps([filters.material_type.value]))
+
+    where_clause = " AND ".join(conditions) if conditions else "1=1"
+    return where_clause, params
 
 
 # ==============================================================================
@@ -270,7 +393,7 @@ def RAG(llm: Any, conn, embeddings: HuggingFaceEmbeddings, query: str, top: int 
     try:
         query = rephrase_and_expand_query(query, llm)
 
-        retrieved, _ = retrieve_from_pg(conn, embeddings, query, k)
+        retrieved, _ = retrieve_from_pg(conn, embeddings, query, llm, k)
         if not retrieved:
             logging.warning("⚠️ No results retrieved from pgvector.")
             return "No documents found for your query. Try using different search terms or broader keywords.", []
