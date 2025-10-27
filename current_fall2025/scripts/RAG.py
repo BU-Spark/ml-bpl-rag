@@ -14,21 +14,16 @@ from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain_core.documents import Document
 from langchain_community.retrievers import BM25Retriever
-from enum import Enum
 from pydantic import BaseModel, ValidationError  
 
 class QueryRewrite(BaseModel):
     improved_query: str
     expanded_query: Optional[str] = ""
 
-class Validity(str, Enum):
-    YES = "YES"
-    NO = "NO"
+class CatalogResponse(BaseModel):
+    """Simplified response for catalog search - no YES/NO validation needed"""
+    summary: str
 
-class RagResponse(BaseModel):
-    reasoning: str
-    valid: Validity
-    response: Union[str, Dict[str, Any], List[Dict[str, Any]]]
 # ==============================================================================
 # 🔍 RETRIEVE: pgvector query (no Pinecone)
 # ==============================================================================
@@ -109,33 +104,59 @@ def extract_text_from_json(json_data: Dict) -> str:
 
 def rephrase_and_expand_query(query: str, llm: Any) -> str:
     """
-    Rephrase and expand query using LLM, returning a validated JSON object.
+    Rephrase and expand query using LLM for better catalog metadata matching.
     Falls back to original query if validation fails.
     """
     logging.info("🧠 Rephrasing and expanding query using LLM...")
     start = time.time()
 
-    prompt = f"""
-    You are a professional librarian skilled at historical research.
-    Rewrite and expand the user's query to match metadata tags.
-    Include related terms (synonyms, historical names, places, events).
+    prompt = f"""You are a librarian at the Boston Public Library specializing in historical collections and archives.
 
-    Respond ONLY in **valid JSON**, no commentary.
-    Example:
-    {{
-        "improved_query": "Boston 1919 historical events",
-        "expanded_query": "Boston 1919 molasses flood, North End disaster, early 20th century"
-    }}
+Your task: Expand the patron's query to better match library catalog metadata (titles, subjects, dates, locations, people, collections).
 
-    Original Query: "{query}"
-    """
+Include in your expansion:
+- Historical synonyms and alternate terminology
+- Specific time periods (decades, years, date ranges)
+- Related geographic locations (neighborhoods, cities, regions)
+- Related historical events, people, or movements
+- Relevant collection types (newspapers, photographs, maps, documents)
+
+Respond ONLY in valid JSON format:
+{{
+    "improved_query": "main search terms focusing on key metadata fields",
+    "expanded_query": "additional related terms, synonyms, historical context"
+}}
+
+Examples:
+Query: "Boston 1919 events"
+{{
+    "improved_query": "Boston 1919 historical events newspapers",
+    "expanded_query": "molasses disaster flood North End police strike September January Dorchester Beacon"
+}}
+
+Query: "old photos of Harvard Square"
+{{
+    "improved_query": "Harvard Square photographs images Cambridge",
+    "expanded_query": "historic pictures 1900s 1920s Massachusetts vintage streetscape architecture"
+}}
+
+Patron's Query: "{query}"
+"""
+    
     logging.info("📝 LLM prompt for rephrase:\n%s", prompt[:1500])  
 
     response = llm.invoke(prompt)
     logging.info("📩 LLM raw response (rephrase): %s", response.content[:2000])
 
     try:
-        data = json.loads(response.content)
+        # Clean potential markdown formatting
+        content = response.content.strip()
+        if content.startswith("```"):
+            content = re.sub(r"^```[a-zA-Z0-9]*\n?", "", content)
+            content = re.sub(r"```$", "", content)
+            content = content.strip()
+        
+        data = json.loads(content)
         parsed = QueryRewrite(**data)
         final_q = f"{parsed.improved_query.strip()} {parsed.expanded_query.strip()}".strip()
         logging.info(f"✅ Query rephrased in {time.time() - start:.2f}s: '{final_q}'")
@@ -210,15 +231,13 @@ def rerank(docs: List[Document], query: str) -> List[Document]:
 
 def parse_json_and_check(output: str) -> str:
     """
-    Parse JSON response safely, validate via schema, and return final message.
-    Handles both string and list-based responses.
-    Automatically strips markdown code fences (```json ... ```) if present.
+    Parse JSON response safely and return the summary.
+    Automatically strips markdown code fences if present.
     """
     try:
         # Clean and normalize the model output
         output = output.strip()
         if output.startswith("```"):
-            # Remove leading ```json or ``` and trailing ```
             output = re.sub(r"^```[a-zA-Z0-9]*\n?", "", output)
             output = re.sub(r"```$", "", output)
             output = output.strip()
@@ -231,31 +250,14 @@ def parse_json_and_check(output: str) -> str:
 
         # Try to parse the cleaned JSON
         data = json.loads(output)
-        parsed = RagResponse(**data)
-
-        # Handle "NO" case
-        if parsed.valid.strip().upper() == "NO":
-            return "Sorry, I couldn’t find direct answers, but here are related documents."
-
-        # Handle list-based structured responses (like image or multi-result queries)
-        if isinstance(parsed.response, list):
-            formatted = "\n".join(
-                f"- {item.get('title', 'Untitled')} ({item.get('date', 'Unknown')}): {item.get('description', '')}"
-                for item in parsed.response
-            )
-            return formatted or "No structured results provided."
-
-        # Handle string-based simple responses
-        if isinstance(parsed.response, str):
-            return parsed.response.strip()
-
-        # Unexpected type fallback
-        logging.warning("⚠️ Unexpected response type: %s", type(parsed.response))
-        return "Unexpected response format from model."
+        parsed = CatalogResponse(**data)
+        
+        return parsed.summary.strip()
 
     except (json.JSONDecodeError, ValidationError) as e:
         logging.error(f"❌ JSON parsing/validation failed: {e}")
-        return "No valid response found in model output."
+        # Fallback: return the raw output if JSON parsing fails
+        return output if output else "Unable to generate response."
 
 
 # ==============================================================================
@@ -271,44 +273,51 @@ def RAG(llm: Any, conn, embeddings: HuggingFaceEmbeddings, query: str, top: int 
         retrieved, _ = retrieve_from_pg(conn, embeddings, query, k)
         if not retrieved:
             logging.warning("⚠️ No results retrieved from pgvector.")
-            return "No documents found for your query.", []
+            return "No documents found for your query. Try using different search terms or broader keywords.", []
 
         reranked = rerank(retrieved, query)
         if not reranked:
             logging.warning("⚠️ No documents passed reranking.")
-            return "Unable to process retrieved documents.", []
+            return "No relevant items found in the catalog. Try broadening your search or using different keywords.", []
 
         context = "\n\n".join(d.page_content for d in reranked[:top] if d.page_content)
         if not context.strip():
             logging.warning("⚠️ Context is empty after reranking.")
-            return "No relevant content found.", []
+            return "No relevant content found in catalog entries.", []
 
         logging.info("🗒️ Generating final LLM summary...")
         start = time.time()
 
-        logging.info("🗒️ Generating final LLM summary...")
-        start = time.time()
+        # Improved prompt for catalog/discovery system
+        prompt = f"""You are a professional librarian at the Boston Public Library helping a patron find relevant materials.
 
-        # Prompt LLM to output strictly JSON
-        prompt = f"""
-        Pretend you are a professional librarian.
-        Summarize the following context as though you had retrieved it for a patron.
-        Some results may include image descriptions, captions, or mentions of places/people—treat these as valid and relevant.
+IMPORTANT: You only have access to CATALOG METADATA (titles, dates, locations, subjects, collections) - NOT the actual content of documents.
 
-        Respond ONLY in **valid JSON**, no commentary.
-        Example:
-        {{
-          "reasoning": "Context mentions Boston 1919 Molasses Flood; relevant to the query.",
-          "valid": "YES",
-          "response": "The Great Molasses Flood occurred in Boston in 1919, killing 21 people."
-        }}
+Your task: Based on the catalog entries below, tell the patron which items, collections, or materials might be relevant to their query.
 
-        Context:
-        {context}
+Guidelines:
+- List the most relevant items found (titles, dates, collections)
+- Mention key time periods, locations, or subjects that appear
+- If results include newspapers, mention specific editions and dates
+- If results include images/photographs, describe what collections they're from
+- Be helpful even if results aren't perfect - describe what WAS found
+- If very few relevant items, suggest broader search terms
+- DO NOT make up information not in the catalog entries
+- DO NOT try to answer factual questions - only describe available materials
 
-        Query:
-        {query}
-        """
+Respond ONLY in valid JSON format:
+{{
+  "summary": "Your response describing what catalog items are available"
+}}
+
+Example response format:
+"I found several relevant items in our collection: The Dorchester Beacon newspaper has multiple editions from 1919 that likely covered major Boston events, including editions from January 11, 1919 (around the time of the molasses disaster) and several from September-November 1919 (Boston Police Strike period). These are available in the Boston Public Library Newspapers collection. I also found references to North End historical materials from this era."
+
+Catalog Entries:
+{context}
+
+Patron's Query: {query}
+"""
 
         logging.info("📝 LLM prompt for summary:\n%s", prompt[:1500])
         response = llm.invoke(prompt)
@@ -319,7 +328,6 @@ def RAG(llm: Any, conn, embeddings: HuggingFaceEmbeddings, query: str, top: int 
         logging.info(f"✅ Summary generated in {time.time() - start:.2f}s.")
         logging.info(f"🏁 RAG completed in {time.time() - total_start:.2f}s total.")
         return parsed, reranked
-
 
     except Exception as e:
         logging.error(f"❌ Error in RAG: {e}")
