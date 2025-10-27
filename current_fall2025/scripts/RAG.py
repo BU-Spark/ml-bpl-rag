@@ -46,7 +46,7 @@ class SearchFilters(BaseModel):
     year_exact: Optional[int] = None
     year_start: Optional[int] = None
     year_end: Optional[int] = None
-    material_type: Optional[MaterialType] = None
+    material_types: Optional[List[MaterialType]] = None
 
 
 # ==============================================================================
@@ -201,7 +201,7 @@ Patron's Query: "{query}"
 def extract_filters_with_llm(query: str, llm: Any) -> SearchFilters:
     """
     Extract temporal and material filters from a natural-language query.
-    Ensures strict JSON and null handling.
+    Supports multi-select material types.
     """
     prompt = f"""
 You are a metadata extraction assistant for the Boston Public Library's catalog.
@@ -213,12 +213,13 @@ Return a JSON object with these fields (use null if not applicable):
 - year_exact: Single year (integer)
 - year_start: Start year if a range (integer)
 - year_end: End year if a range (integer)
-- material_type: ONE of the following EXACT values:
+- material_types: List of one or more of the following EXACT values, or null if not specified:
   ["Still image", "Cartographic", "Manuscript", "Moving image", "Notated music", "Artifact", "Audio"]
 
 Rules:
 - Use "year_exact" if the query refers to a specific year (e.g., "in 1919").
 - Use "year_start" and "year_end" if it refers to a century or decade (e.g., "18th century" → 1700–1799, "1920s" → 1920–1929).
+- For "material_types", return a list even if only one applies (e.g., ["Still image"]).
 - Set missing or irrelevant fields explicitly to null.
 - Respond ONLY in valid JSON using exactly these keys.
 - Do NOT include markdown or explanations.
@@ -230,23 +231,23 @@ Query: "photographs of Boston in 1919"
   "year_exact": 1919,
   "year_start": null,
   "year_end": null,
-  "material_type": "Still image"
+  "material_types": ["Still image"]
 }}
 
-Query: "18th century maps of New England"
+Query: "18th century maps and manuscripts of New England"
 {{
   "year_exact": null,
   "year_start": 1700,
   "year_end": 1799,
-  "material_type": "Cartographic"
+  "material_types": ["Cartographic", "Manuscript"]
 }}
 
-Query: "old manuscripts"
+Query: "audio recordings from the 1960s"
 {{
   "year_exact": null,
-  "year_start": null,
-  "year_end": null,
-  "material_type": "Manuscript"
+  "year_start": 1960,
+  "year_end": 1969,
+  "material_types": ["Audio"]
 }}
 """
     try:
@@ -270,10 +271,12 @@ Query: "old manuscripts"
         return SearchFilters()
 
 
+
 def build_sql_filter(filters: SearchFilters) -> Tuple[str, List[Any]]:
     """Convert SearchFilters → SQL WHERE clause + parameters for PostgreSQL."""
     conditions, params = [], []
 
+    # --- Year filters ---
     if filters.year_exact:
         conditions.append("(%s BETWEEN date_start AND date_end)")
         params.append(filters.year_exact)
@@ -281,12 +284,15 @@ def build_sql_filter(filters: SearchFilters) -> Tuple[str, List[Any]]:
         conditions.append("(date_start <= %s AND date_end >= %s)")
         params.extend([filters.year_end, filters.year_start])
 
-    if filters.material_type:
-        conditions.append("(metadata->'type_of_resource_ssim' @> %s::jsonb)")
-        params.append(json.dumps([filters.material_type.value]))
+    # --- Material type filters ---
+    if filters.material_types:
+        conditions.append("(metadata->'type_of_resource_ssim' ?| %s)")
+        params.append(filters.material_types)
 
+    # --- Combine all ---
     where_clause = " AND ".join(conditions) if conditions else "1=1"
     return where_clause, params
+
 
 
 # ==============================================================================
