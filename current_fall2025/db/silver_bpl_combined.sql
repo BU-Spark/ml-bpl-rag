@@ -53,4 +53,5 @@ LEFT JOIN date_ranges dr ON b.id = dr.id;
 
 CREATE INDEX idx_bpl_combined_dates ON silver.bpl_combined(date_start, date_end);
 
-
+CREATE INDEX IF NOT EXISTS bpl_embeddings_document_id_idx
+ON silver.bpl_combined (document_id);
