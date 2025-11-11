@@ -22,7 +22,7 @@ urls = [
 author = "Nathan"
 
 # --- Output path ---
-json_path = "current_fall2025/evaluation/test_answers.ndjson"
+json_path = "current_fall2025/evaluation/test_ground_truth.ndjson"
 os.makedirs(os.path.dirname(json_path), exist_ok=True)
 
 # --- Get current timestamp in Boston time ---
@@ -46,7 +46,7 @@ unique_ids = sorted(set(results))
 # --- Save one NDJSON record ---
 record = {
     "question": query,
-    "answers": unique_ids,
+    "ground_truth": unique_ids,
     "urls": urls,
     "author": author,
     "timestamp": timestamp
@@ -55,4 +55,4 @@ record = {
 with open(json_path, "a", encoding="utf-8") as f:
     f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
-print(f"✅ Appended record with {len(unique_ids)} answers to {json_path}")
+print(f"✅ Appended record with {len(unique_ids)} ground_truth to {json_path}")
