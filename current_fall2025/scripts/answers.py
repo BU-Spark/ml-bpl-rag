@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import os
+from datetime import datetime
+import pytz  
 
 # --- Question for this run ---
 query = "What were some important historical events that happened in Boston in 1919?"
@@ -23,6 +25,10 @@ author = "Nathan"
 json_path = "current_fall2025/evaluation/test_answers.ndjson"
 os.makedirs(os.path.dirname(json_path), exist_ok=True)
 
+# --- Get current timestamp in Boston time ---
+boston_tz = pytz.timezone("America/New_York")
+timestamp = datetime.now(boston_tz).strftime("%Y-%m-%d %H:%M:%S %Z")
+
 # --- Scrape IDs from each URL ---
 results = []
 for url in urls:
@@ -42,7 +48,8 @@ record = {
     "question": query,
     "answers": unique_ids,
     "urls": urls,
-    "author": author
+    "author": author,
+    "timestamp": timestamp
 }
 
 with open(json_path, "a", encoding="utf-8") as f:
