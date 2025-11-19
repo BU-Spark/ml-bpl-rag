@@ -85,6 +85,68 @@ def dedup_sources(sources: List) -> List:
             seen[key] = doc
     return list(seen.values())
 
+# ============================
+# Developer Mode + Runtime Logs (ADD ONLY)
+# ============================
+
+# ---- Developer Mode Toggle ----
+if "dev_mode" not in st.session_state:
+    st.session_state.dev_mode = False
+
+with st.sidebar:
+    st.header("🛠 Developer Options")
+    st.session_state.dev_mode = st.checkbox(
+        "Enable Developer Mode",
+        value=st.session_state.dev_mode
+    )
+
+
+# ---- Persistent Hidden Log Placeholder ----
+if "log_hidden_placeholder" not in st.session_state:
+    st.session_state.log_hidden_placeholder = st.empty()
+
+
+# ---- Visible Placeholder When Dev Mode ON ----
+if st.session_state.dev_mode:
+    with st.sidebar:
+        st.subheader("📟 Runtime Logs")
+        visible_log_placeholder = st.empty()
+else:
+    visible_log_placeholder = None
+
+
+# ---- Streamlit Log Handler Class ----
+class DevViewLogHandler(logging.Handler):
+    def __init__(self, placeholder):
+        super().__init__()
+        self.placeholder = placeholder
+        self.buffer = ""
+
+    def emit(self, record):
+        msg = self.format(record)
+        self.buffer += msg + "\n"
+
+        # Print to sidebar (if visible)
+        if self.placeholder:
+            self.placeholder.code(self.buffer)
+
+        # ALSO print to terminal
+        print(msg)
+
+
+# ---- Attach Handler Once ----
+if "dev_log_handler" not in st.session_state:
+    handler = DevViewLogHandler(st.session_state.log_hidden_placeholder)
+    handler.setLevel(logging.INFO)
+    logging.getLogger().addHandler(handler)
+    st.session_state.dev_log_handler = handler
+
+# ---- Update Handler Target ----
+if st.session_state.dev_mode and visible_log_placeholder:
+    st.session_state.dev_log_handler.placeholder = visible_log_placeholder
+else:
+    st.session_state.dev_log_handler.placeholder = st.session_state.log_hidden_placeholder
+
 
 def main():
     st.title("📚 Boston Public Library RAG Chatbot 🤖")
@@ -115,10 +177,23 @@ def main():
                 st.session_state.messages.append(
                     {"role": "assistant", "content": response, "sources": sources}
                 )
+        # ============================
+        # ADD: Developer Debug Info
+        # ============================
+        debug_info = {
+            "query": user_input,
+            "response_preview": response[:500],
+            "num_sources": len(sources),
+            "source_ids": [d.metadata.get("source") for d in sources],
+        }
+        if st.session_state.dev_mode:
+            with st.expander("🛠 Developer Debug Info", expanded=False):
+                st.json(debug_info)
 
-    st.markdown("---")
-    st.caption("Built with LangChain + Streamlit + PostgreSQL (pgvector).")
-    st.caption("Access digitized photographs, manuscripts, audio, and other historical materials through natural-language search.")
+
+            st.markdown("---")
+            st.caption("Built with LangChain + Streamlit + PostgreSQL (pgvector).")
+            st.caption("Access digitized photographs, manuscripts, audio, and other historical materials through natural-language search.")
 
 if __name__ == "__main__":
     main()
