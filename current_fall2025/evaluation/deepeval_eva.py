@@ -9,6 +9,44 @@ from deepeval.metrics import (
     ContextualPrecisionMetric,
 )
 
+import ast
+def parse_contexts(val):
+    """Return a list of context strings from CSV cell which may be:
+       - already a list
+       - a JSON array string (most common here)
+       - a Python list literal string (e.g. "['a','b']")
+       - an empty string / NaN
+       - a delimited string (fallback)
+    """
+    if isinstance(val, list):
+        return [str(x) for x in val]
+    try:
+        if pd.isna(val):
+            return []
+    except Exception:
+        pass
+    s = str(val).strip()
+    if not s:
+        return []
+    try:
+        parsed = json.loads(s)
+        if isinstance(parsed, list):
+            return [str(x) for x in parsed]
+        return [str(parsed)]
+    except Exception:
+        pass
+    try:
+        parsed = ast.literal_eval(s)
+        if isinstance(parsed, list):
+            return [str(x) for x in parsed]
+        return [str(parsed)]
+    except Exception:
+        pass
+    for delim in ("||", "|", ";"):
+        if delim in s:
+            return [p.strip() for p in s.split(delim) if p.strip()]
+    return [s]
+
 # --- 1. Setup ---
 load_dotenv()
 assert os.getenv("OPENAI_API_KEY"), "Missing OpenAI key."
@@ -40,7 +78,7 @@ for _, r in df.iterrows():
         input=r["question"],
         actual_output=r["answer"],
         expected_output=str(r["ground_truth"]),
-        retrieval_context=list(r["contexts"]),
+        retrieval_context=parse_contexts(r["contexts"]),
     )
     row = {"question": tc.input, "answer": tc.actual_output}
 
