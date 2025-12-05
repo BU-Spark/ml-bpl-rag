@@ -73,7 +73,7 @@ Patron's Query: "{query}"
     try:
         data = json.loads(content)
         parsed = QueryRewrite(**data)
-        final_q = f"{parsed.improved_query.strip()} {parsed.expanded_query.strip()}".strip()
+        final_q = f"{parsed.improved_query.strip()} {(parsed.expanded_query or '').strip()}".strip()
         logging.info(f"✅ Query rephrased in {time.time() - start:.2f}s: '{final_q}'")
         return final_q
     except (json.JSONDecodeError, ValidationError) as e:
