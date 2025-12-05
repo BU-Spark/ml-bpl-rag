@@ -58,7 +58,7 @@ def RAG(
             return "No documents found for your query. Try using different search terms or broader keywords.", []
 
         # Stage 3: Reranking
-        reranked = rerank(retrieved, expanded_query, top_k=10)
+        reranked = rerank(retrieved, expanded_query, top_k=top)
         if not reranked:
             logging.warning("⚠️ No documents passed reranking.")
             return "No relevant items found in the catalog. Try broadening your search or using different keywords.", []
