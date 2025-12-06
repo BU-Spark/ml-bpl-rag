@@ -7,11 +7,12 @@ Handles pgvector similarity search with metadata filtering.
 import json
 import time
 import logging
-from typing import Any, List, Tuple
+from typing import Any, List, Tuple, Optional
 from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 
 from .filters import extract_filters_with_llm, build_sql_filter
+from .models import SearchFilters
 
 
 def retrieve_from_pg(
@@ -19,7 +20,8 @@ def retrieve_from_pg(
     embeddings: HuggingFaceEmbeddings,
     query: str,
     llm: Any,
-    k: int = 100
+    k: int = 100,
+    filters: Optional[SearchFilters] = None
 ) -> Tuple[List[Document], List[float]]:
     """
     Retrieve relevant documents from PostgreSQL using pgvector similarity search,
@@ -31,6 +33,7 @@ def retrieve_from_pg(
         query: User query string
         llm: Language model for filter extraction
         k: Number of documents to retrieve
+        filters: Optional pre-calculated filters (to avoid re-running LLM)
         
     Returns:
         Tuple of (list of Document objects, list of similarity scores)
@@ -38,8 +41,10 @@ def retrieve_from_pg(
     start = time.time()
     logging.info("🔍 Starting similarity search in PostgreSQL (pgvector)...")
 
-    # Extract filters from query using LLM
-    filters = extract_filters_with_llm(query, llm)
+    # 1. OPTIMIZATION: Use provided filters if available, else extract them
+    if filters is None:
+        filters = extract_filters_with_llm(query, llm)
+        
     where_clause, params = build_sql_filter(filters)
     logging.info(f"🧩 Applied filters: {filters.model_dump()} → WHERE {where_clause}")
 
@@ -61,19 +66,30 @@ def retrieve_from_pg(
         LIMIT %s;
     """
     
-    with conn.cursor() as cur:
-        cur.execute(sql, (*params, k))
-        rows = cur.fetchall()
-    
-    # Convert results to Document objects
-    docs, scores = [], []
-    for document_id, chunk_index, chunk_text, metadata, score in rows:
-        if len(chunk_text) > 4000:
-            chunk_text = chunk_text[:4000]
-        meta_dict = metadata if isinstance(metadata, dict) else json.loads(metadata) if metadata else {}
-        docs.append(Document(page_content=chunk_text, metadata={"source": document_id, **meta_dict}))
-        scores.append(float(score))
+    try:
+        with conn.cursor() as cur:
+            cur.execute(sql, (*params, k))
+            rows = cur.fetchall()
+        
+        # Convert results to Document objects
+        docs, scores = [], []
+        for document_id, chunk_index, chunk_text, metadata, score in rows:
+            if len(chunk_text) > 4000:
+                chunk_text = chunk_text[:4000]
+            
+            # Handle metadata being dict or string
+            meta_dict = metadata if isinstance(metadata, dict) else json.loads(metadata) if metadata else {}
+            
+            # Inject source ID and score for downstream usage
+            docs.append(Document(
+                page_content=chunk_text, 
+                metadata={"source": document_id, "vector_score": float(score), **meta_dict}
+            ))
+            scores.append(float(score))
 
-    logging.info(f"✅ Retrieved {len(docs)} chunks (filters applied) in {time.time() - start:.2f}s.")
-    return docs, scores
+        logging.info(f"✅ Retrieved {len(docs)} chunks (filters applied) in {time.time() - start:.2f}s.")
+        return docs, scores
 
+    except Exception as e:
+        logging.error(f"❌ Database retrieval error: {e}")
+        return [], []

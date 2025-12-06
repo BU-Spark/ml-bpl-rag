@@ -40,7 +40,9 @@ Return a JSON object with these fields (use null if not applicable):
 
 Rules:
 - Use "year_exact" if the query refers to a specific year (e.g., "in 1919").
-- Use "year_start" and "year_end" if it refers to a century or decade (e.g., "18th century" → 1700–1799, "1920s" → 1920–1929).
+- Use "year_start" and "year_end" if the query refers to:
+    - A century or decade (e.g., "1920s" → 1920–1929, "18th century" → 1700–1799).
+    - A specific historical event or era. Use your general knowledge to estimate the date range (e.g., "Civil War" → 1861–1865, "Victorian era" → 1837–1901).
 - For "material_types", return a list even if only one applies (e.g., ["Still image"]).
 - Set missing or irrelevant fields explicitly to null.
 - Respond ONLY in valid JSON using exactly these keys.
@@ -56,11 +58,11 @@ Query: "photographs of Boston in 1919"
   "material_types": ["Still image"]
 }}
 
-Query: "18th century maps and manuscripts of New England"
+Query: "Civil War maps and manuscripts"
 {{
   "year_exact": null,
-  "year_start": 1700,
-  "year_end": 1799,
+  "year_start": 1861,
+  "year_end": 1865,
   "material_types": ["Cartographic", "Manuscript"]
 }}
 
@@ -123,4 +125,3 @@ def build_sql_filter(filters: SearchFilters) -> Tuple[str, List[Any]]:
     # --- Combine all ---
     where_clause = " AND ".join(conditions) if conditions else "1=1"
     return where_clause, params
-
