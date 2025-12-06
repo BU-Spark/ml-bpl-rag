@@ -101,7 +101,9 @@ def process_message(query: str):
     conn = get_db_conn()
     
     # --- STEP 1: Query Expansion ---
-    expanded_query = rephrase_and_expand_query(query, llm)
+    # Now returns a dictionary with 'text', 'improved', 'expanded'
+    expansion_result = rephrase_and_expand_query(query, llm)
+    expanded_query = expansion_result["text"]
     
     # Visualization: Query Expansion
     if st.session_state.dev_mode:
@@ -110,8 +112,15 @@ def process_message(query: str):
             with st.expander("🧠 Query Expansion", expanded=True):
                 st.markdown("**Original:**")
                 st.info(query)
-                st.markdown("**Expanded:**")
-                st.success(expanded_query)
+                
+                st.markdown("**Improved (Core):**")
+                st.success(expansion_result["improved"])
+                
+                if expansion_result["expanded"]:
+                    st.markdown("**Expanded (Context):**")
+                    st.info(expansion_result["expanded"])
+                
+                st.caption("ℹ️ Improved and Expanded are combined for the final search vector.")
 
     # --- STEP 2: Filter Extraction (On Expanded Query) ---
     filters = extract_filters_with_llm(expanded_query, llm)
@@ -171,28 +180,26 @@ def display_sources(sources: List):
 # --- Main UI ---
 def main():
     # 1. RENDER UI ELEMENTS FIRST
-    # This ensures the title appears immediately, even if models are still loading.
     st.title("Boston Public Library Archives 🏛️")
     st.caption("Explore history through the Digital Commonwealth collection. Ask about photographs, manuscripts, maps, and more.")
 
-    # 2. LOAD RESOURCES (might take a moment on first run)
+    # 2. LOAD RESOURCES
     llm, embeddings, conn = load_llm(), load_embeddings(), get_db_conn()
     st.session_state.llm = llm
     st.session_state.embeddings = embeddings
-
     
     # Suggested Queries
     if not st.session_state.messages:
         st.markdown("#### 💡 Try asking:")
         col1, col2, col3 = st.columns(3)
-        if col1.button("📅 Boston Events 1919"):
-            st.session_state.messages.append({"role": "user", "content": "What were some important historical events that happened in Boston in 1919?"})
+        if col1.button("📸 Old Boston Photos"):
+            st.session_state.messages.append({"role": "user", "content": "Show me photographs of Boston streets in the 1920s."})
             st.rerun()
-        if col2.button("🏠 JFK's Cape Cod House"):
-            st.session_state.messages.append({"role": "user", "content": "Find pictures of JFK’s house on Cape Cod"})
+        if col2.button("⚾ Baseball History"):
+            st.session_state.messages.append({"role": "user", "content": "Find pictures of the Boston Red Sox and Fenway Park from the early 1900s."})
             st.rerun()
-        if col3.button("📜 Anti-Slavery Manuscripts"):
-            st.session_state.messages.append({"role": "user", "content": "Show me manuscripts related to the anti-slavery movement in Boston"})
+        if col3.button("🗺️ Civil War Maps"):
+            st.session_state.messages.append({"role": "user", "content": "Show me maps of the United States from the Civil War era."})
             st.rerun()
 
     # Chat History
