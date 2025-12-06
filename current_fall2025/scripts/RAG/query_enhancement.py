@@ -8,13 +8,13 @@ import re
 import json
 import time
 import logging
-from typing import Any
+from typing import Any, Dict, Union
 from pydantic import ValidationError
 
 from .models import QueryRewrite
 
 
-def rephrase_and_expand_query(query: str, llm: Any) -> str:
+def rephrase_and_expand_query(query: str, llm: Any) -> Dict[str, str]:
     """
     Rephrase and expand query using LLM for better catalog metadata matching.
     Falls back to original query if validation fails.
@@ -24,7 +24,10 @@ def rephrase_and_expand_query(query: str, llm: Any) -> str:
         llm: Language model instance
         
     Returns:
-        Expanded query string combining improved and expanded terms
+        Dict with keys:
+        - 'text': Combined string (improved + expanded) used for search
+        - 'improved': The core rewritten query
+        - 'expanded': The additional synonyms/context
     """
     logging.info("🧠 Rephrasing and expanding query using LLM...")
     start = time.time()
@@ -35,10 +38,12 @@ Your task: Expand the patron's query to better match library catalog metadata (t
 
 Include in your expansion:
 - Historical synonyms and alternate terminology
-- Specific time periods (decades, years, date ranges)
 - Related geographic locations (neighborhoods, cities, regions)
 - Related historical events, people, or movements
 - Relevant collection types (newspapers, photographs, maps, documents)
+- **Time Periods**: 
+  - If a specific year is provided, prioritize it (e.g., "1919").
+  - If a decade or century is provided, convert to a numeric range (e.g., "1900s" -> "1900-1999", "18th century" -> "1700-1799"). Do NOT list random decades (e.g., "1910 1920") unless relevant to a specific event.
 
 Respond ONLY in valid JSON format:
 {{
@@ -56,7 +61,13 @@ Query: "Boston 1919 events"
 Query: "old photos of Harvard Square"
 {{
     "improved_query": "Harvard Square photographs images Cambridge",
-    "expanded_query": "historic pictures 1900s 1920s Massachusetts vintage streetscape architecture"
+    "expanded_query": "historic pictures Massachusetts vintage streetscape architecture"
+}}
+
+Query: "Maps of 18th century New England"
+{{
+    "improved_query": "New England maps cartography 1700-1799",
+    "expanded_query": "colonial Massachusetts Connecticut Rhode Island Maine New Hampshire Vermont 1700s"
 }}
 
 Patron's Query: "{query}"
@@ -75,8 +86,18 @@ Patron's Query: "{query}"
         parsed = QueryRewrite(**data)
         final_q = f"{parsed.improved_query.strip()} {(parsed.expanded_query or '').strip()}".strip()
         logging.info(f"✅ Query rephrased in {time.time() - start:.2f}s: '{final_q}'")
-        return final_q
+        
+        return {
+            "text": final_q,
+            "improved": parsed.improved_query,
+            "expanded": parsed.expanded_query
+        }
+
     except (json.JSONDecodeError, ValidationError) as e:
         logging.warning(f"⚠️ JSON parsing or validation failed: {e}")
-        return query
-
+        # Return fallback structure
+        return {
+            "text": query,
+            "improved": query,
+            "expanded": ""
+        }
