@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import ChatOpenAI
 
+
 # --- Import Unbundled Modules ---
 # We import individual steps to support the unbundled pipeline structure
 try:
@@ -72,11 +73,24 @@ def load_embeddings():
 
 @st.cache_resource
 def load_llm():
-    return ChatOpenAI(
-        model="gpt-4o-mini",
-        temperature=0,
-        model_kwargs={"response_format": {"type": "json_object"}}
-    )
+    if running_in_docker():
+        # Use OpenRouter inside Docker (HF Spaces)
+        return ChatOpenAI(
+            api_key=os.getenv("OPENROUTER_API_KEY"),
+            base_url="https://openrouter.ai/api/v1",
+            model="openai/gpt-4o-mini",
+            temperature=0,
+            model_kwargs={"response_format": {"type": "json_object"}}
+        )
+    else:
+        # Use OpenAI locally
+        return ChatOpenAI(
+            api_key=os.getenv("OPENAI_API_KEY"),
+            model="gpt-4o-mini",
+            temperature=0,
+            model_kwargs={"response_format": {"type": "json_object"}}
+        )
+
 
 def get_db_conn():
     if "db_conn" not in st.session_state or st.session_state.db_conn.closed:
@@ -95,13 +109,11 @@ def get_db_conn():
             st.stop()
     return st.session_state.db_conn
 
-def dedup_sources(sources: List) -> List:
-    seen = {}
-    for doc in sources:
-        key = json.dumps(doc.metadata, sort_keys=True)
-        if key not in seen:
-            seen[key] = doc
-    return list(seen.values())
+def running_in_docker() -> bool:
+    """Detect if we're inside a Docker container."""
+    # Hugging Face Spaces always runs inside Docker
+    return os.path.exists("/.dockerenv") or os.getenv("SPACE_ID") is not None
+
 
 def process_message(query: str):
     llm = st.session_state.llm
@@ -192,8 +204,7 @@ def main():
     st.caption("Explore history through the Digital Commonwealth collection. Ask about photographs, manuscripts, maps, and more.")
 
     # 2. LOAD RESOURCES
-    llm, embeddings = load_llm(), load_embeddings()
-    get_db_conn()  # Initialize DB connection
+    llm, embeddings, conn = load_llm(), load_embeddings(), get_db_conn()
     st.session_state.llm = llm
     st.session_state.embeddings = embeddings
     
@@ -235,7 +246,6 @@ def main():
                 st.write("🔍 Analyzing query & extracting filters...")
                 
                 response, sources = process_message(query_text)
-                sources = dedup_sources(sources)  # Add deduplication from dev
                 
                 st.write("📚 Retrieving and re-ranking documents...")
                 st.write("✍️ Generating summary...")
@@ -247,20 +257,7 @@ def main():
             st.session_state.messages.append(
                 {"role": "assistant", "content": response, "sources": sources}
             )
-            
-        # ============================
-        # Developer Debug Info
-        # ============================
-        debug_info = {
-            "query": query_text,
-            "response_preview": response[:500],
-            "num_sources": len(sources),
-            "source_ids": [d.metadata.get("source") for d in sources],
-        }
-        if st.session_state.dev_mode:
-            with st.expander("🛠 Developer Debug Info", expanded=False):
-                st.json(debug_info)
-    
+
     st.markdown("---")
     st.caption("Built with LangChain + Streamlit + PostgreSQL (pgvector).")
     st.caption("Access digitized photographs, manuscripts, audio, and other historical materials through natural-language search.")
