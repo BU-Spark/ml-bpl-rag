@@ -89,22 +89,30 @@ def load_embeddings():
 @st.cache_resource
 def load_llm():
     if running_in_docker():
-        # Use OpenRouter inside Docker (HF Spaces)
+        api_key = os.getenv("OPENROUTER_API_KEY")
+        if api_key is None:
+            raise ValueError("Missing OPENROUTER_API_KEY environment variable.")
+
         return ChatOpenAI(
-            api_key=os.getenv("OPENROUTER_API_KEY"),
+            api_key=api_key,
             base_url="https://openrouter.ai/api/v1",
             model="openai/gpt-4o-mini",
             temperature=0,
             model_kwargs={"response_format": {"type": "json_object"}},
         )
+
     else:
-        # Use OpenAI locally
+        api_key = os.getenv("OPENAI_API_KEY")
+        if api_key is None:
+            raise ValueError("Missing OPENAI_API_KEY environment variable.")
+
         return ChatOpenAI(
-            api_key=os.getenv("OPENAI_API_KEY"),
+            api_key=api_key,
             model="gpt-4o-mini",
             temperature=0,
             model_kwargs={"response_format": {"type": "json_object"}},
         )
+
 
 
 def get_db_conn():
