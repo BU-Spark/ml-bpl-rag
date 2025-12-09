@@ -65,9 +65,9 @@ Catalog Entries:
 Patron's Query: {query}
 """
 
-    logging.info("📝 LLM prompt for summary:\n%s", prompt[:1500])
+    # logging.info("📝 LLM prompt for summary:\n%s", prompt[:1500])
     response = llm.invoke(prompt)
-    logging.info("📩 LLM raw response (summary): %s", response.content[:2000])
+    # logging.info("📩 LLM raw response (summary): %s", response.content[:2000])
 
     parsed = parse_json_response(response.content)
 
