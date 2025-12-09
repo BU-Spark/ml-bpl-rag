@@ -85,7 +85,7 @@ Patron's Query: "{query}"
         data = json.loads(content)
         parsed = QueryRewrite(**data)
         final_q = f"{parsed.improved_query.strip()} {(parsed.expanded_query or '').strip()}".strip()
-        logging.info(f"✅ Query rephrased in {time.time() - start:.2f}s: '{final_q}'")
+        logging.info(f"✅ Query rephrased in {time.time() - start:.2f}s: ")
         
         return {
             "text": final_q,
