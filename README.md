@@ -40,7 +40,6 @@ The system acts as a **catalog search tool**, not a knowledge base—it describe
 ### Evaluation & Quality Assurance
 - **RAGAS Metrics:** Context Recall (0.85+), Answer Relevancy (0.78+)
 - **DeepEval Framework:** Automated evaluation on curated test queries
-- **MLflow Tracking:** Experiment logging and metric comparison for continuous improvement
 
 ### Models & Technology
 - **Embeddings:** `sentence-transformers/all-mpnet-base-v2` (768-dim vectors)
@@ -53,74 +52,15 @@ The system acts as a **catalog search tool**, not a knowledge base—it describe
 ## Live Demo
 
 Try the hosted demo:  
-👉 [Hugging Face Spaces - BPL-RAG-Spring-2025](https://huggingface.co/spaces/spark-ds549/BPL-RAG-Spring-2025)
+👉 [Hugging Face Spaces - BPL-RAG-Fall-2025](https://huggingface.co/spaces/spark-ds549/BPL-RAG-Fall-20255)
 
 ---
 
 ## System Architecture
+![System Architecture](./BPL_RAG_System_Architecture.drawio.png)
 
-### Bronze-Silver-Gold Data Pipeline
 
-The system implements a medallion architecture pattern for data quality and transformation:
-
-**Bronze Layer (Raw Data):**
-```
-Digital Commonwealth API → bronze.bpl_metadata
-- Purpose: Immutable source of truth
-- Size: ~1.2M records as-is from API
-- Schema: id (TEXT), data (JSONB)
-```
-
-**Silver Layer (Processed Data):**
-```
-bronze → silver.bpl_combined
-- Date extraction and normalization (handles "circa" dates with ±5 year buffer)
-- Multi-field text concatenation (title, abstract, notes, subjects, locations, dates)
-- Schema: document_id, summary_text, metadata (JSONB), date_start, date_end
-```
-
-**Gold Layer (Vector Embeddings):**
-```
-silver → gold.bpl_embeddings
-- Text chunking: RecursiveCharacterTextSplitter (1000 chars, 100 overlap)
-- Embedding generation: sentence-transformers/all-mpnet-base-v2
-- Schema: document_id, chunk_index, chunk_text, embedding VECTOR(768), metadata
-- Indexes: Vector similarity (cosine distance), date ranges, metadata (GIN)
-```
-
-### Modular RAG Pipeline
-
-Each stage is independently testable and optimizable:
-
-```
-User Query
-    ↓
-[1] Query Enhancement (LLM)
-    → Expand with historical terminology, synonyms, related concepts
-    ↓
-[2] Filter Extraction (LLM)
-    → Extract temporal constraints (years, date ranges, eras)
-    → Extract material types (Still image, Cartographic, Manuscript, Audio, etc.)
-    ↓
-[3] Vector Retrieval (pgvector)
-    → Generate query embedding
-    → Cosine similarity search with filter constraints
-    → Retrieve top-k chunks
-    ↓
-[4] BM25 Reranking
-    → Merge chunks by document
-    → Apply lexical matching (BM25)
-    → Boost scores based on metadata field presence and exact year matches
-    → Select top documents
-    ↓
-[5] Response Generation (LLM)
-    → Generate catalog-style summary
-    → Describe available materials (titles, dates, collections)
-    ↓
-Display Results + Source Metadata
-```
-
-**Pipeline Modules:**
+**RAG Pipeline Modules:**
 - `query_enhancement.py` - Query rewriting and expansion
 - `filters.py` - Filter extraction and SQL generation
 - `retrieval.py` - Vector similarity search
@@ -191,31 +131,6 @@ ml-bpl-rag/
 ├── TECHNICAL_MANIFEST.md          # Comprehensive technical documentation
 └── COLLABORATORS                  # Project team members
 ```
-
-**Key Directories Explained:**
-
-- **`current_fall2025/`** - Active development directory for Fall 2025 semester
-  - All production code and evaluation scripts are here
-  - Organized by function: db schemas, application scripts, evaluation, notebooks
-
-- **`scripts/RAG/`** - Modular RAG pipeline components
-  - Each stage (query enhancement, retrieval, reranking, etc.) is a separate module
-  - Enables independent testing and optimization
-  - `pipeline.py` orchestrates the full flow
-
-- **`db/`** - SQL schema definitions for Bronze-Silver-Gold layers
-  - Create these tables in order: bronze → silver → gold
-  - Includes custom SQL functions (e.g., `flatten_jsonb_array`)
-
-- **`evaluation/`** - Automated evaluation framework
-  - Test queries with ground truth answers
-  - RAGAS and DeepEval metric implementations
-  - Results tracked in `results/` subdirectory
-
-- **Archive directories** - Historical reference
-  - Previous semesters' implementations (Pinecone-based, different architectures)
-  - Kept for reference but not actively maintained
-
 ---
 
 ## Setup Instructions
@@ -224,15 +139,10 @@ ml-bpl-rag/
 
 - **Python:** 3.12.4 or later
 - **PostgreSQL:** 14+ with pgvector extension installed
-- **OpenAI API Key:** For GPT-4o-mini access
-
-### Installation
-
-Clone the repository and set up a virtual environment:
 
 ```bash
 # Clone the repository
-git clone https://github.com/[your-org]/ml-bpl-rag.git
+git clone https://github.com/BU-Spark/ml-bpl-rag.git
 cd ml-bpl-rag
 
 # Create and activate virtual environment
@@ -247,36 +157,11 @@ pip install -r requirements.txt
 
 ### Configure Environment Variables
 
-Create a `.env` file in the project root:
-
-```bash
-# PostgreSQL Database
-PGHOST=localhost
-PGPORT=5432
-PGDATABASE=bpl_rag
-PGUSER=your_username
-PGPASSWORD=your_password
-PGSSLMODE=prefer
-
-# OpenAI API
-OPENAI_API_KEY=sk-your-api-key-here
-```
+Create a `.env` file in the project root. Ask a team member for the file. 
 
 ### Set Up Database
-
+Connect to PostgreSQL. We recommend pgadmin. 
 ```bash
-# Connect to PostgreSQL and create database
-psql -h $PGHOST -U $PGUSER -d postgres
-CREATE DATABASE bpl_rag;
-\c bpl_rag
-CREATE EXTENSION vector;
-
-# Create schemas
-CREATE SCHEMA bronze;
-CREATE SCHEMA silver;
-CREATE SCHEMA gold;
-\q
-
 # Run SQL schema files
 cd current_fall2025/scripts
 python querypg.py
@@ -313,8 +198,6 @@ cd current_fall2025/scripts
 streamlit run app.py
 ```
 
-The application will open in your browser at `http://localhost:8501/`
-
 ### Using the Interface
 
 1. **Enter Query:** Type a natural language question in the chat input
@@ -330,30 +213,9 @@ The application will open in your browser at `http://localhost:8501/`
 
 ## Deployment
 
-### Current: BU SCC HPC Cluster
-
-```bash
-module load miniconda
-conda activate ./env
-cd ml-bpl-rag/current_fall2025/scripts
-streamlit run app.py --server.port 8501
-```
+Currently it is deployed on [Hugging Face Spaces - BPL-RAG-Fall-2025](https://huggingface.co/spaces/spark-ds549/BPL-RAG-Fall-20255).
 
 See `TECHNICAL_MANIFEST.md` Section 9 for cloud deployment strategies (Docker, AWS, GCP, Azure).
-
----
-
-## Technology Stack
-
-| Component | Technology | Purpose |
-|-----------|-----------|---------|
-| **Database** | PostgreSQL + pgvector | Vector similarity search |
-| **Embeddings** | all-mpnet-base-v2 | 768-dim text embeddings |
-| **LLM** | OpenAI GPT-4o-mini | Query understanding & summarization |
-| **Framework** | LangChain 0.3.21 | RAG orchestration |
-| **UI** | Streamlit 1.45.0 | Web application |
-| **Reranking** | rank-bm25 | Lexical reranking |
-| **Evaluation** | RAGAS + DeepEval | Quality metrics |
 
 ---
 
@@ -380,24 +242,13 @@ See `TECHNICAL_MANIFEST.md` Section 9 for cloud deployment strategies (Docker, A
 
 ---
 
-## Known Limitations
-
-- Searches metadata catalogs only, not full document text
-- First query after restart has ~30-60 second cold start
-- No query result caching (duplicate queries re-execute)
-- Temporal expressions rely on LLM interpretation
-
-*See `TECHNICAL_MANIFEST.md` for detailed limitations and mitigations.*
-
----
-
 ## Future Improvements
 
-- Query result caching and streaming responses
-- Full-text OCR integration for document content search
-- Conversational search with multi-turn dialogue
-- User feedback loop and personalized recommendations
-- Distributed vector search for improved scalability
+- Create a small, high-quality answer set so retrieval and changes can be tested and compared.
+- Record retrieval quality, generation accuracy, and latency on every code change to detect regressions early.
+- Add support for images and audio, which the new metadata filter module does not yet handle.
+- Enable session memory so the chatbot can maintain multi-turn understanding instead of treating every query independently.
+- Add a proper pgVector index; the current setup relies on full table scans if we didn't use any filter (only GIN/date indexes exist), which limits performance at scale.
 
 *See `TECHNICAL_MANIFEST.md` for detailed improvement roadmap with effort estimates.*
 
@@ -419,5 +270,5 @@ This project is licensed under the MIT License. See [LICENSE](LICENSE) file for 
 
 ---
 
-**Last Updated:** December 7, 2025  
+**Last Updated:** December 9, 2025  
 **Version:** Fall 2025 Release
