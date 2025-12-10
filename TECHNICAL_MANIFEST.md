@@ -57,7 +57,7 @@ The system implements a medallion architecture pattern for data quality and tran
 - Table: `bronze.bpl_metadata`
 - Purpose: Immutable source of truth from Digital Commonwealth API
 - Schema: `id TEXT PRIMARY KEY, data JSONB`
-- Size: ~1.2M records
+- Size: ~400k records
 
 **Silver Layer (Processed):**
 - Table: `silver.bpl_combined`
@@ -86,7 +86,7 @@ The system implements a medallion architecture pattern for data quality and tran
 
 ```
 Language Runtime:
-├── Python 3.9-3.12 (tested on 3.12.4)
+├── Python 3.12
 └── Conda environment management (SCC HPC cluster)
 
 Vector Database:
