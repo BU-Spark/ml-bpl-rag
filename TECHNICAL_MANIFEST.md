@@ -47,48 +47,7 @@ LIBRAG is a production-ready Retrieval-Augmented Generation system that provides
 
 ### High-Level Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                         USER INTERFACE                           │
-│                    (Streamlit Web Application)                   │
-└───────────────────────────────┬─────────────────────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                      RAG PIPELINE (Modular)                      │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
-│  │   Query      │→ │  Retrieval   │→ │  Reranking   │          │
-│  │ Enhancement  │  │  (pgvector)  │  │   (BM25)     │          │
-│  └──────────────┘  └──────────────┘  └──────────────┘          │
-│         ↓                                      ↓                 │
-│  ┌──────────────┐                      ┌──────────────┐         │
-│  │   Filter     │                      │  Response    │         │
-│  │ Extraction   │                      │ Generation   │         │
-│  └──────────────┘                      └──────────────┘         │
-└─────────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    DATA STORAGE LAYER                            │
-│                                                                   │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │  PostgreSQL Database (SCC HPC Cluster)                   │   │
-│  │                                                            │   │
-│  │  Bronze Layer:  bpl_metadata (raw JSON)                   │   │
-│  │  Silver Layer:  bpl_combined (processed text + dates)     │   │
-│  │  Gold Layer:    bpl_embeddings (768-dim vectors)          │   │
-│  └──────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
-                                │
-                                ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                    EXTERNAL SERVICES                             │
-│                                                                   │
-│  • Digital Commonwealth API (data source)                        │
-│  • OpenAI API (gpt-4o-mini for LLM operations)                   │
-│  • HuggingFace Models (all-mpnet-base-v2 embeddings)             │
-└─────────────────────────────────────────────────────────────────┘
-```
+![System Architecture](./BPL_RAG_System_Architecture.drawio.png)
 
 ### Three-Tier Data Architecture (Bronze-Silver-Gold)
 
