@@ -7,7 +7,7 @@
   * https://github.com/BU-Spark/ml-bpl-rag
 
 * What is the link to your project’s Google Drive folder? **This should be a Spark! Owned Google Drive folder - please contact your PM if you do not have access**  
-  * Spark-owned Google Drive folder (TBD) – please contact the Spark! PM for this course section to obtain or update the official link.
+  * [Spark-owned Google Drive folder](https://drive.google.com/drive/folders/1bR8FCIilwfyKEUWfxwua5h0cDsgjxPOl?dmr=1&ec=wgc-drive-hero-goto) – please contact the Spark! PM for this course section to obtain or update the official link.
 
 * In your own words, what is this project about? What is the goal of this project?   
   * This project builds a retrieval-augmented generation (RAG) system to make the Boston Public Library’s Digital Commonwealth collections easier to explore. Instead of relying on brittle keyword search, our system lets users ask natural language questions (e.g., “photos of Boston in the 1920s” or “maps of Worcester from the 18th century”) and returns relevant catalog entries from BPL’s digital collections along with a librarian-style summary of what materials are available. The goal is to support historians, educators, students, and the general public in discovering relevant archival materials more efficiently and intuitively.
