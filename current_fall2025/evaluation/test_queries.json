@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "query": "What were some important historical events that happened in Boston in 1919?",
+    "expected_answer": "On January 15, 1919, a 50-foot-tall storage tank in Boston's North End ruptured, releasing 2.3 million gallons of molasses into the streets in what became known as the Great Molasses Flood. Other major events include the Boston Police Strike of 1919 and the Victory Parade for the 101st Infantry Regiment."
+  },
+  {
+    "id": 2,
+    "query": "Find pictures of JFK’s house on Cape Cod",
+    "expected_answer": "Former President John F. Kennedy’s house was located in Hyannis Port, Massachusetts, on Cape Cod. The property, known as the Kennedy Compound, included the President’s summer home and several nearby family residences, often captured in photographs and aerial views."
+  },
+  {
+    "id": 3,
+    "query": "Are there any maps of Worcester, MA from the 18th century?",
+    "expected_answer": "There are several historical maps of Worcester, Massachusetts dating from the 18th century, including a manuscript plan of Worcester County from 1785, a map of western Massachusetts from around 1785, and a map of the seat of the late war at Boston in Massachusetts."
+  },
+  {
+    "id": 4,
+    "query": "I want to see a variety of depictions of indigenous Americans from across the United States.",
+    "expected_answer": "There are numerous depictions of Native Americans from various tribes across the United States, including portraits, photographs, and prints. Examples include 'Afraid of Eagle, Sioux', '19 portraits of Indian chiefs', and 'A family of West Plains Indians with grandmother and granddaughter in foreground.'"
+  },
+  {
+    "id": 5,
+    "query": "Can you help me find drawings that were included on grave markers from people who died in the late 1700s?",
+    "expected_answer": "Stone rubbing is the practice of creating an image of the surface of a gravestone on paper, often to preserve or commemorate historical inscriptions. Examples from the late 1700s include rubbings from gravestones such as those of Capt. Thomas Eaton, Mr. Nathaniel Bachelor, and Loae Parker."
+  }
+]
