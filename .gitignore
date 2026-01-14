@@ -175,3 +175,8 @@ $RECYCLE.BIN/
 .venv/
 
 venv/
+
+data/
+
+*.pyc
+__pycache__/
