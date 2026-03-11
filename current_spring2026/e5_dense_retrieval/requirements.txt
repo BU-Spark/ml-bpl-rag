@@ -1,0 +1,22 @@
+# Core ML / embeddings
+sentence-transformers>=2.7.0
+faiss-cpu>=1.7.4            # use faiss-gpu if you have a CUDA GPU
+
+# Reranking
+cohere>=5.0.0
+spacy>=3.7.0
+scikit-learn>=1.4.0
+
+# LLM / app
+openai>=1.30.0
+langchain-openai>=0.1.0
+streamlit>=1.35.0
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+tqdm>=4.66.0
+numpy>=1.26.0
+
+# After installing, download the spaCy model:
+#   python -m spacy download en_core_web_sm
