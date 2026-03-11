@@ -179,4 +179,4 @@ venv/
 data/
 
 *.pyc
-__pycache__/
+__pycache__/current_spring2026/e5_dense_retrieval/indexes/
