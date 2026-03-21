@@ -1,0 +1,4 @@
+
+# Large index files — store these outside git
+*.faiss
+*.pkl
