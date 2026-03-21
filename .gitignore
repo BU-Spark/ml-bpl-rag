@@ -180,3 +180,9 @@ data/
 
 *.pyc
 __pycache__/
+
+# Large index files — store these outside git
+*.faiss
+*.pkl
+current_spring2026/e5_dense_retrieval/indexes/
+current_spring2026/BGE_hybrid_retrieval/indexes/
