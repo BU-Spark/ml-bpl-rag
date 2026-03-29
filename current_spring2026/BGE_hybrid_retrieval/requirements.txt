@@ -1,0 +1,30 @@
+# BGE-M3 Hybrid RAG + GraphRAG — Python dependencies
+# Install with: pip install -r requirements.txt
+
+# ── Core embedding & reranking ───────────────────────────────────────────
+FlagEmbedding>=1.2.9          # BAAI/bge-m3 and bge-reranker-v2-m3
+torch>=2.2.0                  # GPU/CPU tensor computation
+
+# ── Vector index ─────────────────────────────────────────────────────────
+faiss-cpu>=1.7.4              # FAISS local vector index (use faiss-gpu for GPU)
+
+# ── GraphRAG (Microsoft, 2024) ──────────────────────────────────────────
+graphrag>=3.0.0               # Microsoft GraphRAG — knowledge graph + community clusters
+pandas>=2.0.0                 # Required for GraphRAG parquet artefacts
+pyarrow>=14.0.0               # Parquet file support
+
+# ── LangChain stack ──────────────────────────────────────────────────────
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-openai>=0.3.0
+langchain-text-splitters>=0.3.0
+openai>=1.0.0
+
+# ── Utilities ────────────────────────────────────────────────────────────
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+tqdm>=4.65.0
+numpy>=1.26.0
+
+# ── Application ──────────────────────────────────────────────────────────
+streamlit>=1.35.0
