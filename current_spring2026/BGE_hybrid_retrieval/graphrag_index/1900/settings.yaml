@@ -1,0 +1,73 @@
+# Auto-generated GraphRAG settings for year 1900
+# Docs: https://microsoft.github.io/graphrag/config/yaml/
+
+completion_models:
+  default:
+    model_provider: openai
+    model: gpt-4o-mini
+    api_key: ${GRAPHRAG_API_KEY}
+    max_retries: 3
+    tokens_per_minute: 80000
+    requests_per_minute: 40
+
+embedding_models:
+  default:
+    model_provider: openai
+    model: text-embedding-3-small
+    api_key: ${GRAPHRAG_API_KEY}
+
+input:
+  type: text
+  storage:
+    type: file
+    base_dir: input
+  file_pattern: ".*\\.txt$"
+  encoding: utf-8
+
+chunking:
+  type: tokens
+  size: 1200
+  overlap: 100
+
+extract_graph:
+  completion_model_id: default
+  entity_types:
+    - person
+    - organization
+    - location
+    - event
+    - date
+    - topic
+  max_gleanings: 1
+
+community_reports:
+  completion_model_id: default
+  max_length: 1500
+  max_input_length: 8000
+
+cluster_graph:
+  max_cluster_size: 10
+  seed: 42
+
+embed_graph:
+  enabled: true
+  embedding_model_id: default
+
+vector_store:
+  type: lancedb
+  db_uri: output/lancedb
+
+output:
+  type: file
+  base_dir: output
+
+local_search:
+  text_unit_prop: 0.5
+  community_prop: 0.1
+  top_k_entities: 10
+  top_k_relationships: 10
+  max_context_tokens: 12000
+
+global_search:
+  dynamic_search_threshold: 0.5
+  dynamic_search_keep_parent: true
