@@ -1,0 +1,712 @@
+[
+    {
+        "question": "I want to see a variety of depictions of indigenous Americans from across the United States.",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Afraid of Eagle, Sioux",
+                "ark_id": "commonwealth:70796j511"
+            },
+            {
+                "title": "A family of West Plains Indians with grandmother and granddaughter in foreground",
+                "ark_id": "commonwealth:8g84ms67v"
+            },
+            {
+                "title": "Band of Sioux Warriors",
+                "ark_id": "commonwealth:70796j910"
+            },
+            {
+                "title": "Nascaupée Indian",
+                "ark_id": "commonwealth:1v53kk250"
+            }
+        ],
+        "answer": "Here are a variety of depictions of Native Americans from a number of different tribes, including photographs, prints, and postcards.",
+        "notes": null
+    },
+    {
+        "question": "Find pictures of JFK before he became president.",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Famous debate between JFK & Henry Cabot Lodge, Jr., at Faneuil Hall during JFK's first Senate fight, 1952",
+                "ark_id": "commonwealth:7w62g495q"
+            },
+            {
+                "title": "Jackie & JFK campaign in Mass.",
+                "ark_id": "commonwealth:7w62gc97q"
+            },
+            {
+                "title": "Massachusetts delegation led by John E. Powers arrives in Chicago with JFK banner, the first sign of its kind",
+                "ark_id": "commonwealth:7w62g5435"
+            },
+            {
+                "title": "JFK is a big hit with future voters during his campaign for Senate",
+                "ark_id": "commonwealth:7w62gb97h"
+            }
+        ],
+        "answer": "Former President John F. Kennedy was elected to the White House in 1961, here are photos from his campaign for Senate in the late 1950s...",
+        "notes": null
+    },
+    {
+        "question": "I have to do a project about the battle of Bunker Hill during the American Revolution, can you help me find some information about that?",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "A plan of the action at Bunkers Hill on the 17th of June 1775 between His Majesty's troops, under the command of Major General Howe, and the American forces",
+                "ark_id": "commonwealth:3f462x95q"
+            },
+            {
+                "title": "Plan of the town of Boston with the attack on Bunkers-Hill in the peninsula of Charlestown the 17th of June 1775",
+                "ark_id": "commonwealth:wd376807m"
+            },
+            {
+                "title": "The Battle at Bunker's Hill near Boston June 17, 1775",
+                "ark_id": "commonwealth:nc587w492"
+            },
+            {
+                "title": "Stone marking spot where Continental troops assembled before Bunker Hill",
+                "ark_id": "commonwealth:8c97n816r"
+            }
+        ],
+        "answer": "The Battle of Bunker Hill was fought on June 17, 1775, during the Siege of Boston in the first stage of the American Revolutionary War. Here are some maps and images that show the conflict...",
+        "notes": null
+    },
+    {
+        "question": "What were some important historical events that happened in Boston in 1919?",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Twisted elevated structure on Atlantic Ave., damaged in Molasses Disaster",
+                "ark_id": "commonwealth:2j62s563b"
+            },
+            {
+                "title": "Police strike of 1919, state militia trucked in at Union Station",
+                "ark_id": "commonwealth:5h73vx18p"
+            },
+            {
+                "title": "Atlantic Ave. flood, Boston, horses & wagon - largest tide since 1898",
+                "ark_id": "commonwealth:5h73qh68q"
+            },
+            {
+                "title": "Boston Herald. September 11, 1919",
+                "ark_id": "commonwealth:x920px83j"
+            }
+        ],
+        "answer": "There were several notable historical events in Boston in 1919. On January 15, a 50-foot tall storage tank in Boston's North End ruptured, releasing 2.3 million gallons of molasses into the streets. Other events include a police strike and significant flooding on Atlantic Avenue.",
+        "notes": null
+    },
+    {
+        "question": "What caused the Great Fire of Boston in 1872?",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Boston after the Great Fire",
+                "ark_id": "commonwealth:xp68kr375"
+            },
+            {
+                "title": "Before and after the Great Fire of 1872, Washington St.",
+                "ark_id": "commonwealth:xp68kr35m"
+            },
+            {
+                "title": "The Great Fire at Boston, November 9th and 10th, 1872.",
+                "ark_id": "commonwealth:xp68kr53j"
+            },
+            {
+                "title": "Panoramic view of the ruins after the Great Fire in Boston, from a point opposite Trinity Church in Summer Street",
+                "ark_id": "commonwealth:c821gq65v"
+            }
+        ],
+        "answer": "The Great Fire of Boston in 1872 burned 65 acres of the city's business district, causing heavy property loss. It destroyed large portions of Boston's downtown area, caused by a fire that began in a dry-goods store on Summer Street. The blaze spread quickly through wooden buildings before being contained by firefighters.",
+        "notes": null
+    },
+    {
+        "question": "Find postcards of Cape Cod from the early 1900s",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Bourne Bridge from the air, Cape Cod, Mass.",
+                "ark_id": "commonwealth:0k225t71f"
+            },
+            {
+                "title": "Quaint Cape Cod scene, Cape Cod, Mass.",
+                "ark_id": "commonwealth:cn69mp144"
+            },
+            {
+                "title": "Picturesque Cape Cod, Mass.",
+                "ark_id": "commonwealth:cn69mp02b"
+            },
+            {
+                "title": "Greetings from Cape Cod, Mass.",
+                "ark_id": "commonwealth:0k225t45t"
+            }
+        ],
+        "answer": "The collection features vintage postcards showing beaches, lighthouses, and seaside towns around Cape Cod from the early 20th century, capturing Massachusetts' coastal heritage.",
+        "notes": "Earliest items are from 1930, so \"early 1900s\" might trip up results"
+    },
+    {
+        "question": "Show me depictions of women working in Boston during the early 1900s.",
+        "question_type": "hallucination_test",
+        "ground_truths": [],
+        "answer": "Sorry, we couldn't find any items matching this query.",
+        "notes": "There aren't any items matching this query"
+    },
+    {
+        "question": "Find materials related to abolitionist movements in Massachusetts.",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Agents of Massachusetts Abolition Society, 1840-1841",
+                "ark_id": "commonwealth:m900pj71z"
+            },
+            {
+                "title": "Abolitionists - New England by Amos Augustus Phelps, ca. 1842 August",
+                "ark_id": "commonwealth:5h740p602"
+            },
+            {
+                "title": "Copy of letter from Boston Female Anti-slavery Society, Boston, to Charlotte Phelps, April 12th 1834",
+                "ark_id": "commonwealth:m900qg763"
+            },
+            {
+                "title": "Various notes on slavery, emancipation, immediate abolition of slavery, etc. by Amos Augustus Phelps, [ca. 1834-1842]",
+                "ark_id": "commonwealth:m900qr11x"
+            }
+        ],
+        "answer": "The collection includes newspapers, pamphlets, and portraits connected to 19th-century abolitionist figures and organizations active in Massachusetts, such as anti-slavery societies and speeches from reformers.",
+        "notes": null
+    },
+    {
+        "question": "Find old photographs of Beacon Hill, Boston.",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Old Boston from State House looking northwest (Pinckney St. in foreground)",
+                "ark_id": "commonwealth:8623j613c"
+            },
+            {
+                "title": "Old Boston. View north over Beacon Hill reservoir",
+                "ark_id": "commonwealth:7h14d6210"
+            },
+            {
+                "title": "State House Boston",
+                "ark_id": "commonwealth:ht24xf08g"
+            },
+            {
+                "title": "Beacon Street, Beacon Hill in winter",
+                "ark_id": "commonwealth:9019x004d"
+            }
+        ],
+        "answer": "Historic photographs of Beacon Hill show its narrow streets, brick row houses, and landmarks such as the Massachusetts State House, reflecting the area's architectural history.",
+        "notes": null
+    },
+    {
+        "question": "What was the Boston Tea Party and why did it happen?",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Griffins Wharf, Boston Tea Party tablet",
+                "ark_id": "commonwealth:d504v765w"
+            },
+            {
+                "title": "Diary for 1773 to the end of 1774 of Mr. Thomas Newell, Boston",
+                "ark_id": "commonwealth:zs2626294"
+            },
+            {
+                "title": "Boston, memorial tablet on Atlantic Ave., site of Griffin's Wharf",
+                "ark_id": "commonwealth:f1884c31d"
+            },
+            {
+                "title": "Washington crossing the Delaware - December 1776. The ride of Paul Revere - April, 1775. The Boston Tea Party - December, 1773. The naval victory of John Paul Jones - September, 1779",
+                "ark_id": "commonwealth:6d571125r"
+            }
+        ],
+        "answer": "The Boston Tea Party was a political protest in December 1773 where American colonists, frustrated by British taxation without representation, dumped chests of tea into Boston Harbor as an act of resistance against the Tea Act.",
+        "notes": null
+    },
+    {
+        "question": "What events took place in Boston during the American Revolution?",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "The theatre of war in North America, with the roads, and tables, of the superficial contents, distances, &ca",
+                "ark_id": "commonwealth:9s161871m"
+            },
+            {
+                "title": "Plan of the town of Boston, with the attack on Bunkers-Hill, in the peninsula of Charlestown, the 17th of June, 1775",
+                "ark_id": "commonwealth:st74cw36c"
+            },
+            {
+                "title": "Gen. Washington's Revolutionary campaign war map",
+                "ark_id": "commonwealth:wd3768027"
+            },
+            {
+                "title": "Boston Massacre trial notes",
+                "ark_id": "commonwealth:dv142f145"
+            }
+        ],
+        "answer": "The Boston Public Library collection includes accounts of key Revolutionary War events such as the Boston Massacre, the Boston Tea Party, and the Siege of Boston, which marked the early stages of the conflict.",
+        "notes": null
+    },
+    {
+        "question": "Who was Crispus Attucks and what was his role in American history?",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Crispus Attucks statue. Boston Common",
+                "ark_id": "commonwealth:2801pm92n"
+            },
+            {
+                "title": "The bloody massacre perpetrated in King-Street Boston",
+                "ark_id": "commonwealth:vh53x3780"
+            },
+            {
+                "title": "Boston Massacre, March 5th, 1770",
+                "ark_id": "commonwealth:jq08ds22z"
+            },
+            {
+                "title": "Bronze panel in Crispus Attucks monument. Boston Common",
+                "ark_id": "commonwealth:41688262q"
+            }
+        ],
+        "answer": "Crispus Attucks was one of the first casualties of the American Revolution, killed during the Boston Massacre in 1770. He is remembered as an early symbol of the fight for liberty and civil rights.",
+        "notes": null
+    },
+    {
+        "question": "Are there any newspaper articles covering the women's suffrage movement in Massachusetts?",
+        "question_type": "full_text",
+        "ground_truths": [
+            {
+                "title": "The Boston Traveler. November 03, 1915",
+                "ark_id": "commonwealth:mw232h306"
+            },
+            {
+                "title": "The Boston Traveler. October 16, 1915",
+                "ark_id": "commonwealth:4t64q022m"
+            },
+            {
+                "title": "The Boston Traveler. August 19, 1920",
+                "ark_id": "commonwealth:5d86wc88j"
+            },
+            {
+                "title": "The Boston Traveler. February 25, 1919",
+                "ark_id": "commonwealth:nv93cf51s"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "Find documents or letters from the Civil War era written by Massachusetts soldiers.",
+        "question_type": "hallucination_test",
+        "ground_truths": [],
+        "answer": null,
+        "notes": "There aren't any items matching this query"
+    },
+    {
+        "question": "What role did Frederick Douglass play in Massachusetts history?",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Letter from Frederick Douglass, Springfield, Mass, to William Lloyd Garrison, Jan. 13, 1856",
+                "ark_id": "commonwealth:dv143022b"
+            },
+            {
+                "title": "Letter from Frederick Douglass, London, [England], to Maria Weston Chapman, 18 Aug. 1846",
+                "ark_id": "commonwealth:7s75fx33m"
+            },
+            {
+                "title": "Letter from Frederick Douglass, Belfast, [Northern Ireland], to William Lloyd Garrison, [Jan. 1, 1846]",
+                "ark_id": "commonwealth:dv142z173"
+            },
+            {
+                "title": "Boston, Roxbury, wall mural, Frederick Douglass",
+                "ark_id": "commonwealth:5m60th82r"
+            }
+        ],
+        "answer": "Frederick Douglass lived in Massachusetts for several years, where he became an influential abolitionist and orator. The collection includes his speeches and writings advocating for emancipation and civil rights.",
+        "notes": null
+    },
+    {
+        "question": "What did the Boston Public Library look like when it was first built?",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Exterior view of the old Boston Public Library on Boylston Street, built 1858",
+                "ark_id": "commonwealth:c821gx37x"
+            },
+            {
+                "title": "Bates Hall in the Boylston Street Building",
+                "ark_id": "commonwealth:gt54pc92n"
+            },
+            {
+                "title": "Winter view of Boston Public Library",
+                "ark_id": "commonwealth:7p88d826d"
+            },
+            {
+                "title": "Old Boston Public Library. Boylston Street. Entrance, corridor and staircase",
+                "ark_id": "commonwealth:c821gx27p"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "When was the Longfellow Bridge between Boston and Cambridge built?",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "West Boston Bridge connecting Cambridge and Boston. The newest and most beautiful bridge crossing the Charles River",
+                "ark_id": "commonwealth:3f463c80z"
+            },
+            {
+                "title": "Longfellow Bridge, looking toward Boston",
+                "ark_id": "commonwealth:8s45qv70f"
+            },
+            {
+                "title": "Sketch of Longfellow Bridge",
+                "ark_id": "commonwealth:pr76f347h"
+            },
+            {
+                "title": "Longfellow Bridge and the Charles River, two boats in foreground",
+                "ark_id": "commonwealth:4f16kv932"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "What were the biggest insurance companies in Boston in the early 20th century?",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Boston, Liberty Mutual Insurance Company Building",
+                "ark_id": "commonwealth:9306wq12z"
+            },
+            {
+                "title": "Boston, New England Mutual Life Insurance Company Building",
+                "ark_id": "commonwealth:70797z85h"
+            },
+            {
+                "title": "Equitable Life Insurance building, 67 Milk Street",
+                "ark_id": "commonwealth:8k71nw59n"
+            },
+            {
+                "title": "John Hancock Life Insurance Co. Clarendon Street, 1922",
+                "ark_id": "commonwealth:xp68kn172"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "Who was Samuel Adams and what did he do in Boston?",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Grave of Samuel Adams",
+                "ark_id": "commonwealth:fj2373328"
+            },
+            {
+                "title": "Boston, Massachusetts. Statue of Samuel Adams, Jr., Adams Square",
+                "ark_id": "commonwealth:jm217635p"
+            },
+            {
+                "title": "Samuel Adams",
+                "ark_id": "commonwealth:2v23zv79k"
+            },
+            {
+                "title": "Adams, Samuel, Colonial Statesman",
+                "ark_id": "commonwealth:7p88gj11s"
+            }
+        ],
+        "answer": "Samuel Adams was a leading Patriot and political organizer in colonial Boston. He helped coordinate protests against British taxation, including the Boston Tea Party, and played a key role in forming the Sons of Liberty. Adams' writings, speeches, and leadership galvanized public opinion in Boston and contributed to the city's central role in the American Revolution.",
+        "notes": null
+    },
+    {
+        "question": "What was the role of the Boston Navy Yard?",
+        "question_type": "metadata",
+        "ground_truths": [
+            {
+                "title": "Charlestown Navy Yard area",
+                "ark_id": "commonwealth:2v240047f"
+            },
+            {
+                "title": "Charlestown Navy Yard master plan",
+                "ark_id": "commonwealth:1j92kc44m"
+            },
+            {
+                "title": "Comprehensive view of U.S. Navy Yard at Charlestown",
+                "ark_id": "commonwealth:8k71p1131"
+            },
+            {
+                "title": "Historic Boston Harbor, air view Navy Yard",
+                "ark_id": "commonwealth:5425rv86w"
+            }
+        ],
+        "answer": "The Boston Navy Yard, established in 1801, was a major shipbuilding and repair facility for the U.S. Navy. It supported military operations during the War of 1812, the Civil War, and both World Wars. The yard attracted workers, stimulated local industry, and became an important economic and strategic asset for Boston, leaving a legacy in maritime infrastructure and naval history.",
+        "notes": null
+    },
+    {
+        "question": "What was the Old State House in Boston used for?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "Boston, Massachusetts. Old State House",
+                "ark_id": "commonwealth:ht24xf50g"
+            },
+            {
+                "title": "Boston, Old State House, interior, Council Chamber",
+                "ark_id": "commonwealth:c534jd829"
+            },
+            {
+                "title": "Massachusetts. Boston. The Old State House",
+                "ark_id": "commonwealth:ht24xf521"
+            },
+            {
+                "title": "Old State House - Boston",
+                "ark_id": "commonwealth:5h73rs02f"
+            }
+        ],
+        "answer": "The Old State House, built in 1713, served as the seat of colonial government in Massachusetts. It was the site of key events, including the reading of the Declaration of Independence in 1776. The building also witnessed protests and unrest, such as the Boston Massacre in 1770. Today, it is a museum preserving the history of Boston and the American Revolution.",
+        "notes": null
+    },
+    {
+        "question": "Who was Paul Revere and what was his significance?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "Paul Revere waiting for the signal from the Old North Church Tower",
+                "ark_id": "commonwealth:wh246s53h"
+            },
+            {
+                "title": "Paul Revere's",
+                "ark_id": "commonwealth:cr56qq138"
+            },
+            {
+                "title": "Paul Revere, born in Boston, January 1734, died May 1818,",
+                "ark_id": "commonwealth:fj2372144"
+            },
+            {
+                "title": "The birthplace of Paul Revere",
+                "ark_id": "commonwealth:gt54mc309"
+            }
+        ],
+        "answer": "Paul Revere was a silversmith, engraver, and Patriot activist in colonial Boston. He is best known for his midnight ride on April 18, 1775, warning of British troop movements before the battles of Lexington and Concord. Revere's work as an artisan and messenger contributed to the American Revolution, and his engravings documented colonial life and political events.",
+        "notes": null
+    },
+    {
+        "question": "What happened at the Boston Massacre?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "Boston Massacre, March 5th, 1770",
+                "ark_id": "commonwealth:jq08ds22z"
+            },
+            {
+                "title": "Paul Revere's plan of the scene of the Boston Massacre : used at the trial of Capt. Preston and soldiers",
+                "ark_id": "commonwealth:vh53x374w"
+            },
+            {
+                "title": "The bloody massacre perpetrated in King-Street Boston : on March 5th 1770 by a party of ye 29th regt.",
+                "ark_id": "commonwealth:vh53x3780"
+            },
+            {
+                "title": "Boston Common, Boston Massacre Monument",
+                "ark_id": "commonwealth:9w034t41d"
+            }
+        ],
+        "answer": "On March 5, 1770, British soldiers fired into a crowd of colonists in Boston, killing five people, including Crispus Attucks. The incident heightened tensions between colonists and Britain, was widely publicized through engravings and pamphlets, and became a powerful symbol of colonial resistance, galvanizing support for independence.",
+        "notes": null
+    },
+    {
+        "question": "Who were the Sons of Liberty?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "Grave of William Dawes Jr.",
+                "ark_id": "commonwealth:fj2372543"
+            },
+            {
+                "title": "Green Dragon Tavern, Union Street",
+                "ark_id": "commonwealth:vd66w6545"
+            },
+            {
+                "title": "A new method of Macarony making, as practiced at Boston.",
+                "ark_id": "commonwealth:9880w844w"
+            },
+            {
+                "title": "Diary for 1773 to the end of 1774 of Mr. Thomas Newell, Boston",
+                "ark_id": "commonwealth:zs2626294"
+            }
+        ],
+        "answer": "The Sons of Liberty were a group of colonial activists in Boston who opposed British taxation and policies. They organized protests, including the Boston Tea Party, and resisted enforcement of unpopular laws. Their actions fostered unity among colonists and helped ignite revolutionary sentiment, playing a critical role in the events leading up to the American Revolution.",
+        "notes": null
+    },
+    {
+        "question": "What is Faneuil Hall's historical significance?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            }
+        ],
+        "answer": "Built in 1742, Faneuil Hall served as a marketplace and meeting hall in Boston. It was a site for revolutionary speeches, protests, and assemblies, including gatherings opposing British taxes. Faneuil Hall remains an iconic symbol of free speech, civic engagement, and Boston's role in American independence.",
+        "notes": null
+    },
+    {
+        "question": "What was the Big Dig and why was it significant?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            }
+        ],
+        "answer": "The Big Dig, officially called the Central Artery/Tunnel Project, was a massive infrastructure project in Boston that aimed to reduce traffic congestion by rerouting the elevated Central Artery (Interstate 93) underground. Construction began in 1991 and included building tunnels, bridges, and the Ted Williams Tunnel, as well as the Leonard P. Zakim Bunker Hill Memorial Bridge. The project also created the Rose Kennedy Greenway, a series of parks and public spaces replacing the old elevated highway.",
+        "notes": null
+    },
+    {
+        "question": "What happened at the Boston Marathon Bombings?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            }
+        ],
+        "answer": "The Boston Marathon bombing, sometimes referred to as simply the Boston bombing, was an Islamist domestic terrorist attack that took place during the 117th annual Boston Marathon on April 15, 2013.",
+        "notes": null
+    },
+    {
+        "question": "What was the history of the Boston Common?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            }
+        ],
+        "answer": "Established in 1634, Boston Common is the oldest public park in the United States. It served as a pasture, military training ground, and site for public gatherings and protests. Over time, it became a central recreational and civic space, reflecting Boston's urban development and social history.",
+        "notes": null
+    },
+    {
+        "question": "Why is Boston named Boston?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            }
+        ],
+        "answer": "Boston is named after Boston, Lincolnshire, in England. Early Puritan settlers from that English town founded the Massachusetts Bay Colony in 1630 and named their new settlement after their hometown. The name reflected the settlers' desire to maintain a connection to their English roots while establishing a community based on their religious and social ideals in the New World.",
+        "notes": null
+    },
+    {
+        "question": "Show me some newspapers covering the 1916 World Series.",
+        "question_type": "full_text",
+        "ground_truths": [
+            {
+                "title": "The Boston Traveler. October 07, 1916",
+                "ark_id": "commonwealth:x346mh47g"
+            },
+            {
+                "title": "The Boston Traveler. October 09, 1916",
+                "ark_id": "commonwealth:r7823s29k"
+            },
+            {
+                "title": "The Boston Traveler. October 10, 1916",
+                "ark_id": "commonwealth:c247n520p"
+            },
+            {
+                "title": "The Boston Traveler. October 12, 1916",
+                "ark_id": "commonwealth:g158jw90g"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "Give me some historical data of Zulu people in South Africa.",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "Zululandish styles",
+                "ark_id": "commonwealth:1z40mh38h"
+            },
+            {
+                "title": "King Zulu Parades -- Despite the dull, overcast day, King Zulu led his parade winding through the streets of the city early today. People followed the float to catch the coconuts, which his majesty throws as favors to the throng.",
+                "ark_id": "commonwealth:br86fd210"
+            },
+            {
+                "title": "Zulu's Hepcats-Members of the court of King Zulu give with a little jive in the parade which marks the high spot in the Negro celebration of Mardi Gras at New Orleans.",
+                "ark_id": "commonwealth:jm218041r"
+            },
+            {
+                "title": "De King Old King Zulu, Negro ruler at the Mardi Gras, and his retainers paraded through New Orleans from morning till night during the great festive occasion. Here's His Majesty in the march of glory.",
+                "ark_id": "commonwealth:7p88cv41v"
+            }
+        ],
+        "answer": "I found some relevant items that may interest you regarding the Zulu people and South Africa's historical context: \n1. There are several images in the Women and Gender Issues Press Photography Collection that portray significant aspects of South African culture: \n   - 'Changes her race' (October 21, 1969) discusses race identity in Johannesburg, South Africa. \n   - 'Bewitching business booms' (August 15, 1966) features modern practitioners of tribal healing. \n   - 'Two girls killed' (October 16, 1973) mentions the conflict involving guerrilla crossfire at the Zambia-Rhodesia border, with the victims being from a Canadian background, which could provide insight into the geopolitical climate in the area. \n   - 'Diamond Miners at the bottom of a great shaft at the Wesselton Mine, Kimberley, So Africa' (ca. February 1914) depicts the diamond mining industry, which may relate to the economic context of the region during the colonial era. \n2. The Boston Herald-Traveler Photo Morgue includes images related to festivals and parades, such as 'King Zulu Parades' (ca. February 1951), which may provide a glimpse into cultural traditions. \n3. For a broader search, consider looking into materials related to KwaZulu-Natal specifically, as well as colonial and apartheid periods in South Africa.",
+        "notes": null
+    }
+]
