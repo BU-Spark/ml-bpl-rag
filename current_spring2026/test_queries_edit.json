@@ -510,8 +510,8 @@
                 "ark_id": "commonwealth:vh53x3780"
             },
             {
-                "title": "Boston Common, Boston Massacre Monument",
-                "ark_id": "commonwealth:9w034t41d"
+                "title": "Boston Massacre trial notes",
+                "ark_id": "commonwealth:dv142f145"
             }
         ],
         "answer": "On March 5, 1770, British soldiers fired into a crowd of colonists in Boston, killing five people, including Crispus Attucks. The incident heightened tensions between colonists and Britain, was widely publicized through engravings and pamphlets, and became a powerful symbol of colonial resistance, galvanizing support for independence.",
@@ -546,20 +546,20 @@
         "question_type": null,
         "ground_truths": [
             {
-                "title": "",
-                "ark_id": ""
+                "title": "Faneuil Hall in 1826",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:p2677g44k"
             },
             {
-                "title": "",
-                "ark_id": ""
+                "title": "Rejoicings at Faneuil Hall, Boston, at the close of the revolution",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:7m01kw73f"
             },
             {
-                "title": "",
-                "ark_id": ""
+                "title": "Faneuil Hall, \"the cradle of liberty\"",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:v405sz97p"
             },
             {
-                "title": "",
-                "ark_id": ""
+                "title": "Faneuil Hall. Headquarters of National Guard during Police Strike",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:xp68kq91r"
             }
         ],
         "answer": "Built in 1742, Faneuil Hall served as a marketplace and meeting hall in Boston. It was a site for revolutionary speeches, protests, and assemblies, including gatherings opposing British taxes. Faneuil Hall remains an iconic symbol of free speech, civic engagement, and Boston's role in American independence.",
@@ -570,47 +570,23 @@
         "question_type": null,
         "ground_truths": [
             {
-                "title": "",
-                "ark_id": ""
+                "title": "A plan for the Central Artery",
+                "ark_id": "commonwealth:t722qd95f"
             },
             {
-                "title": "",
-                "ark_id": ""
+                "title": "Central Artery through downtown Boston",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:ww72m211q"
             },
             {
-                "title": "",
-                "ark_id": ""
+                "title": "Central Artery traffic, downtown Boston",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:4q77fs75b"
             },
             {
-                "title": "",
-                "ark_id": ""
+                "title": "Master highway plan metropolitan Boston showing the Massachusetts turnpike, route 128 (circumferential highway), Boston central artery, and planned system of expressways",
+                "ark_id": "commonwealth:cn69pp161"
             }
         ],
         "answer": "The Big Dig, officially called the Central Artery/Tunnel Project, was a massive infrastructure project in Boston that aimed to reduce traffic congestion by rerouting the elevated Central Artery (Interstate 93) underground. Construction began in 1991 and included building tunnels, bridges, and the Ted Williams Tunnel, as well as the Leonard P. Zakim Bunker Hill Memorial Bridge. The project also created the Rose Kennedy Greenway, a series of parks and public spaces replacing the old elevated highway.",
-        "notes": null
-    },
-    {
-        "question": "What happened at the Boston Marathon Bombings?",
-        "question_type": null,
-        "ground_truths": [
-            {
-                "title": "",
-                "ark_id": ""
-            },
-            {
-                "title": "",
-                "ark_id": ""
-            },
-            {
-                "title": "",
-                "ark_id": ""
-            },
-            {
-                "title": "",
-                "ark_id": ""
-            }
-        ],
-        "answer": "The Boston Marathon bombing, sometimes referred to as simply the Boston bombing, was an Islamist domestic terrorist attack that took place during the 117th annual Boston Marathon on April 15, 2013.",
         "notes": null
     },
     {
@@ -618,20 +594,20 @@
         "question_type": null,
         "ground_truths": [
             {
-                "title": "",
-                "ark_id": ""
+                "title": "Boston Common",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:c821gs31f"
             },
             {
-                "title": "",
-                "ark_id": ""
+                "title": "Boston Common",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:2801pn560"
             },
             {
-                "title": "",
-                "ark_id": ""
+                "title": "Beacon St. mall. Boston Common",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:2801pn446"
             },
             {
-                "title": "",
-                "ark_id": ""
+                "title": "Atlas of the city of Boston, Boston proper : from actual surveys and official plans. plate 33",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:9g54z626j"
             }
         ],
         "answer": "Established in 1634, Boston Common is the oldest public park in the United States. It served as a pasture, military training ground, and site for public gatherings and protests. Over time, it became a central recreational and civic space, reflecting Boston's urban development and social history.",
@@ -642,20 +618,20 @@
         "question_type": null,
         "ground_truths": [
             {
-                "title": "",
-                "ark_id": ""
+                "title": "The general laws and statutes of Plymouth Colony : 1658-1666",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:z316sk199"
             },
             {
-                "title": "",
-                "ark_id": ""
+                "title": "Book of possessions of the town of Boston, ca. 1644-1693",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:m900r167m"
             },
             {
-                "title": "",
-                "ark_id": ""
+                "title": "Arbitrary government described : and the government of the Massachusetts vindicated from that aspersion : autograph manuscript, signed",
+                "ark_id": "commonwealth:z316sk156"
             },
             {
-                "title": "",
-                "ark_id": ""
+                "title": "First Church in Boston, 1632",
+                "ark_id": "commonwealth:8k71p274z"
             }
         ],
         "answer": "Boston is named after Boston, Lincolnshire, in England. Early Puritan settlers from that English town founded the Massachusetts Bay Colony in 1630 and named their new settlement after their hometown. The name reflected the settlers' desire to maintain a connection to their English roots while establishing a community based on their religious and social ideals in the New World.",
@@ -686,7 +662,7 @@
         "notes": null
     },
     {
-        "question": "Give me some historical data of Zulu people in South Africa.",
+        "question": "Give me some historical info on the Zulu people in South Africa.",
         "question_type": null,
         "ground_truths": [
             {
@@ -707,6 +683,482 @@
             }
         ],
         "answer": "I found some relevant items that may interest you regarding the Zulu people and South Africa's historical context: \n1. There are several images in the Women and Gender Issues Press Photography Collection that portray significant aspects of South African culture: \n   - 'Changes her race' (October 21, 1969) discusses race identity in Johannesburg, South Africa. \n   - 'Bewitching business booms' (August 15, 1966) features modern practitioners of tribal healing. \n   - 'Two girls killed' (October 16, 1973) mentions the conflict involving guerrilla crossfire at the Zambia-Rhodesia border, with the victims being from a Canadian background, which could provide insight into the geopolitical climate in the area. \n   - 'Diamond Miners at the bottom of a great shaft at the Wesselton Mine, Kimberley, So Africa' (ca. February 1914) depicts the diamond mining industry, which may relate to the economic context of the region during the colonial era. \n2. The Boston Herald-Traveler Photo Morgue includes images related to festivals and parades, such as 'King Zulu Parades' (ca. February 1951), which may provide a glimpse into cultural traditions. \n3. For a broader search, consider looking into materials related to KwaZulu-Natal specifically, as well as colonial and apartheid periods in South Africa.",
+        "notes": null
+    },
+    {
+        "question": "Show me poems by Emily Dickinson, in her own handwriting",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "Emily Dickinson, Amherst, Mass., autograph manuscript poem: I'll tell you how the Sun rose, 1862",
+                "ark_id": "commonwealth:fq977x21b"
+            },
+            {
+                "title": "Emily Dickinson, Amherst, Mass., autograph manuscript poem: Longing is like the seed, 1873",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:kh04mw646"
+            },
+            {
+                "title": "Emily Dickinson, Amherst, Mass., autograph manuscript poem: Success is counted sweetest, 1862",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:fq977x56f"
+            },
+            {
+                "title": "Emily Dickinson, Amherst, Mass., autograph manuscript poem: To undertake is to achieve, 1866",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:fq977z101"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "Who was William Lloyd Garrison and what did he do?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "Mr. Wm. Lloyd Garrison",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:2514p017p"
+            },
+            {
+                "title": "William Lloyd Garrison Monument in the snow",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:8c97n842c"
+            },
+            {
+                "title": "Presentation and farewell meeting!! : ... July 16, 1849... Colored Citizens of Boston... will then present a silver pitcher to... W. Lloyd Garrison : after which a farewell will be tendered to William W. Brown",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:70796c89x"
+            },
+            {
+                "title": "Printed circular: \"To colored citizens of Massachusetts and elsewhere\"",
+                "ark_id": "commonwealth:2v23x8010"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "Were there ever any breweries based in Boston?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "Rochester Brewing Co. 285-308 \"A\" St. near Melcher (round house on left)",
+                "ark_id": "commonwealth:br86bd53r"
+            },
+            {
+                "title": "Conrad Decher, lager beer brewer, East Boston",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:t435gm15v"
+            },
+            {
+                "title": "Boston Beer Company, So. Boston",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:t435gm11r"
+            },
+            {
+                "title": "Highland Spring Brewery : Rueter & Alley, Boston. Ale & porter",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:t435gm032"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "What were the results of the 1935 Boston Marathon?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "Johnny Kelley winning marathon",
+                "ark_id": "commonwealth:3t946b82t"
+            },
+            {
+                "title": "Johnny Kelley winning the B.A.A. Marathon",
+                "ark_id": "commonwealth:3t946c14w"
+            },
+            {
+                "title": "The Boston Traveler. April 19, 1935",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:1j92pv18d"
+            },
+            {
+                "title": "No. 9 crossing finish line at B.A.A. marathon",
+                "ark_id": "commonwealth:3t946b36q"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "Can you help me find some old dessert recipes from the 1800s?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "The dessert book : a complete manual from the best American and foreign authorities. With original economical recipes",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:j0992n65t"
+            },
+            {
+                "title": "Puddings and dainty desserts",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:j0992q789"
+            },
+            {
+                "title": "The Boston Traveler. February 02, 1898",
+                "ark_id": "commonwealth:xk81rw520"
+            },
+            {
+                "title": "The Boston Traveler. December 24, 1895",
+                "ark_id": "commonwealth:w663bd023"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "I am writing a report about the history of people making boats in Massachusetts, can you help me find some information?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "Boat being built",
+                "ark_id": "commonwealth:cn69mf744"
+            },
+            {
+                "title": "Crowd at launch of USS Bainbridge from shipyard in Quincy",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:1831dm900"
+            },
+            {
+                "title": "Largest tanker ever built in the U.S., the 70,000 ton S.S. Princess Sophie leaves Fore River shipyard for day-long test in Massachusetts Bay",
+                "ark_id": "commonwealth:n009xf24t"
+            },
+            {
+                "title": "Shipbuilding",
+                "ark_id": "commonwealth:3r075h422"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "I want to find some examples of what tickets to a baseball game looked like back in the old days.",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "Congress Street Ballgrounds pass",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:gq67jx919"
+            },
+            {
+                "title": "Boston Americans season pass, 1906",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:gq67jx97z"
+            },
+            {
+                "title": "Boston Red Sox American League Championship pass, 1916",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:gq67jz002"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "Who were the Boston Americans?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "John I. Taylor, owner of the Boston Americans",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:sf268644d"
+            },
+            {
+                "title": "Boston Americans in dugout at the Huntington Avenue Grounds, 1903 World Series",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:sf268560k"
+            },
+            {
+                "title": "Boston Americans Baseball Team",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:sf268672k"
+            },
+            {
+                "title": "Boston Americans Baseball Team, 1902",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:sf268850z"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "Can you help me find some historical maps of Boston's subway system from the early 1900s?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "Boston Elevated Railway lines 1921",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:4x51m294f"
+            },
+            {
+                "title": "Map of Boston and vicinity, showing tracks operated by the Boston Elevated Railway Co. January, 1910",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:0v83bg708"
+            },
+            {
+                "title": "Tracks operated by the Boston Elevated Railway Company January 1916",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:g732gs78m"
+            },
+            {
+                "title": "Street railways of Boston and vicinity Jan. 1914",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:34852076k"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "My class is reading Moby Dick and I have to do a project about whaling in Massachusetts, can you help me find some sources?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "The voyage of the Pequod from the book, Moby Dick, by Herman Melville",
+                "ark_id": "commonwealth:rv049z346"
+            },
+            {
+                "title": "Old State House - miniature whaling scene",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:5h73rx028"
+            },
+            {
+                "title": "Whaling Museum: Whale ship \"Lagoda\" replica, New Bedford",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:cv43p6866"
+            },
+            {
+                "title": "Bierstadt - 1862. A whaling ship. New Bedford",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:nk322p393"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "Is it true that Harvard used to have a good football team?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "The Boston Traveler. November 23, 1901",
+                "ark_id": "commonwealth:90200b57q"
+            },
+            {
+                "title": "The Boston Traveler. November 21, 1908",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:g158jv887"
+            },
+            {
+                "title": "The Boston Traveler. November 19, 1910",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:t148nn16h"
+            },
+            {
+                "title": "The Boston Traveler. November 21, 1914",
+                "ark_id": "commonwealth:0z70h6684"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "Find some newspaper articles about the sinking of the Lusitania during WWI",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "The Boston Traveler. June 01, 1915",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:0v83gc74f"
+            },
+            {
+                "title": "The Boston Traveler. May 08, 1915",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:v118zs65j"
+            },
+            {
+                "title": "The Boston Traveler. May 31, 1915",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:7d27h447j"
+            },
+            {
+                "title": "The Boston Traveler. May 10, 1915",
+                "ark_id": "commonwealth:4b29jq26h"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "Were there any people from Boston on the Titanic when it sank?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "The Boston Traveler. April 16, 1912",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:sn00j357m"
+            },
+            {
+                "title": "The Boston Traveler. April 19, 1912",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:nc586t329"
+            },
+            {
+                "title": "The Boston Traveler. April 20, 1912",
+                "ark_id": "commonwealth:xd07q011v"
+            },
+            {
+                "title": "The Boston Traveler. April 17, 1912",
+                "ark_id": "commonwealth:5138rj364"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "What caused the Great Depression?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "The Boston Traveler. October 24, 1929",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:sn00jh80w"
+            },
+            {
+                "title": "The Boston Traveler. November 06, 1929",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:jq08d420g"
+            },
+            {
+                "title": "The Boston Traveler. December 05, 1929",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:8k71w2448"
+            },
+            {
+                "title": "The Boston Traveler. October 28, 1929",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:kw52rs605"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "What information can you find about the Coconut Grove fire disaster?",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "Rescuers and victims outside Cocoanut Grove",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:x346fh915"
+            },
+            {
+                "title": "Entrance and marquee of the Cocoanut Grove after the fire",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:x346fh99c"
+            },
+            {
+                "title": "Cocoanut Grove fire, Boston, Nov. 28, 1942",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:7s75dh42x"
+            },
+            {
+                "title": "Cocoanut Grove owner Barnett Welansky indicted",
+                "ark_id": "https://www.digitalcommonwealth.org/search/commonwealth:7s75dh42x"
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            }
+        ],
+        "answer": null,
+        "notes": null
+    },
+    {
+        "question": "",
+        "question_type": null,
+        "ground_truths": [
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            },
+            {
+                "title": "",
+                "ark_id": ""
+            }
+        ],
+        "answer": null,
         "notes": null
     }
 ]
