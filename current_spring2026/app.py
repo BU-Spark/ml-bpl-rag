@@ -1,6 +1,7 @@
 import streamlit as st
 import sys
 import os
+import html
 
 # Add project root to path so we can import pipeline modules
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -318,7 +319,11 @@ def format_card(doc: RetrievedDocument) -> dict:
     else:
         # No chunk text = collection-level metadata record
         url = f"https://www.digitalcommonwealth.org/collections/commonwealth:{doc.ark_id}"
-
+    
+    thumbnail_url = (
+        f"https://iiif.digitalcommonwealth.org/iiif/2/{doc.exemplary_image_id}/full/400,/0/default.jpg"
+        if doc.exemplary_image_id and doc.exemplary_image_id.strip() else ""
+    )
     return {
         "type":       doc_type,
         "title":      doc.title or "Untitled",
@@ -328,6 +333,7 @@ def format_card(doc: RetrievedDocument) -> dict:
         "tags":       tags,
         "score":      round(doc.final_score, 2),
         "url":        url,
+        "thumbnail":  thumbnail_url
     }
 
 
@@ -434,14 +440,25 @@ if st.session_state.searched and st.session_state.results is not None:
             score_pct = min(int(r["score"] * 100), 100)
             bar_width = score_pct
             tags_html = ''.join(f'<span class="card-tag">{t}</span>' for t in r["tags"])
+
+            thumbnail_html = (
+            f'<img src="{r["thumbnail"]}" style="width:100%;max-height:200px;object-fit:cover;border-radius:4px;margin-bottom:0.8rem;" />'
+            if r.get("thumbnail", "").startswith("https://") else "<div></div>"
+            )
+            # print(f"[debug] thumbnail: {r.get('thumbnail')!r}, thumbnail_html: {thumbnail_html!r}")
+
+            safe_snippet = html.escape(r["snippet"])
+            safe_title   = html.escape(r["title"])
+
             st.markdown(f"""
             <div class="result-card" id="result-{i+1}">
+                {thumbnail_html}
                 <div class="card-type-badge">{r['type']}</div>
-                <div class="card-title">{r['title']}</div>
+                <div class="card-title">{safe_title}</div>
                 <div class="card-meta">
                     {r['date']} &nbsp;·&nbsp; {r['collection']}
                 </div>
-                <div class="card-snippet">{r['snippet']}</div>
+                <div class="card-snippet">{safe_snippet}</div>
                 <div class="card-tags">{tags_html}</div>
                 <div class="score-row">
                     <span class="score-label">Relevance</span>

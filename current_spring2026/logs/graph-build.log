@@ -1,0 +1,135 @@
+/var/spool/sge/scc-504/job_scripts/4267773: line 11: /etc/profile.d/modules.sh: No such file or directory
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 30: export: mamba: not a function
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 31: export: __mamba_exe: not a function
+Starting graph build at Mon Apr 13 00:05:31 EDT 2026
+GPU: NVIDIA L40S
+NVIDIA L40S
+NVIDIA L40S
+NVIDIA L40S
+/var/spool/sge/scc-504/job_scripts/4267773: line 32: /etc/profile.d/modules.sh: No such file or directory
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 30: export: mamba: not a function
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 31: export: __mamba_exe: not a function
+Starting graph build at Mon Apr 13 00:05:32 EDT 2026
+GPU: NVIDIA L40S
+NVIDIA L40S
+NVIDIA L40S
+NVIDIA L40S
+Processing year: 1900
+
+============================================================
+BPL RAG Graph Builder
+  Year filter : 1900
+============================================================
+
+Creating Neo4j schema...
+  OK: CREATE CONSTRAINT document_ark IF NOT EXISTS FOR (d:Document...
+  OK: CREATE CONSTRAINT entity_unique IF NOT EXISTS FOR (e:Entity)...
+  OK: CREATE INDEX entity_name IF NOT EXISTS FOR (e:Entity) ON (e....
+  OK: CREATE INDEX entity_type IF NOT EXISTS FOR (e:Entity) ON (e....
+  OK: CREATE INDEX document_year IF NOT EXISTS FOR (d:Document) ON...
+  OK: vector index on Entity.embedding (1024 dims, cosine)
+Schema ready.
+Fetching documents from PostgreSQL...
+  Found 305 documents
+
+Loading spaCy model: en_core_web_sm
+Loading BGE-M3 model on cuda
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 5788.97it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 56919.79it/s]
+loading existing colbert_linear and sparse_linear---------
+  [1/305] 00006888t | 50 entities | 24.0s | ETA: 121.8min
+  [10/305] 0z70h4907 | 50 entities | 12.2s | ETA: 59.5min
+  [20/305] 1z40t3161 | 50 entities | 12.2s | ETA: 54.8min
+  [30/305] 3f468f11t | 50 entities | 13.1s | ETA: 52.3min
+  [40/305] 4j03m923x | 50 entities | 10.8s | ETA: 49.6min
+  [50/305] 5712tf766 | 50 entities | 12.2s | ETA: 47.2min
+  [60/305] 6h4474449 | 50 entities | 9.6s | ETA: 44.7min
+  [70/305] 7653f7831 | 50 entities | 11.7s | ETA: 42.5min
+  [80/305] 8k71vs17j | 50 entities | 13.6s | ETA: 41.3min
+  [90/305] 9c683v75j | 50 entities | 9.7s | ETA: 39.3min
+  [100/305] b564c292w | 50 entities | 10.1s | ETA: 37.3min
+  [110/305] bz60m558f | 50 entities | 9.9s | ETA: 35.2min
+  [120/305] cz30x1463 | 50 entities | 9.8s | ETA: 33.1min
+  [130/305] dv146273r | 50 entities | 13.5s | ETA: 31.5min
+  [140/305] fj23dc57n | 50 entities | 11.0s | ETA: 29.7min
+  [150/305] gh93q773f | 50 entities | 10.2s | ETA: 27.9min
+  [160/305] hm512450s | 50 entities | 11.4s | ETA: 26.1min
+  [170/305] j9608958f | 50 entities | 9.6s | ETA: 24.2min
+  [180/305] k643j923r | 50 entities | 9.1s | ETA: 22.4min
+  [190/305] m900w444m | 50 entities | 10.6s | ETA: 20.7min
+  [200/305] n29749520 | 50 entities | 10.6s | ETA: 18.8min
+  [210/305] ns06bh040 | 50 entities | 11.5s | ETA: 17.0min
+  [220/305] q237r3219 | 50 entities | 15.3s | ETA: 15.3min
+  [230/305] qr46zc687 | 50 entities | 10.5s | ETA: 13.5min
+  [240/305] rb694n47t | 50 entities | 11.9s | ETA: 11.7min
+  [250/305] sj13h8158 | 50 entities | 14.1s | ETA: 9.9min
+  [260/305] th83t590f | 50 entities | 9.0s | ETA: 8.1min
+  [270/305] vt156t54m | 50 entities | 8.9s | ETA: 6.3min
+  [280/305] w950c7966 | 50 entities | 9.8s | ETA: 4.5min
+  [290/305] xk81rw82q | 50 entities | 9.9s | ETA: 2.7min
+  [300/305] zc7812756 | 50 entities | 10.3s | ETA: 0.9min
+
+✓ Graph build complete.
+  Documents processed : 305
+  Total entities      : 15250
+  Total time          : 54.7 min
+Processing year: 1901
+
+============================================================
+BPL RAG Graph Builder
+  Year filter : 1901
+============================================================
+
+Creating Neo4j schema...
+  OK: CREATE CONSTRAINT document_ark IF NOT EXISTS FOR (d:Document...
+  OK: CREATE CONSTRAINT entity_unique IF NOT EXISTS FOR (e:Entity)...
+  OK: CREATE INDEX entity_name IF NOT EXISTS FOR (e:Entity) ON (e....
+  OK: CREATE INDEX entity_type IF NOT EXISTS FOR (e:Entity) ON (e....
+  OK: CREATE INDEX document_year IF NOT EXISTS FOR (d:Document) ON...
+  OK: vector index on Entity.embedding (1024 dims, cosine)
+Schema ready.
+Fetching documents from PostgreSQL...
+  Found 304 documents
+
+Loading spaCy model: en_core_web_sm
+Loading BGE-M3 model on cuda
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 8570.88it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 54181.74it/s]
+loading existing colbert_linear and sparse_linear---------
+  [1/304] 00006896h | 50 entities | 13.9s | ETA: 70.2min
+  [10/304] 0k22ck85c | 50 entities | 14.6s | ETA: 57.1min
+  [20/304] 1n79qd33z | 50 entities | 10.3s | ETA: 54.9min
+  [30/304] 31984w831 | 50 entities | 11.2s | ETA: 51.3min
+  [40/304] 3t94d068z | 50 entities | 9.8s | ETA: 48.6min
+  [50/304] 4b29jn263 | 50 entities | 10.5s | ETA: 47.2min
+  [60/304] 5999vg162 | 50 entities | 13.9s | ETA: 45.3min
+  [70/304] 7079ch17c | 50 entities | 11.8s | ETA: 43.2min
+  [80/304] 8049ph39p | 50 entities | 12.5s | ETA: 41.2min
+  [90/304] 90200b57q | 50 entities | 21.2s | ETA: 39.3min
+  [100/304] b277b3952 | 50 entities | 9.2s | ETA: 37.2min
+  [110/304] c534p033k | 50 entities | 13.0s | ETA: 35.7min
+  [120/304] cn69tf54p | 50 entities | 8.0s | ETA: 33.5min
+  [130/304] df662k424 | 50 entities | 9.3s | ETA: 31.6min
+  [140/304] g158jt261 | 50 entities | 9.7s | ETA: 29.9min
+  [150/304] h702xm40m | 50 entities | 9.4s | ETA: 27.9min
+  [160/304] hx124r59p | 50 entities | 9.7s | ETA: 26.2min
+  [170/304] js95dt99f | 50 entities | 14.7s | ETA: 24.4min
+  [180/304] kk91nv27p | 50 entities | 13.5s | ETA: 22.6min
+  [190/304] mw232f19s | 50 entities | 9.0s | ETA: 20.7min
+  [200/304] ns06bh13z | 50 entities | 10.7s | ETA: 18.9min
+  [210/304] pr76nc191 | 50 entities | 11.8s | ETA: 17.1min
+  [220/304] rb694n55h | 50 entities | 9.4s | ETA: 15.3min
+  [230/304] s178bz27m | 50 entities | 9.7s | ETA: 13.5min
+  [240/304] sj13h838k | 50 entities | 13.3s | ETA: 11.7min
+  [250/304] tt44wz028 | 50 entities | 12.4s | ETA: 9.9min
+  [260/304] vh544517v | 50 entities | 12.0s | ETA: 8.1min
+  [270/304] wm11fx18n | 50 entities | 14.6s | ETA: 6.2min
+  [280/304] xg94r2644 | 50 entities | 10.1s | ETA: 4.4min
+  [290/304] xw42vj33k | 50 entities | 12.0s | ETA: 2.6min
+  [300/304] zs264j092 | 50 entities | 10.6s | ETA: 0.7min
+
+✓ Graph build complete.
+  Documents processed : 304
+  Total entities      : 15200
+  Total time          : 56.1 min
+Graph build complete at Mon Apr 13 01:57:58 EDT 2026

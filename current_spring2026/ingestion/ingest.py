@@ -35,6 +35,8 @@ from config import MIN_CHAR_COUNT, BGE_BATCH_SIZE
 from database.schema import get_conn, get_cursor
 from embedding.embedder import embedder
 from ingestion.chunker import chunker
+import re
+import html
 
 DEFAULT_FULLTEXT_DIR  = "data/fulltext"
 DEFAULT_METADATA_FILE = "data/metadata/metadata.jsonl"
@@ -102,6 +104,11 @@ def _parse_metadata_record(raw: dict) -> dict:
     attrs     = data.get("attributes", {})
     record_id = data.get("id", attrs.get("id", ""))
     ark_id    = record_id.split(":")[-1] if ":" in record_id else record_id
+    abstract_raw = attrs.get("abstract_tsi", "") or ""
+    abstract_unescaped = html.unescape(abstract_raw)
+    abstract_clean = re.sub(r"<[^>]+>", " ", abstract_unescaped).strip()
+    abstract_clean = re.sub(r"\s+", " ", abstract_clean)
+    
 
     return {
         "ark_id":         ark_id,
@@ -128,8 +135,10 @@ def _parse_metadata_record(raw: dict) -> dict:
         "char_count":     0,
         "ingested_at":    datetime.now(timezone.utc).isoformat(),
         "_metadata_only": True,
-        "genre":         attrs.get("genre_basic_ssim", []),
-        "abstract":      attrs.get("abstract_tsi", ""),
+        "genre":          attrs.get("genre_basic_ssim", []),
+        # Strip HTML once at parse time instead of repeatedly at embed time
+        "exemplary_image_id": attrs.get("exemplary_image_ssi", ""),
+        "abstract": abstract_clean[:300],
     }
 
 
@@ -196,6 +205,9 @@ def upsert_documents(
             rec.get("topics") or [],
             rec.get("geography") or [],
             rec.get("char_count", 0),
+            rec.get("genre") or [],
+            rec.get("abstract", ""),
+            rec.get("exemplary_image_id", ""),
             emb.tolist(),
             token_ids,
             weights,
@@ -208,7 +220,9 @@ def upsert_documents(
             newspaper, collection, institution,
             title, issue_date, date_iso, date_start, year,
             publisher, place, language,
-            page_count, pages, topics, geography, char_count,
+            page_count, pages, topics, geography,
+            char_count,
+            genre, abstract, exemplary_image_id,
             metadata_embedding, sparse_token_ids, sparse_weights,
             ingested_at
         )
@@ -218,6 +232,9 @@ def upsert_documents(
             sparse_token_ids   = EXCLUDED.sparse_token_ids,
             sparse_weights     = EXCLUDED.sparse_weights,
             char_count         = EXCLUDED.char_count,
+            genre               = EXCLUDED.genre,
+            abstract            = EXCLUDED.abstract,
+            exemplary_image_id  = EXCLUDED.exemplary_image_id,
             ingested_at        = EXCLUDED.ingested_at
         RETURNING ark_id, id
     """

@@ -3,6 +3,7 @@ from typing import List
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from config import BGE_MODEL_NAME, BGE_DEVICE, BGE_BATCH_SIZE
+from FlagEmbedding import BGEM3FlagModel
 
 
 class BGEEmbedder:
@@ -13,22 +14,25 @@ class BGEEmbedder:
     def _load(self):
         if self._model is None:
             print(f"Loading BGE-M3 model on {BGE_DEVICE}")
-            self._model = SentenceTransformer(BGE_MODEL_NAME, device=BGE_DEVICE)
+            self._model = BGEM3FlagModel(
+                BGE_MODEL_NAME,
+                use_fp16=True,
+                device=BGE_DEVICE,
+            )
 
     def encode_both(self, texts: List[str]) -> dict:
         self._load()
         texts = [t if t.strip() else " " for t in texts]
-        embeddings = self._model.encode(
+        output = self._model.encode(
             texts,
             batch_size=BGE_BATCH_SIZE,
-            normalize_embeddings=True,
-            show_progress_bar=len(texts) > BGE_BATCH_SIZE,
+            return_dense=True,
+            return_sparse=True,
+            return_colbert_vecs=False,
         )
-        # sentence-transformers doesn't support sparse natively
-        # return empty sparse dicts as placeholders
         return {
-            "dense":  embeddings.astype(np.float32),
-            "sparse": [{} for _ in texts],
+            "dense":  output["dense_vecs"].astype(np.float32),
+            "sparse": output["lexical_weights"],
         }
 
     def embed(self, texts: List[str]) -> np.ndarray:
@@ -57,32 +61,39 @@ class BGEEmbedder:
     @staticmethod
     def build_metadata_text(record: dict) -> str:
         parts = []
+
         if record.get("title"):
             parts.append(f"Title: {record['title']}")
-        if record.get("newspaper"):
-            parts.append(f"Newspaper: {record['newspaper']}")
-        if record.get("institution"):
-            parts.append(f"Institution: {record['institution']}")
-        if record.get("issue_date"):
-            parts.append(f"Date: {record['issue_date']}")
+
+        genres = record.get("genre") or []
+        if genres:
+            parts.append(f"Format: {', '.join(genres)}")
+
         topics = record.get("topics") or []
         if topics:
             parts.append(f"Topics: {', '.join(topics)}")
+
         geography = record.get("geography") or []
         if geography:
             parts.append(f"Geography: {', '.join(geography)}")
+
         place = record.get("place") or []
         if place:
             parts.append(f"Place: {', '.join(place)}")
-        genres = record.get("genre") or []
-        if genres:
-            parts.append(f"Formats: {', '.join(genres)}")
-        # Include abstract — most information-rich field for collection records
-        abstract = record.get("abstract") or record.get("abstract_tsi") or ""
+
+        year = record.get("year") or []
+        if year:
+            parts.append(f"Year: {', '.join(str(y) for y in year)}")
+
+        collection = record.get("collection") or ""
+        if collection and collection != record.get("title"):
+            parts.append(f"Collection: {collection}")
+
+        # HTML already stripped at parse time, just truncate
+        abstract = record.get("abstract") or ""
         if abstract:
-            import re
-            abstract = re.sub(r"<[^>]+>", " ", abstract).strip()
-            parts.append(f"Description: {abstract}")
+            parts.append(f"Description: {abstract[:1000]}")
+
         return " | ".join(parts)
 
 

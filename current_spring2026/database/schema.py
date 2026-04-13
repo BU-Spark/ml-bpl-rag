@@ -70,6 +70,9 @@ CREATE TABLE IF NOT EXISTS documents (
     topics          TEXT[],
     geography       TEXT[],
     char_count      INT,
+    genre               TEXT[],
+    abstract            TEXT,
+    exemplary_image_id  TEXT,
 
     -- Dense metadata embedding (BGE-M3 → 1024 dims)
     metadata_embedding  VECTOR(1024),
@@ -93,6 +96,7 @@ CREATE INDEX IF NOT EXISTS idx_documents_year     ON documents USING GIN (year);
 CREATE INDEX IF NOT EXISTS idx_documents_language ON documents USING GIN (language);
 CREATE INDEX IF NOT EXISTS idx_documents_topics   ON documents USING GIN (topics);
 CREATE INDEX IF NOT EXISTS idx_documents_geo      ON documents USING GIN (geography);
+CREATE INDEX IF NOT EXISTS idx_documents_genre ON documents USING GIN (genre);
 
 
 -- ── Table 2: chunks ──────────────────────────────────────────────────────────

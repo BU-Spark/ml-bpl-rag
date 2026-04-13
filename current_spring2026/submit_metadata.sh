@@ -1,8 +1,8 @@
 #!/bin/bash -l
 #$ -l h_rt=30:00:00
-#$ -N embed-fulltext
+#$ -N embed-metadata
 #$ -j y
-#$ -o embed-fulltext.log
+#$ -o embed-metadata.log
 #$ -l gpus=1
 #$ -l gpu_memory=16G
 #$ -l gpu_c=7.5
@@ -15,4 +15,4 @@ source /etc/profile.d/modules.sh
 module load miniconda
 conda activate spark-rag
 
-python -m ingestion.ingest --fulltext-dir data/fulltext/boston-traveler --skip-metadata
+python -m ingestion.ingest --metadata-file data/metadata/metadata.jsonl --skip-fulltext

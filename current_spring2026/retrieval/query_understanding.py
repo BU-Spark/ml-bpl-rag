@@ -46,6 +46,7 @@ class QueryIntent:
     # Weights for score fusion (overridden by classifier)
     content_weight:  float = 0.75
     metadata_weight: float = 0.25
+    use_graph:       bool  = False 
 
 
 # ── System prompt ─────────────────────────────────────────────────────────────
@@ -66,7 +67,8 @@ Given a user query, return a JSON object with exactly these fields:
   "geography": ["<place names mentioned>"],
   "topics": ["<subject topics mentioned>"],
   "content_weight": <float between 0 and 1>,
-  "metadata_weight": <float between 0 and 1>
+  "metadata_weight": <float between 0 and 1>,
+  "use_graph": <true or false>
 }
 
 Classification rules:
@@ -81,6 +83,13 @@ Classification rules:
 - hybrid: both content and metadata signals are important.
   Split weights roughly 50/50.
   Examples: "newspaper articles about indigenous Americans in the 1800s"
+
+- use_graph: set to true only when the query asks about specific named people,
+  organizations, or events where cross-document connections matter.
+  Examples that need graph: "who was involved in the 1900 labor strike",
+  "what organizations covered the molasses disaster", "find everything about Mayor Fitzgerald"
+  Examples that don't need graph: "what happened in 1900", "Boston news stories",
+  "show me newspapers from June 1900"
 
 Rules for rewritten_query:
 - Expand abbreviations and archaic terms to modern equivalents
@@ -145,6 +154,8 @@ def classify_query(raw_query: str) -> QueryIntent:
         topics          = parsed.get("topics", []),
         content_weight  = cw,
         metadata_weight = mw,
+        use_graph = parsed.get("use_graph", False),
+
     )
 
     return intent

@@ -50,6 +50,7 @@ class RetrievedDocument:
     rrf_score:        float
     metadata_sim:     float
     final_score:      float
+    exemplary_image_id: str = ""  # add this
 
 
 # ── Filter clause ─────────────────────────────────────────────────────────────
@@ -103,6 +104,8 @@ def _dense_search(
                 c.id             AS chunk_id,
                 c.chunk_index,
                 c.chunk_text,
+                c.sparse_token_ids,    
+                c.sparse_weights,      
                 1 - (c.text_embedding <=> %s::vector) AS dense_score
             FROM chunks c
             INNER JOIN filtered_docs fd ON c.document_id = fd.document_id
@@ -113,6 +116,7 @@ def _dense_search(
             d.ark_id, d.title, d.source_url, d.institution,
             d.issue_date, d.year, d.topics, d.geography,
             d.metadata_embedding,
+            d.exemplary_image_id,
             d.sparse_token_ids AS doc_sparse_token_ids,
             d.sparse_weights   AS doc_sparse_weights
         FROM nearest_chunks nc
@@ -132,49 +136,20 @@ def _dense_search(
 
 def _sparse_search(
     query_sparse: dict,
-    where_clause: str,
-    where_params: list,
-    conn,
+    dense_results: List[dict],   # pass dense results in directly
     top_k: int = TOP_K_BM25,
 ) -> List[dict]:
     """
-    BGE-M3 sparse retrieval using dot product between
-    query sparse vector and stored chunk sparse arrays.
-    Fetches filtered candidates then scores in Python.
+    Score sparse embeddings only on the candidates already returned
+    by dense search. Avoids fetching all chunks from DB.
     """
-    sql = f"""
-        WITH filtered_docs AS (
-            SELECT d.id AS document_id, d.ark_id
-            FROM documents d
-            {where_clause}
-        )
-        SELECT DISTINCT ON (c.document_id)
-            c.document_id,
-            c.id          AS chunk_id,
-            c.chunk_index,
-            c.chunk_text,
-            c.sparse_token_ids,
-            c.sparse_weights,
-            d.ark_id, d.title, d.source_url, d.institution,
-            d.issue_date, d.year, d.topics, d.geography,
-            d.metadata_embedding,
-            d.sparse_token_ids AS doc_sparse_token_ids,
-            d.sparse_weights   AS doc_sparse_weights
-        FROM chunks c
-        INNER JOIN filtered_docs fd ON c.document_id = fd.document_id
-        JOIN documents d ON d.id = c.document_id
-        WHERE c.sparse_token_ids IS NOT NULL
-    """
+    if not query_sparse or not dense_results:
+        return []
 
-    with get_cursor(conn) as cur:
-        cur.execute(sql, where_params)
-        rows = cur.fetchall()
-
-    # Score each chunk by sparse dot product with query
     scored = []
-    for row in rows:
-        token_ids    = row["sparse_token_ids"] or []
-        weights      = row["sparse_weights"]   or []
+    for row in dense_results:
+        token_ids    = row.get("sparse_token_ids") or []
+        weights      = row.get("sparse_weights")   or []
         chunk_sparse = dict(zip([str(t) for t in token_ids], weights))
         score = sum(
             float(query_sparse.get(tok, 0.0)) * float(weight)
@@ -226,6 +201,7 @@ def _metadata_only_search(
             d.topics,
             d.geography,
             d.metadata_embedding,
+            d.exemplary_image_id,
             d.sparse_token_ids AS doc_sparse_token_ids,
             d.sparse_weights   AS doc_sparse_weights,
             '' AS chunk_text,
@@ -314,6 +290,7 @@ def _metadata_rerank(
             geography        = row.get("geography") or [],
             best_chunk_text  = row.get("chunk_text", ""),
             best_chunk_index = row.get("chunk_index", 0),
+            exemplary_image_id = row.get("exemplary_image_id") or "",
             rrf_score        = rrf_score,
             metadata_sim     = meta_sim,
             final_score      = final_score,
@@ -329,34 +306,21 @@ def _metadata_rerank(
 # ── Public API ────────────────────────────────────────────────────────────────
 
 def retrieve(intent: QueryIntent, top_k: int = TOP_K_FINAL) -> List[RetrievedDocument]:
-    """
-    Full retrieval pipeline for a classified QueryIntent.
-
-    Steps:
-      1. Build SQL filter clause from intent
-      2. Embed the rewritten query (dense + sparse in one pass)
-      3. Dense search on chunks
-      4. Sparse search on chunks
-      5. RRF fusion
-      6. Metadata-only search for metadata_driven queries
-      7. Metadata similarity rerank
-      8. Return top_k results
-    """
     where_clause, where_params = _build_filter_clause(intent)
-    print(f"[debug] where_clause: {where_clause}")
-    print(f"[debug] where_params: {where_params}")
 
-    # Single forward pass for both dense and sparse query embeddings
     query_output = embedder.encode_one_both(intent.rewritten_query, is_query=True)
     query_emb    = query_output["dense"]
     query_sparse = query_output["sparse"]
 
     with get_conn() as conn:
-        dense_results  = _dense_search(
+        # Dense search fetches top candidates from DB
+        dense_results = _dense_search(
             query_emb, where_clause, where_params, conn
         )
+
+        # Sparse search scores only the dense candidates — no extra DB call
         sparse_results = _sparse_search(
-            query_sparse, where_clause, where_params, conn
+            query_sparse, dense_results
         )
 
         meta_results = []
@@ -369,12 +333,9 @@ def retrieve(intent: QueryIntent, top_k: int = TOP_K_FINAL) -> List[RetrievedDoc
 
     rrf_results = _reciprocal_rank_fusion(dense_results, sparse_results)
 
-    # Merge metadata-only results not already in RRF
     rrf_ark_ids = {ark for ark, _, _ in rrf_results}
     for i, row in enumerate(meta_results):
         if row["ark_id"] not in rrf_ark_ids:
-            # Give metadata results a competitive RRF score based on their rank
-            # For metadata_driven queries boost this significantly
             if intent.query_type == "metadata_driven":
                 score = 1.0 / (RRF_K + i + 1) * 2.0
             else:

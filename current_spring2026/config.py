@@ -18,6 +18,16 @@ BGE_MODEL_NAME = "BAAI/bge-m3"
 BGE_DEVICE            = "cuda"                      # change to "cpu" if no GPU
 BGE_BATCH_SIZE        = 64                          # lower if OOM
 
+# ── Neo4j / GraphRAG ──────────────────────────────────────────────────────────
+NEO4J_URI      = os.getenv("NEO4J_URI", "")
+NEO4J_USER     = os.getenv("NEO4J_USER", "neo4j")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
+
+# GraphRAG is triggered only for content_driven queries
+GRAPH_RAG_ENABLED        = True
+GRAPH_TOP_K              = 5    # max additional docs from graph
+GRAPH_MIN_ENTITY_MATCHES = 1    # min query entities a doc must match
+
 # ── PostgreSQL / pgVector ─────────────────────────────────────────────────────
 PG_HOST               = os.getenv("PG_HOST", "localhost")
 PG_PORT               = int(os.getenv("PG_PORT", 5432))
