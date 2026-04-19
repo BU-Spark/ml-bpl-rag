@@ -15,7 +15,7 @@ OPENAI_CHAT_MODEL     = "gpt-4o"
 
 # ── BGE Embedding ─────────────────────────────────────────────────────────────
 BGE_MODEL_NAME = "BAAI/bge-m3"
-BGE_DEVICE            = "cuda"                      # change to "cpu" if no GPU
+BGE_DEVICE            = "cpu"                       # V100 CC 7.0 incompatible with installed PyTorch (CC >=7.5)
 BGE_BATCH_SIZE        = 64                          # lower if OOM
 
 # ── Neo4j / GraphRAG ──────────────────────────────────────────────────────────

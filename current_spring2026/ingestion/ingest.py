@@ -138,7 +138,7 @@ def _parse_metadata_record(raw: dict) -> dict:
         "genre":          attrs.get("genre_basic_ssim", []),
         # Strip HTML once at parse time instead of repeatedly at embed time
         "exemplary_image_id": attrs.get("exemplary_image_ssi", ""),
-        "abstract": abstract_clean[:300],
+        "abstract": abstract_clean,
     }
 
 

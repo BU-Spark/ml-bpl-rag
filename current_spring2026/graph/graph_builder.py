@@ -176,53 +176,63 @@ def build_graph(year: int = None):
     total_docs     = 0
     total_entities = 0
     start_time     = time.monotonic()
+    CHUNK_SIZE     = 200
 
-    for i, doc in enumerate(docs):
-        doc_start = time.monotonic()
+    for chunk_start in range(0, len(docs), CHUNK_SIZE):
+        chunk     = docs[chunk_start:chunk_start + CHUNK_SIZE]
+        chunk_end = min(chunk_start + CHUNK_SIZE, len(docs))
 
-        # Combine all chunks into full document text
-        chunks    = doc["chunks"] or []
-        full_text = " ".join(chunks)
+        print(f"\n── Chunk [{chunk_start+1}-{chunk_end}/{len(docs)}] ──")
 
-        # Extract entities
-        entities = extractor.extract_top(full_text, n=50)
+        # ── Phase 1: Extract entities (CPU/spaCy) ──────────────────────────
+        chunk_data = []
+        for doc in chunk:
+            full_text = " ".join(doc["chunks"] or [])
+            entities  = extractor.extract_top(full_text, n=40)
+            if entities:
+                chunk_data.append((doc, entities))
 
-        if not entities:
+        print(f"  Extracted entities from {len(chunk_data)} docs")
+
+        if not chunk_data:
             continue
 
-        # Embed all entities in one BGE-M3 batch call
-        entity_embeddings = embed_entities(entities)
+        # ── Phase 2: Embed all entities in one GPU batch ───────────────────
+        all_texts = [build_entity_text(e) for _, ents in chunk_data for e in ents]
+        print(f"  Embedding {len(all_texts)} entities on GPU...")
+        all_embs  = embedder.embed(all_texts)
+        print(f"  Embedding complete")
 
-        # Build co-occurrence pairs from top 10 entities
-        top_entities   = entities[:10]
-        co_occur_pairs = list(combinations(top_entities, 2))
+        # Split embeddings back per document
+        idx            = 0
+        doc_embeddings = []
+        for _, entities in chunk_data:
+            n = len(entities)
+            doc_embeddings.append(all_embs[idx:idx+n])
+            idx += n
 
-        # Write to Neo4j in one transaction
-        with get_session() as session:
-            write_document_batch(
-                session, doc, entities, entity_embeddings, co_occur_pairs
-            )
+        # ── Phase 3: Write to Neo4j ────────────────────────────────────────
+        for (doc, entities), embs in zip(chunk_data, doc_embeddings):
+            top_entities   = entities[:10]
+            co_occur_pairs = list(combinations(top_entities, 2))
+            with get_session() as session:
+                write_document_batch(session, doc, entities, embs, co_occur_pairs)
 
-        doc_time        = time.monotonic() - doc_start
-        total_entities += len(entities)
-        total_docs     += 1
+            total_entities += len(entities)
+            total_docs     += 1
 
-        if (i + 1) % 10 == 0 or i == 0:
-            elapsed   = time.monotonic() - start_time
-            remaining = (elapsed / (i + 1)) * (len(docs) - i - 1)
-            print(
-                f"  [{i+1}/{len(docs)}] {doc['ark_id']} | "
-                f"{len(entities)} entities | "
-                f"{doc_time:.1f}s | "
-                f"ETA: {remaining/60:.1f}min"
-            )
+        elapsed   = time.monotonic() - start_time
+        remaining = (elapsed / total_docs) * (len(docs) - total_docs) if total_docs else 0
+        print(
+            f"  Written {total_docs}/{len(docs)} docs | "
+            f"ETA: {remaining/60:.1f}min"
+        )
 
     print(f"\n✓ Graph build complete.")
     print(f"  Documents processed : {total_docs}")
     print(f"  Total entities      : {total_entities}")
     print(f"  Total time          : {(time.monotonic()-start_time)/60:.1f} min")
-
-
+    
 # ── CLI ───────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":

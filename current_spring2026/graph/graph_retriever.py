@@ -40,7 +40,7 @@ def retrieve_by_query(
     exclude_ark_ids: Set[str] = None,
     top_k: int = 5,
     entity_top_k: int = 10,      # how many similar entities to find via vector search
-    co_occur_threshold: int = 2,  # min co-occurrence weight for second hop
+    co_occur_threshold: int = 10,  # min co-occurrence weight for second hop
 ) -> List[GraphResult]:
     """
     Semantic GraphRAG retrieval:

@@ -221,6 +221,8 @@ Write a concise summary that cites the relevant documents inline by number."""
         ],
     )
 
+    if not response.choices:
+        raise ValueError("OpenAI returned empty choices (finish_reason may indicate content filter)")
     response_text = response.choices[0].message.content.strip()
 
     return GenerationResult(

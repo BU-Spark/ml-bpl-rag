@@ -1,0 +1,15 @@
+/var/spool/sge/scc-502/job_scripts/4383472: line 14: /etc/profile.d/modules.sh: No such file or directory
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 30: export: mamba: not a function
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 31: export: __mamba_exe: not a function
+Traceback (most recent call last):
+  File "/projectnb/sparkgrp/ml-bpl-rag-data-subset/ml-bpl-rag-spring-2026/ml-bpl-rag/current_spring2026/scripts/update_abstracts_and_embeddings.py", line 27, in <module>
+    from database.schema import get_conn, get_cursor
+ModuleNotFoundError: No module named 'database'
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 30: export: mamba: not a function
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 31: export: __mamba_exe: not a function
+Starting at Fri Apr 17 23:51:09 EDT 2026
+Traceback (most recent call last):
+  File "/projectnb/sparkgrp/ml-bpl-rag-data-subset/ml-bpl-rag-spring-2026/ml-bpl-rag/current_spring2026/scripts/update_abstracts_and_embeddings.py", line 27, in <module>
+    from database.schema import get_conn, get_cursor
+ModuleNotFoundError: No module named 'database'
+Done at Fri Apr 17 23:51:10 EDT 2026

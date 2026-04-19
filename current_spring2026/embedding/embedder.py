@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import List
 import numpy as np
-from sentence_transformers import SentenceTransformer
 from config import BGE_MODEL_NAME, BGE_DEVICE, BGE_BATCH_SIZE
 from FlagEmbedding import BGEM3FlagModel
 
@@ -53,9 +52,10 @@ class BGEEmbedder:
         if is_query:
             text = f"Represent this sentence for searching relevant passages: {text}"
         output = self.encode_both([text])
+        sparse_list = output["sparse"]
         return {
             "dense":  output["dense"][0],
-            "sparse": output["sparse"][0],
+            "sparse": sparse_list[0] if sparse_list else {},
         }
 
     @staticmethod
@@ -92,7 +92,7 @@ class BGEEmbedder:
         # HTML already stripped at parse time, just truncate
         abstract = record.get("abstract") or ""
         if abstract:
-            parts.append(f"Description: {abstract[:1000]}")
+            parts.append(f"Description: {abstract}")
 
         return " | ".join(parts)
 

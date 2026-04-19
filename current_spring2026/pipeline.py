@@ -146,7 +146,6 @@ def run_query(raw_query: str, top_k: int = TOP_K_FINAL) -> PipelineResult:
     print(f"[pipeline] Rewritten    : {intent.rewritten_query}")
     print(f"[pipeline] Date filter  : {intent.date_filter}")
     print(f"[pipeline] Use graph    : {intent.use_graph}")
-    print(f"[pipeline] Weights      : content={intent.content_weight:.2f} metadata={intent.metadata_weight:.2f}")
 
     # ── Step 2: Dense + sparse retrieval ───────────────────────────────────
     documents = retrieve(intent, top_k=top_k)

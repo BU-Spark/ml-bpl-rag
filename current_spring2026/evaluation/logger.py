@@ -70,8 +70,6 @@ def log_query(
     filters_json    = json.dumps({
         "year_min":  intent.date_filter.year_min,
         "year_max":  intent.date_filter.year_max,
-        "geography": intent.geography,
-        "topics":    intent.topics,
         "doc_types": intent.doc_types,
     })
 
@@ -113,8 +111,8 @@ def log_query(
             "query_type":        intent.query_type,
             "year_min":          intent.date_filter.year_min,
             "year_max":          intent.date_filter.year_max,
-            "geography":         "|".join(intent.geography),
-            "topics":            "|".join(intent.topics),
+            "geography":         "",
+            "topics":            "",
             "retrieved_ark_ids": "|".join(retrieved_arks),
             "response":          generation_result.response,
             "latency_ms":        latency_ms,
