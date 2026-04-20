@@ -64,3 +64,9 @@ GENERATION_MAX_TOKENS = 600
 
 MIN_RELEVANCE_SCORE = 0.01   # documents below this are considered irrelevant
 
+# ── Fusion interleave strategy ────────────────────────────────────────────────
+# When True, pipeline.run_query() uses the fusion_interleave retriever:
+# 1:1 interleave of (unified_tier1 + GraphRAG-on) ⊕ (unified + GraphRAG-off).
+# See retrieval/fusion_interleave.py. Falls back to legacy retrieve() when False.
+USE_FUSION_INTERLEAVE = True
+

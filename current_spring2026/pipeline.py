@@ -22,6 +22,7 @@ from config import (
     GRAPH_RAG_ENABLED,
     GRAPH_TOP_K,
     GRAPH_MIN_ENTITY_MATCHES,
+    USE_FUSION_INTERLEAVE,
 )
 
 
@@ -148,25 +149,36 @@ def run_query(raw_query: str, top_k: int = TOP_K_FINAL) -> PipelineResult:
     print(f"[pipeline] Use graph    : {intent.use_graph}")
 
     # ── Step 2: Dense + sparse retrieval ───────────────────────────────────
-    documents = retrieve(intent, top_k=top_k)
-    print(f"[pipeline] Retrieved    : {len(documents)} documents (dense/sparse)")
-
-    # ── Step 3: GraphRAG expansion ─────────────────────────────────────────
     graph_used       = False
     graph_docs_added = 0
 
-    if (
-        GRAPH_RAG_ENABLED
-        and intent.query_type == "content_driven"
-        and intent.use_graph
-    ):
-        try:
-            expanded         = _expand_with_graph(intent, documents, top_k=GRAPH_TOP_K)
-            graph_docs_added = len(expanded) - len(documents)
-            documents        = expanded
-            graph_used       = graph_docs_added > 0
-        except Exception as e:
-            print(f"[pipeline] GraphRAG failed (non-fatal): {e}")
+    if USE_FUSION_INTERLEAVE:
+        # 1:1 interleave of (unified_tier1 + GraphRAG-on) ⊕ (unified + GraphRAG-off).
+        # GraphRAG is applied inside the fusion strategy on the tier1 branch only,
+        # so we skip the outer _expand_with_graph block below.
+        from retrieval.fusion_interleave import fusion_interleave_retrieve
+        documents = fusion_interleave_retrieve(intent, top_k=top_k)
+        print(f"[pipeline] Retrieved    : {len(documents)} documents (fusion_interleave)")
+        graph_used = bool(
+            GRAPH_RAG_ENABLED and intent.use_graph
+        )
+    else:
+        documents = retrieve(intent, top_k=top_k)
+        print(f"[pipeline] Retrieved    : {len(documents)} documents (dense/sparse)")
+
+        # ── Step 3: GraphRAG expansion ─────────────────────────────────────
+        if (
+            GRAPH_RAG_ENABLED
+            and intent.query_type == "content_driven"
+            and intent.use_graph
+        ):
+            try:
+                expanded         = _expand_with_graph(intent, documents, top_k=GRAPH_TOP_K)
+                graph_docs_added = len(expanded) - len(documents)
+                documents        = expanded
+                graph_used       = graph_docs_added > 0
+            except Exception as e:
+                print(f"[pipeline] GraphRAG failed (non-fatal): {e}")
 
     print(f"[pipeline] Final docs   : {len(documents)} (graph added: {graph_docs_added})")
 
