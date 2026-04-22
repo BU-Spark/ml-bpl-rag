@@ -4,11 +4,11 @@ graph/graph_retriever.py
 GraphRAG retrieval using semantic entity matching + two-hop traversal.
 
 Flow:
-  1. Embed the raw query text with BGE-M3
+  1. Accept pre-computed query embedding (no re-embedding)
   2. Find semantically similar Entity nodes via vector index
   3. Two-hop traversal: direct entities → CO_OCCURS_WITH → related entities
   4. Find documents mentioning any of those entities
-  5. Return documents not already in dense results
+  5. Return ranked graph results (ark_id + score)
 """
 
 from __future__ import annotations
@@ -19,47 +19,34 @@ from typing import List, Set
 import numpy as np
 
 from graph.neo4j_client import get_session
-from embedding.embedder import embedder
 
 
 @dataclass
 class GraphResult:
     ark_id:           str
-    title:            str
-    source_url:       str
-    institution:      str
-    issue_date:       str
-    year:             int
     matched_entities: List[str]
     graph_score:      float
     hop:              int   # 1 = direct entity match, 2 = co-occurrence hop
 
 
 def retrieve_by_query(
-    query_text: str,
-    exclude_ark_ids: Set[str] = None,
-    top_k: int = 5,
-    entity_top_k: int = 10,      # how many similar entities to find via vector search
-    co_occur_threshold: int = 10,  # min co-occurrence weight for second hop
+    query_embedding: np.ndarray,
+    exclude_ark_ids: Set[str]   = None,
+    top_k: int                  = 5,
+    entity_top_k: int           = 10,
+    co_occur_threshold: int     = 2,
 ) -> List[GraphResult]:
     """
-    Semantic GraphRAG retrieval:
+    Semantic GraphRAG retrieval using a pre-computed query embedding.
 
-    1. Embed raw query text
-    2. Find top-K semantically similar Entity nodes (vector index)
-    3. Two-hop: also find entities that CO_OCCUR with those entities
-    4. Find documents mentioning any entity from either hop
-    5. Return ranked by graph_score, excluding already-retrieved docs
+    1. Find top-K semantically similar Entity nodes (vector index)
+    2. Two-hop: also find entities that CO_OCCUR with those entities
+    3. Find documents mentioning any entity from either hop
+    4. Return ranked by graph_score
     """
     exclude_ark_ids = exclude_ark_ids or set()
+    query_vec       = query_embedding.tolist()
 
-    # ── Step 1: Embed query ────────────────────────────────────────────────
-    query_emb = embedder.embed_one(query_text, is_query=True)
-    query_vec = query_emb.tolist()
-
-    print(f"[graph] Searching for entities similar to: '{query_text[:60]}'")
-
-    # ── Step 2 + 3: Vector search on entities + two-hop traversal ─────────
     cypher = """
         // Step 1: Find semantically similar entities via vector index
         CALL db.index.vector.queryNodes(
@@ -88,21 +75,16 @@ def retrieve_by_query(
 
         WITH
             d,
-            COUNT(DISTINCT e)       AS matched_count,
-            SUM(r.count)            AS total_mentions,
+            COUNT(DISTINCT e)        AS matched_count,
+            SUM(r.count)             AS total_mentions,
             COLLECT(DISTINCT e.name) AS matched_entities,
-            MIN(hop)                AS min_hop,
-            MAX(sim)                AS max_similarity
+            MIN(hop)                 AS min_hop,
+            MAX(sim)                 AS max_similarity
 
         RETURN
-            d.ark_id          AS ark_id,
-            d.title           AS title,
-            d.source_url      AS source_url,
-            d.institution     AS institution,
-            d.issue_date      AS issue_date,
-            d.year            AS year,
+            d.ark_id         AS ark_id,
             matched_entities,
-            min_hop           AS hop,
+            min_hop          AS hop,
             (matched_count * 2.0 + total_mentions * 0.1 + max_similarity) AS graph_score
         ORDER BY graph_score DESC
         LIMIT $top_k
@@ -111,16 +93,15 @@ def retrieve_by_query(
     with get_session() as session:
         result = session.run(
             cypher,
-            query_embedding      = query_vec,
-            entity_top_k         = entity_top_k,
-            co_occur_threshold   = co_occur_threshold,
-            exclude_ark_ids      = list(exclude_ark_ids),
-            top_k                = top_k,
+            query_embedding    = query_vec,
+            entity_top_k       = entity_top_k,
+            co_occur_threshold = co_occur_threshold,
+            exclude_ark_ids    = list(exclude_ark_ids),
+            top_k              = top_k,
         )
         rows = result.data()
 
     if not rows:
-        print("[graph] No additional documents found via graph traversal.")
         return []
 
     hop1 = sum(1 for r in rows if r["hop"] == 1)
@@ -130,11 +111,6 @@ def retrieve_by_query(
     return [
         GraphResult(
             ark_id           = row["ark_id"],
-            title            = row["title"],
-            source_url       = row["source_url"] or "",
-            institution      = row["institution"] or "",
-            issue_date       = row["issue_date"] or "",
-            year             = row["year"],
             matched_entities = row["matched_entities"],
             graph_score      = float(row["graph_score"]),
             hop              = row["hop"],

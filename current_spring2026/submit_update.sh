@@ -17,7 +17,7 @@ module load miniconda
 conda activate spark-rag
 
 # Change to project root — critical for module imports
-cd /projectnb/sparkgrp/ml-bpl-rag-data-subset/ml-bpl-rag-spring-2026/ml-bpl-rag/current_spring2026
+cd /projectnb/sparkgrp/ml-bpl-rag-data-subset/temp/ml-bpl-rag/current_spring2026
 
 echo "Starting at $(date)"
 

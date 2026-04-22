@@ -12,7 +12,7 @@ source /etc/profile.d/modules.sh
 module load miniconda
 conda activate spark-rag
 
-cd /projectnb/sparkgrp/ml-bpl-rag-data-subset/ml-bpl-rag-spring-2026/ml-bpl-rag/current_spring2026
+cd /projectnb/sparkgrp/ml-bpl-rag-data-subset/temp/ml-bpl-rag/current_spring2026
 
 echo "Starting graph build at $(date)"
 echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader)"
@@ -33,7 +33,7 @@ source /etc/profile.d/modules.sh
 module load miniconda
 conda activate spark-rag
 
-cd /projectnb/sparkgrp/ml-bpl-rag-data-subset/ml-bpl-rag-spring-2026/ml-bpl-rag/current_spring2026
+cd /projectnb/sparkgrp/ml-bpl-rag-data-subset/temp/ml-bpl-rag/current_spring2026
 
 echo "Starting graph build at $(date)"
 echo "GPU: $(nvidia-smi --query-gpu=name --format=csv,noheader)"

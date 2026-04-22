@@ -1,23 +1,23 @@
 """
 retrieval/retriever.py
 
-Hybrid retrieval — always runs both paths and merges via RRF:
-  A) Dense + sparse search on chunks (full-text)
-  B) Metadata embedding search on documents
-  C) RRF fusion of all results
-  D) Final rerank by combined score
-
-No more content_driven / metadata_driven routing.
-Both paths always run. Reranker decides final order.
+Hybrid retrieval — three parallel paths fused via RRF:
+  A) Dense search on chunks (full-text)
+  B) Sparse re-rank on dense candidates
+  C) Graph retrieval via Neo4j (entity + co-occurrence)
+  D) Metadata embedding search on documents
+  E) RRF fusion of all result lists
+  F) Final rerank by combined score
 """
 
 from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from typing import List
+from typing import List, Tuple
 
 import numpy as np
+import time
 
 from config import (
     TOP_K_DENSE,
@@ -27,6 +27,8 @@ from config import (
     CONTENT_WEIGHT,
     METADATA_WEIGHT,
     MIN_RELEVANCE_SCORE,
+    GRAPH_RAG_ENABLED,
+    GRAPH_TOP_K,
 )
 from database.schema import get_conn, get_cursor
 from embedding.embedder import embedder
@@ -86,33 +88,37 @@ def _dense_search(
     conn,
     top_k: int = TOP_K_DENSE,
 ) -> List[dict]:
-    """HNSW vector search on chunk embeddings."""
+    """HNSW vector search on chunk embeddings with post-filter date constraints."""
     emb_list = query_embedding.tolist()
 
-    # Build exists clause correctly depending on whether where_clause exists
+    # Build date filter for application AFTER HNSW search
+    date_filter = ""
     if where_clause:
-        exists_clause = f"{where_clause} AND EXISTS (SELECT 1 FROM chunks c WHERE c.document_id = d.id)"
-    else:
-        exists_clause = "WHERE EXISTS (SELECT 1 FROM chunks c WHERE c.document_id = d.id)"
-
+        # Strip "WHERE " and keep the rest
+        date_filter = "WHERE " + where_clause.replace("WHERE ", "")
+    
     sql = f"""
-        WITH filtered_docs AS (
-            SELECT d.id AS document_id, d.ark_id
-            FROM documents d
-            {exists_clause}
-        ),
-        nearest_chunks AS (
-            SELECT DISTINCT ON (c.document_id)
+        WITH top_chunks AS (
+            -- Step 1: HNSW search unrestricted - fast
+            SELECT
                 c.document_id,
-                c.id             AS chunk_id,
+                c.id           AS chunk_id,
                 c.chunk_index,
                 c.chunk_text,
                 c.sparse_token_ids,
                 c.sparse_weights,
-                1 - (c.text_embedding <=> %s::vector) AS dense_score
+                (c.text_embedding <=> %s::vector) AS distance
             FROM chunks c
-            INNER JOIN filtered_docs fd ON c.document_id = fd.document_id
-            ORDER BY c.document_id, c.text_embedding <=> %s::vector
+            ORDER BY c.text_embedding <=> %s::vector
+            LIMIT %s
+        ),
+        nearest_chunks AS (
+            -- Step 2: Deduplicate to best chunk per document
+            SELECT DISTINCT ON (document_id)
+                *,
+                1 - distance AS dense_score
+            FROM top_chunks
+            ORDER BY document_id, distance
         )
         SELECT
             nc.*,
@@ -124,16 +130,16 @@ def _dense_search(
             d.sparse_weights   AS doc_sparse_weights
         FROM nearest_chunks nc
         JOIN documents d ON d.id = nc.document_id
+        {date_filter}
         ORDER BY nc.dense_score DESC
-        LIMIT %s
     """
 
-    params = where_params + [emb_list, emb_list, top_k]
+    # HNSW fetches top_k * 3 chunks, then date filter is applied after join
+    params = [emb_list, emb_list, top_k * 3] + where_params
 
     with get_cursor(conn) as cur:
         cur.execute(sql, params)
         return cur.fetchall()
-
 
 # ── Sparse re-ranking on dense candidates ────────────────────────────────────
 
@@ -172,11 +178,7 @@ def _metadata_search(
     conn,
     top_k: int = TOP_K_DENSE,
 ) -> List[dict]:
-    """
-    Search all documents by metadata embedding similarity.
-    Includes both full-text documents and metadata-only collection records.
-    Always runs regardless of query type.
-    """
+    """Search all documents by metadata embedding similarity."""
     emb_list = query_embedding.tolist()
 
     sql = f"""
@@ -210,6 +212,80 @@ def _metadata_search(
         return cur.fetchall()
 
 
+# ── Graph retrieval ───────────────────────────────────────────────────────────
+
+def _graph_search(
+    query_embedding: np.ndarray,
+    exclude_ark_ids: set,
+    conn,
+    top_k: int = GRAPH_TOP_K,
+) -> List[dict]:
+    """
+    Graph retrieval via Neo4j entity matching + two-hop traversal.
+    Fetches best chunk per document by embedding similarity from PostgreSQL.
+    Returns results in the same dict format as dense/metadata search for RRF.
+    """
+    from graph.graph_retriever import retrieve_by_query
+
+    graph_results = retrieve_by_query(
+        query_embedding = query_embedding,
+        exclude_ark_ids = exclude_ark_ids,
+        top_k           = top_k,
+    )
+
+    if not graph_results:
+        print("[retriever] Graph returned no results")
+        return []
+
+    # Fetch full document details + best chunk by embedding similarity
+    graph_ark_ids = [r.ark_id for r in graph_results]
+    emb_list      = query_embedding.tolist()
+
+    sql = """
+        SELECT
+            d.id AS document_id,
+            d.ark_id,
+            d.title,
+            d.source_url,
+            d.institution,
+            d.issue_date,
+            d.year,
+            d.topics,
+            d.geography,
+            d.metadata_embedding,
+            d.exemplary_image_id,
+            d.sparse_token_ids AS doc_sparse_token_ids,
+            d.sparse_weights   AS doc_sparse_weights,
+            c.chunk_text,
+            c.chunk_index
+        FROM documents d
+        LEFT JOIN LATERAL (
+            SELECT chunk_text, chunk_index
+            FROM chunks
+            WHERE document_id = d.id
+            ORDER BY text_embedding <=> %s::vector
+            LIMIT 1
+        ) c ON true
+        WHERE d.ark_id = ANY(%s)
+    """
+
+    with get_cursor(conn) as cur:
+        cur.execute(sql, (emb_list, graph_ark_ids))
+        rows = {row["ark_id"]: row for row in cur.fetchall()}
+
+    # Build result dicts in same format as dense/metadata results
+    results = []
+    for graph_result in graph_results:
+        row = rows.get(graph_result.ark_id)
+        if not row:
+            continue
+        result = dict(row)
+        result["graph_score"] = graph_result.graph_score
+        results.append(result)
+
+    return results
+
+
 # ── RRF fusion ────────────────────────────────────────────────────────────────
 
 def _reciprocal_rank_fusion(
@@ -219,11 +295,14 @@ def _reciprocal_rank_fusion(
     """
     Merge any number of ranked lists using RRF.
     Each list contributes 1/(k + rank) to the score.
+    Empty lists are skipped silently.
     """
     scores: dict[str, float] = {}
     rows:   dict[str, dict]  = {}
 
     for result_list in result_lists:
+        if not result_list:
+            continue
         for rank, row in enumerate(result_list, start=1):
             aid = row["ark_id"]
             scores[aid] = scores.get(aid, 0.0) + 1.0 / (k + rank)
@@ -239,11 +318,10 @@ def _reciprocal_rank_fusion(
 def _rerank(
     rrf_results:     List[tuple[str, float, dict]],
     query_embedding: np.ndarray,
-    top_k:           int   = TOP_K_FINAL,
+    top_k:           int = TOP_K_FINAL,
 ) -> List[RetrievedDocument]:
     """
     Final rerank blending RRF score with metadata embedding similarity.
-    No content/metadata weight split — uses fixed weights.
     """
     if not rrf_results:
         return []
@@ -261,7 +339,6 @@ def _rerank(
         else:
             meta_sim = 0.0
 
-        # Fixed blend: RRF captures retrieval signal, metadata sim adds document-level signal
         final_score = CONTENT_WEIGHT * rrf_score + METADATA_WEIGHT * meta_sim
 
         final.append(RetrievedDocument(
@@ -289,16 +366,20 @@ def _rerank(
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
-def retrieve(intent: QueryIntent, top_k: int = TOP_K_FINAL) -> List[RetrievedDocument]:
+def retrieve(intent: QueryIntent, top_k: int = TOP_K_FINAL) -> Tuple[List[RetrievedDocument], np.ndarray]:
     """
     Full hybrid retrieval:
       1. Build date filter from intent
       2. Embed query (dense + sparse in one pass)
       3. Dense chunk search (HNSW)
       4. Sparse re-rank on dense candidates
-      5. Metadata document search (always runs)
-      6. RRF fusion of all three result lists
-      7. Final rerank and threshold filter
+      5. Metadata document search
+      6. Graph retrieval via Neo4j (if enabled)
+      7. RRF fusion of all result lists
+      8. Final rerank and threshold filter
+
+    Returns (documents, query_embedding) — embedding returned to avoid
+    re-computation in downstream callers.
     """
     where_clause, where_params = _build_filter_clause(intent)
 
@@ -307,25 +388,52 @@ def retrieve(intent: QueryIntent, top_k: int = TOP_K_FINAL) -> List[RetrievedDoc
     query_sparse = query_output["sparse"]
 
     with get_conn() as conn:
-        # Path A: chunk-level search
+        # Path A: chunk-level dense search
+        t = time.monotonic()
+        print("[retrieve] starting dense", flush=True)
+        print(f"[retrieve] where_clause: '{where_clause}'", flush=True)
+        print(f"[retrieve] where_params: {where_params}", flush=True)
+        dense_results = _dense_search(query_emb, where_clause, where_params, conn)
         dense_results  = _dense_search(
             query_emb, where_clause, where_params, conn
         )
+        print(f"[timing] dense: {time.monotonic()-t:.2f}s", flush=True)
+        # Path B: sparse re-rank on dense candidates
+        t = time.monotonic()
+        print("[retrieve] starting sparse", flush=True)
         sparse_results = _sparse_search(
             query_sparse, dense_results
         )
-
-        # Path B: document-level metadata search (always runs)
+       
+        # Path C: document-level metadata search
+        t = time.monotonic()
+        print("[retrieve] starting meta", flush=True)
         meta_results = _metadata_search(
             query_emb, where_clause, where_params, conn,
             top_k=TOP_K_DENSE,
         )
+        print(f"[timing] meta: {time.monotonic()-t:.2f}s", flush=True)
+        # Path D: graph retrieval
+        graph_results = []
+        if GRAPH_RAG_ENABLED:
+            existing_ark_ids = {r["ark_id"] for r in dense_results + meta_results}
+            t = time.monotonic()
+            print("[retrieve] starting graph", flush=True)
+            graph_results = _graph_search(
+                query_emb,
+                exclude_ark_ids = existing_ark_ids,
+                conn            = conn,
+                top_k           = GRAPH_TOP_K,
+            )
+            print(f"[timing] graph: {time.monotonic()-t:.2f}s", flush=True)
 
-    # Merge all three via RRF
+
+    # Fuse all paths via RRF
     rrf_results = _reciprocal_rank_fusion(
         dense_results,
         sparse_results,
         meta_results,
+        graph_results,
     )
 
-    return _rerank(rrf_results, query_emb, top_k=top_k)
+    return _rerank(rrf_results, query_emb, top_k=top_k), query_emb

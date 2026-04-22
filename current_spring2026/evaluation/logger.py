@@ -31,7 +31,6 @@ CSV_HEADERS = [
     "queried_at",
     "raw_query",
     "rewritten_query",
-    "query_type",
     "year_min",
     "year_max",
     "geography",
@@ -70,7 +69,7 @@ def log_query(
     filters_json    = json.dumps({
         "year_min":  intent.date_filter.year_min,
         "year_max":  intent.date_filter.year_max,
-        "doc_types": intent.doc_types,
+        # "doc_types": intent.doc_types,
     })
 
     # ── 1. Write to PostgreSQL ──────────────────────────────────────────────
@@ -80,7 +79,7 @@ def log_query(
                 cur.execute(
                     """
                     INSERT INTO query_logs (
-                        queried_at, raw_query, rewritten_query, query_type,
+                        queried_at, raw_query, rewritten_query,
                         filters, retrieved_ark_ids, response,
                         relevancy_score, faithfulness_score, latency_ms
                     ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
@@ -89,7 +88,6 @@ def log_query(
                         queried_at,
                         intent.raw_query,
                         intent.rewritten_query,
-                        intent.query_type,
                         filters_json,
                         retrieved_arks,
                         generation_result.response,
@@ -108,7 +106,6 @@ def log_query(
             "queried_at":        queried_at,
             "raw_query":         intent.raw_query,
             "rewritten_query":   intent.rewritten_query,
-            "query_type":        intent.query_type,
             "year_min":          intent.date_filter.year_min,
             "year_max":          intent.date_filter.year_max,
             "geography":         "",

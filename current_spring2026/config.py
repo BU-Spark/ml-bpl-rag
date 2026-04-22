@@ -15,8 +15,8 @@ OPENAI_CHAT_MODEL     = "gpt-4o"
 
 # ── BGE Embedding ─────────────────────────────────────────────────────────────
 BGE_MODEL_NAME = "BAAI/bge-m3"
-BGE_DEVICE            = "cpu"                       # V100 CC 7.0 incompatible with installed PyTorch (CC >=7.5)
-BGE_BATCH_SIZE        = 64                          # lower if OOM
+BGE_DEVICE            = "cuda"                       # V100 CC 7.0 incompatible with installed PyTorch (CC >=7.5)
+BGE_BATCH_SIZE        = 128                          # lower if OOM
 
 # ── Neo4j / GraphRAG ──────────────────────────────────────────────────────────
 NEO4J_URI      = os.getenv("NEO4J_URI", "")
@@ -25,7 +25,7 @@ NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
 
 # GraphRAG is triggered only for content_driven queries
 GRAPH_RAG_ENABLED        = True
-GRAPH_TOP_K              = 5    # max additional docs from graph
+GRAPH_TOP_K              = 100    # max additional docs from graph
 GRAPH_MIN_ENTITY_MATCHES = 1    # min query entities a doc must match
 
 # ── PostgreSQL / pgVector ─────────────────────────────────────────────────────

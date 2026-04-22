@@ -4,11 +4,9 @@ retrieval/query_understanding.py
 Uses GPT-4o to:
   1. Rewrite the query for better embedding
   2. Extract hard filters (date range)
-  3. Decide if GraphRAG should be triggered
 
-Classification into content_driven/metadata_driven removed.
-Retrieval always runs both chunk search and metadata search.
-Reranking handles the final ordering.
+GraphRAG is always enabled. No classification into content_driven/metadata_driven.
+Retrieval always runs all paths: chunk search, metadata search, and graph.
 """
 
 from __future__ import annotations
@@ -36,13 +34,6 @@ class QueryIntent:
     raw_query:       str        = ""
     rewritten_query: str        = ""
     date_filter:     DateFilter = field(default_factory=DateFilter)
-    doc_types:       list[str]  = field(default_factory=list)
-    use_graph:       bool       = False
-
-    # Keep for backward compatibility but no longer used for routing
-    query_type:      str   = "hybrid"
-    content_weight:  float = 0.75
-    metadata_weight: float = 0.25
 
 
 # ── System prompt ─────────────────────────────────────────────────────────────
@@ -57,9 +48,7 @@ Given a user query, return a JSON object with exactly these fields:
 {
   "rewritten_query": "<clean semantic version of the query for embedding>",
   "year_min": <integer or null>,
-  "year_max": <integer or null>,
-  "doc_types": ["newspaper" | "photograph" | "map" | "manuscript" | "book" | "postcard"],
-  "use_graph": <true or false>
+  "year_max": <integer or null>
 }
 
 Rules for rewritten_query:
@@ -74,14 +63,6 @@ Rules for year_min / year_max:
 - "early 20th century" = year_min 1900, year_max 1930
 - Otherwise null
 
-Rules for use_graph:
-- true only when query asks about specific named people, organizations, or events
-  where cross-document connections matter
-- Examples needing graph: "who was involved in the 1900 labor strike",
-  "what organizations covered the molasses disaster", "find everything about Mayor Fitzgerald"
-- Examples not needing graph: "what happened in 1900", "Boston news stories",
-  "show me newspapers from June 1900", "find photographs of Greece"
-
 Return ONLY valid JSON. No markdown, no explanation.
 """.strip()
 
@@ -89,6 +70,10 @@ Return ONLY valid JSON. No markdown, no explanation.
 # ── Classifier ────────────────────────────────────────────────────────────────
 
 def classify_query(raw_query: str) -> QueryIntent:
+    """
+    Rewrite query and extract date filters.
+    Name kept as classify_query for backward compatibility.
+    """
     response = client.chat.completions.create(
         model       = OPENAI_CHAT_MODEL,
         temperature = 0,
@@ -101,7 +86,13 @@ def classify_query(raw_query: str) -> QueryIntent:
 
     if not response.choices:
         raise ValueError(f"OpenAI returned empty choices (finish_reason may indicate content filter)")
-    raw_json = response.choices[0].message.content.strip()
+    
+    raw_json = response.choices[0].message.content
+    if raw_json is None:
+        raise ValueError("OpenAI returned null content")
+    
+    raw_json = raw_json.strip()
+    
     if raw_json.startswith("```"):
         raw_json = raw_json.split("```")[1]
         if raw_json.startswith("json"):
@@ -120,11 +111,6 @@ def classify_query(raw_query: str) -> QueryIntent:
             year_min = parsed.get("year_min"),
             year_max = parsed.get("year_max"),
         ),
-        doc_types       = parsed.get("doc_types", []),
-        use_graph       = parsed.get("use_graph", False),
-        query_type      = "hybrid",    # always hybrid now
-        content_weight  = 0.75,
-        metadata_weight = 0.25,
     )
 
 
@@ -140,4 +126,3 @@ if __name__ == "__main__":
         print(f"\nQuery     : {q}")
         print(f"Rewritten : {intent.rewritten_query}")
         print(f"Date      : {intent.date_filter}")
-        print(f"use_graph : {intent.use_graph}")

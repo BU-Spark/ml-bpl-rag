@@ -23,12 +23,17 @@ import sys
 from pathlib import Path
 from typing import List
 
+import numpy as np
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from retrieval.query_understanding import classify_query
 from retrieval.retriever import retrieve
 from graph.graph_retriever import retrieve_by_query
+from embedding.embedder import embedder
 from config import GRAPH_TOP_K
+
+
 
 K_VALUES = [5, 10, 20, 30, 50]
 MAX_K    = max(K_VALUES)
@@ -65,10 +70,10 @@ def compute_metrics(retrieved: List[str], ground_truths: List[str]) -> dict:
 
 # ── GraphRAG-only retrieval ───────────────────────────────────────────────────
 
-def retrieve_graph_only(intent, top_k: int = MAX_K) -> List[str]:
+def retrieve_graph_only(query_emb: np.ndarray, top_k: int = MAX_K) -> List[str]:
     """Run GraphRAG retrieval only — no dense or sparse search."""
     graph_results = retrieve_by_query(
-        query_text      = intent.rewritten_query,
+        query_embedding = query_emb,
         exclude_ark_ids = set(),
         top_k           = top_k,
     )
@@ -125,11 +130,13 @@ def main():
 
         try:
             # ── System 1: Dense + Sparse ───────────────────────────────────
-            dense_docs = retrieve(intent, top_k=MAX_K)
-            dense_ids  = [d.ark_id for d in dense_docs]
+            # retrieve() returns (documents, query_emb) — unpack both
+            dense_docs, query_emb = retrieve(intent, top_k=MAX_K)
+            dense_ids = [d.ark_id for d in dense_docs]
 
             # ── System 2: GraphRAG only ────────────────────────────────────
-            graph_ids = retrieve_graph_only(intent, top_k=MAX_K)
+            # Reuse query_emb from dense retrieval — no re-embedding
+            graph_ids = retrieve_graph_only(query_emb, top_k=MAX_K)
 
             # ── Compute metrics ────────────────────────────────────────────
             dense_metrics = compute_metrics(dense_ids, ground_truths)
@@ -207,10 +214,10 @@ def main():
         if not subset:
             return {}
         return {
-            f"hit@{k}":       {"dense": avg(f"dense_hit_{k}", subset),  "graph": avg(f"graph_hit_{k}", subset),  "delta": round(avg(f"graph_hit_{k}", subset)  - avg(f"dense_hit_{k}", subset), 4)}
+            f"hit@{k}":       {"dense": avg(f"dense_hit_{k}", subset),       "graph": avg(f"graph_hit_{k}", subset),       "delta": round(avg(f"graph_hit_{k}", subset)       - avg(f"dense_hit_{k}", subset), 4)}
             for k in K_VALUES
         } | {
-            f"recall@{k}":    {"dense": avg(f"dense_recall_{k}", subset), "graph": avg(f"graph_recall_{k}", subset), "delta": round(avg(f"graph_recall_{k}", subset) - avg(f"dense_recall_{k}", subset), 4)}
+            f"recall@{k}":    {"dense": avg(f"dense_recall_{k}", subset),    "graph": avg(f"graph_recall_{k}", subset),    "delta": round(avg(f"graph_recall_{k}", subset)    - avg(f"dense_recall_{k}", subset), 4)}
             for k in K_VALUES
         } | {
             f"precision@{k}": {"dense": avg(f"dense_precision_{k}", subset), "graph": avg(f"graph_precision_{k}", subset), "delta": round(avg(f"graph_precision_{k}", subset) - avg(f"dense_precision_{k}", subset), 4)}
@@ -222,17 +229,17 @@ def main():
 
     output = {
         "metadata": {
-            "total_queries":       len(rows),
-            "valid_queries":       len(valid),
-            "failed_queries":      len(errors),
-            "use_graph_true":      len(graph_queries),
-            "use_graph_false":     len(no_graph_queries),
-            "k_values":            K_VALUES,
+            "total_queries":   len(rows),
+            "valid_queries":   len(valid),
+            "failed_queries":  len(errors),
+            "use_graph_true":  len(graph_queries),
+            "use_graph_false": len(no_graph_queries),
+            "k_values":        K_VALUES,
         },
         "summary": {
-            "all_queries":        summary_for(valid),
-            "use_graph_true":     summary_for(graph_queries),
-            "use_graph_false":    summary_for(no_graph_queries),
+            "all_queries":     summary_for(valid),
+            "use_graph_true":  summary_for(graph_queries),
+            "use_graph_false": summary_for(no_graph_queries),
         },
         "results": rows,
     }

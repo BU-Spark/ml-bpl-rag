@@ -138,7 +138,6 @@ CREATE TABLE IF NOT EXISTS query_logs (
 
     raw_query           TEXT,
     rewritten_query     TEXT,
-    query_type          TEXT,
 
     filters             JSONB,
     retrieved_ark_ids   TEXT[],

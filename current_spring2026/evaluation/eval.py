@@ -110,7 +110,6 @@ def main():
             row = {
                 "question":          question,
                 "question_type":     qtype,
-                "classified_as":     result.intent.query_type,
                 "rewritten_query":   result.intent.rewritten_query,
                 "num_ground_truths": len(ground_truths),
                 "num_retrieved":     len(retrieved_ids),

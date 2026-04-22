@@ -27,7 +27,7 @@ import time
 from pathlib import Path
 from typing import List, Optional
 
-from openai import AsyncOpenAI
+from openai import AsyncOpenAI, APITimeoutError, RateLimitError, APIConnectionError, APIStatusError
 
 from config import OPENAI_API_KEY
 from database.schema import get_conn, get_cursor
@@ -209,7 +209,10 @@ async def extract_entities_for_doc(
     async with semaphore:
         for attempt in range(max_retries):
             try:
-                response = await client.chat.completions.create(
+                # Use timeout-enabled client
+                timeout_client = client.with_options(timeout=30.0)
+                
+                response = await timeout_client.chat.completions.create(
                     model       = "gpt-4o-mini",
                     temperature = 0,
                     max_tokens  = 500,
@@ -219,7 +222,17 @@ async def extract_entities_for_doc(
                     ],
                 )
 
-                raw = response.choices[0].message.content.strip()
+                # Safely check response structure
+                if not response.choices or len(response.choices) == 0:
+                    print(f"  Empty response for {doc['ark_id']}, skipping")
+                    return None
+
+                raw = response.choices[0].message.content
+                if raw is None:
+                    print(f"  Null content for {doc['ark_id']}, skipping")
+                    return None
+                
+                raw = raw.strip()
 
                 # Strip markdown fences if present
                 if raw.startswith("```"):
@@ -260,19 +273,42 @@ async def extract_entities_for_doc(
                     "entities":    clean_entities,
                 }
 
-            except json.JSONDecodeError:
+            except APITimeoutError:
+                wait = 2 ** (attempt + 1)
+                print(f"  Timeout for {doc['ark_id']}, waiting {wait}s... (attempt {attempt+1}/{max_retries})")
+                await asyncio.sleep(wait)
+                continue
+
+            except RateLimitError as e:
+                wait = 2 ** (attempt + 2)
+                print(f"  Rate limited for {doc['ark_id']}, waiting {wait}s... (attempt {attempt+1}/{max_retries})")
+                await asyncio.sleep(wait)
+                continue
+
+            except APIConnectionError as e:
+                wait = 2 ** (attempt + 1)
+                print(f"  Connection error for {doc['ark_id']}: {e}, waiting {wait}s... (attempt {attempt+1}/{max_retries})")
+                await asyncio.sleep(wait)
+                continue
+
+            except APIStatusError as e:
+                if e.status_code == 429:  # Rate limit
+                    wait = 2 ** (attempt + 2)
+                    print(f"  HTTP 429 for {doc['ark_id']}, waiting {wait}s... (attempt {attempt+1}/{max_retries})")
+                    await asyncio.sleep(wait)
+                    continue
+                else:
+                    print(f"  API error {e.status_code} for {doc['ark_id']}: {e}")
+                    return None
+
+            except json.JSONDecodeError as e:
+                print(f"  JSON decode error for {doc['ark_id']}: {e}")
                 await asyncio.sleep(2 ** attempt)
                 continue
 
             except Exception as e:
-                error_str = str(e)
-                if "rate_limit" in error_str.lower() or "429" in error_str:
-                    wait = 2 ** (attempt + 2)
-                    print(f"  Rate limited, waiting {wait}s...")
-                    await asyncio.sleep(wait)
-                else:
-                    print(f"  Error for {doc['ark_id']}: {e}")
-                    return None
+                print(f"  Unexpected error for {doc['ark_id']}: {e}")
+                return None
 
     return None
 
@@ -301,9 +337,15 @@ async def extract_async(
 
     output_file = OUTPUT_DIR / f"entities_{suffix}.jsonl"
 
+    # Compute mode string to avoid nested f-strings
+    if metadata_only:
+        mode_str = "metadata-only"
+    else:
+        mode_str = f"full-text (year={year or 'all'})"
+
     print(f"\n{'='*60}")
     print(f"BPL Graph — Entity Extraction (GPT-4o-mini)")
-    print(f"  Mode        : {'metadata-only' if metadata_only else f'full-text (year={year or \"all\"})'}")
+    print(f"  Mode        : {mode_str}")
     print(f"  Concurrency : {concurrency}")
     print(f"  Output      : {output_file}")
     print(f"{'='*60}\n")
