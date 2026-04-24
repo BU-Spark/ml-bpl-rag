@@ -31,35 +31,53 @@ class PipelineResult:
 
 # ── Main pipeline ─────────────────────────────────────────────────────────────
 
-def run_query(raw_query: str, top_k: int = TOP_K_FINAL) -> PipelineResult:
-    """
-    End-to-end query pipeline:
-      1. Classify and rewrite query (GPT-4o)
-      2. Retrieve via dense + sparse + graph + metadata (all paths, RRF fused)
-      3. Generate cited response (GPT-4o)
-      4. Log event
-    """
+def run_query(raw_query: str, top_k: int = TOP_K_FINAL, skip_generation: bool = False, prebuilt_intent: QueryIntent = None) -> PipelineResult:
+
+
+
     start = time.monotonic()
 
-    # ── Step 1: Classify ───────────────────────────────────────────────────
-    intent = classify_query(raw_query)
-    # print(f"[pipeline] Query type   : {intent.query_type}")
-    print(f"[pipeline] Rewritten    : {intent.rewritten_query}")
+    # ── Step 1: Classify (skip if cached intent provided) ─────────────────
+    if prebuilt_intent is not None:
+        intent = prebuilt_intent
+        print(f"[pipeline] Rewritten    : {intent.rewritten_query} (cached)")
+    else:
+        intent = classify_query(raw_query)
+        print(f"[pipeline] Rewritten    : {intent.rewritten_query}")
+    
+    if not intent.is_relevant:
+        generation = GenerationResult(
+            response      = "This doesn't appear to be something the Digital Commonwealth collection can help with. The collection focuses on historical materials from Massachusetts institutions. Try searching for Boston history, local landmarks, historical events, or Massachusetts figures.",
+            source_titles = [],
+            source_urls   = [],
+        )
+        latency_ms = int((time.monotonic() - start) * 1000)
+        log_query(intent=intent, retrieved_docs=[], generation_result=generation, latency_ms=latency_ms)
+        return PipelineResult(intent=intent, documents=[], generation=generation, latency_ms=latency_ms)
+# ─────────────────────────────────────────────────────────────────────
     print(f"[pipeline] Date filter  : {intent.date_filter}")
 
-    # ── Step 2: Retrieve (all paths fused via RRF) ─────────────────────────
+
+    # ── Step 2: Retrieve ───────────────────────────────────────────────────
     documents, _ = retrieve(intent, top_k=top_k)
     print(f"[pipeline] Retrieved    : {len(documents)} documents")
 
-    # ── Step 3: Generate ───────────────────────────────────────────────────
-    if not documents:
+    # ── Step 3: Generate (skippable) ──────────────────────────────────────
+    if skip_generation:
+        generation = GenerationResult(
+            response      = "",
+            source_titles = [],
+            source_urls   = [],
+        )
+    elif not documents:
         generation = GenerationResult(
             response      = "No relevant materials were found for your query in the Digital Commonwealth collection. Try rephrasing or using a more specific historical topic.",
             source_titles = [],
             source_urls   = [],
         )
     else:
-        generation = generate(raw_query, documents)
+        top_docs_for_generation = documents[:10]
+        generation = generate(raw_query, top_docs_for_generation)
 
     latency_ms = int((time.monotonic() - start) * 1000)
     print(f"[pipeline] Latency      : {latency_ms}ms")
@@ -78,7 +96,6 @@ def run_query(raw_query: str, top_k: int = TOP_K_FINAL) -> PipelineResult:
         generation = generation,
         latency_ms = latency_ms,
     )
-
 
 def print_result(result: PipelineResult):
     print("\n" + "=" * 60)

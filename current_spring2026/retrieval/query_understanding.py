@@ -28,11 +28,19 @@ class DateFilter:
     year_min: Optional[int] = None
     year_max: Optional[int] = None
 
+# @dataclass
+# class QueryIntent:
+#     raw_query:        str        = ""
+#     rewritten_query:  str        = ""
+#     keyword_query:    str        = ""      # ← new
+#     query_type:       str        = ""      # ← new
+#     date_filter:      DateFilter = field(default_factory=DateFilter)
 
 @dataclass
 class QueryIntent:
     raw_query:       str        = ""
     rewritten_query: str        = ""
+    is_relevant:     bool       = True   # ← add this
     date_filter:     DateFilter = field(default_factory=DateFilter)
 
 
@@ -62,6 +70,13 @@ Rules for year_min / year_max:
 - "1900s" = year_min 1900, year_max 1909
 - "early 20th century" = year_min 1900, year_max 1930
 - Otherwise null
+
+Rules for is_relevant:
+- Look at the Digital Commonwealth archive description above
+- true if the archive could plausibly contain materials related to this query
+- false if it is impossible for a historical Massachusetts library archive 
+  to contain materials that would answer this query
+- When in doubt, return true
 
 Return ONLY valid JSON. No markdown, no explanation.
 """.strip()
@@ -107,11 +122,22 @@ def classify_query(raw_query: str) -> QueryIntent:
     return QueryIntent(
         raw_query       = raw_query,
         rewritten_query = parsed.get("rewritten_query", raw_query),
+        is_relevant     = parsed.get("is_relevant", True),
         date_filter     = DateFilter(
             year_min = parsed.get("year_min"),
             year_max = parsed.get("year_max"),
         ),
     )
+    # return QueryIntent(
+    #     raw_query       = raw_query,
+    #     rewritten_query = parsed.get("rewritten_query", raw_query),
+    #     keyword_query   = parsed.get("keyword_query", ""),
+    #     query_type      = parsed.get("query_type", "metadata"),
+    #     date_filter     = DateFilter(
+    #         year_min = parsed.get("year_min"),
+    #         year_max = parsed.get("year_max"),
+    #     ),
+    # )
 
 
 if __name__ == "__main__":

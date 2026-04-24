@@ -60,23 +60,24 @@ class RetrievedDocument:
 
 def _build_filter_clause(intent: QueryIntent) -> tuple[str, list]:
     """Build SQL WHERE clause from date filters only."""
-    conditions = []
-    params     = []
+    # conditions = []
+    # params     = []
 
-    if intent.date_filter.year_min is not None:
-        conditions.append(
-            "(EXTRACT(YEAR FROM d.date_start) >= %s OR d.date_start IS NULL)"
-        )
-        params.append(float(intent.date_filter.year_min))
+    # if intent.date_filter.year_min is not None:
+    #     conditions.append(
+    #         "(EXTRACT(YEAR FROM d.date_start) >= %s OR d.date_start IS NULL)"
+    #     )
+    #     params.append(float(intent.date_filter.year_min))
 
-    if intent.date_filter.year_max is not None:
-        conditions.append(
-            "(EXTRACT(YEAR FROM d.date_start) <= %s OR d.date_start IS NULL)"
-        )
-        params.append(float(intent.date_filter.year_max))
+    # if intent.date_filter.year_max is not None:
+    #     conditions.append(
+    #         "(EXTRACT(YEAR FROM d.date_start) <= %s OR d.date_start IS NULL)"
+    #     )
+    #     params.append(float(intent.date_filter.year_max))
 
-    where = "WHERE " + " AND ".join(conditions) if conditions else ""
-    return where, params
+    # where = "WHERE " + " AND ".join(conditions) if conditions else ""
+    # return where, params
+    return "", []
 
 
 # ── Dense chunk search ────────────────────────────────────────────────────────
@@ -126,6 +127,7 @@ def _dense_search(
             d.issue_date, d.year, d.topics, d.geography,
             d.metadata_embedding,
             d.exemplary_image_id,
+            d.char_count,  
             d.sparse_token_ids AS doc_sparse_token_ids,
             d.sparse_weights   AS doc_sparse_weights
         FROM nearest_chunks nc
@@ -193,6 +195,7 @@ def _metadata_search(
             d.topics,
             d.geography,
             d.metadata_embedding,
+            d.char_count,  
             d.exemplary_image_id,
             d.sparse_token_ids AS doc_sparse_token_ids,
             d.sparse_weights   AS doc_sparse_weights,
@@ -315,9 +318,11 @@ def _reciprocal_rank_fusion(
 
 # ── Final rerank ──────────────────────────────────────────────────────────────
 
+
 def _rerank(
     rrf_results:     List[tuple[str, float, dict]],
     query_embedding: np.ndarray,
+    intent:          QueryIntent,                   # ← add this
     top_k:           int = TOP_K_FINAL,
 ) -> List[RetrievedDocument]:
     """
@@ -339,7 +344,19 @@ def _rerank(
         else:
             meta_sim = 0.0
 
-        final_score = CONTENT_WEIGHT * rrf_score + METADATA_WEIGHT * meta_sim
+        # ── Soft date penalty ─────────────────────────────────────────────
+        date_penalty = 0.0
+        if intent.date_filter.year_min is not None or intent.date_filter.year_max is not None:
+            doc_years = row.get("year") or []
+            doc_year  = doc_years[0] if doc_years else None
+            if doc_year:
+                if intent.date_filter.year_max and doc_year > intent.date_filter.year_max:
+                    date_penalty = min((doc_year - intent.date_filter.year_max) / 50.0, 0.3)
+                elif intent.date_filter.year_min and doc_year < intent.date_filter.year_min:
+                    date_penalty = min((intent.date_filter.year_min - doc_year) / 50.0, 0.3)
+        # ─────────────────────────────────────────────────────────────────
+
+        final_score = (CONTENT_WEIGHT * rrf_score + METADATA_WEIGHT * meta_sim) * (1 - date_penalty)
 
         final.append(RetrievedDocument(
             ark_id             = ark_id,
@@ -382,6 +399,12 @@ def retrieve(intent: QueryIntent, top_k: int = TOP_K_FINAL) -> Tuple[List[Retrie
     re-computation in downstream callers.
     """
     where_clause, where_params = _build_filter_clause(intent)
+    # if intent.query_type == "fulltext":
+    #     search_query = intent.keyword_query or intent.rewritten_query
+    # else:
+    #     search_query = intent.rewritten_query
+
+    # query_output = embedder.encode_one_both(search_query, is_query=True)
 
     query_output = embedder.encode_one_both(intent.rewritten_query, is_query=True)
     query_emb    = query_output["dense"]
@@ -394,9 +417,7 @@ def retrieve(intent: QueryIntent, top_k: int = TOP_K_FINAL) -> Tuple[List[Retrie
         print(f"[retrieve] where_clause: '{where_clause}'", flush=True)
         print(f"[retrieve] where_params: {where_params}", flush=True)
         dense_results = _dense_search(query_emb, where_clause, where_params, conn)
-        dense_results  = _dense_search(
-            query_emb, where_clause, where_params, conn
-        )
+
         print(f"[timing] dense: {time.monotonic()-t:.2f}s", flush=True)
         # Path B: sparse re-rank on dense candidates
         t = time.monotonic()
@@ -416,12 +437,12 @@ def retrieve(intent: QueryIntent, top_k: int = TOP_K_FINAL) -> Tuple[List[Retrie
         # Path D: graph retrieval
         graph_results = []
         if GRAPH_RAG_ENABLED:
-            existing_ark_ids = {r["ark_id"] for r in dense_results + meta_results}
+            # REPLACE WITH this:
             t = time.monotonic()
             print("[retrieve] starting graph", flush=True)
             graph_results = _graph_search(
                 query_emb,
-                exclude_ark_ids = existing_ark_ids,
+                exclude_ark_ids = set(),
                 conn            = conn,
                 top_k           = GRAPH_TOP_K,
             )
@@ -436,4 +457,84 @@ def retrieve(intent: QueryIntent, top_k: int = TOP_K_FINAL) -> Tuple[List[Retrie
         graph_results,
     )
 
-    return _rerank(rrf_results, query_emb, top_k=top_k), query_emb
+    # return _rerank(rrf_results, query_emb, top_k=top_k), query_emb
+    return _rerank(rrf_results, query_emb, intent=intent, top_k=top_k), query_emb
+
+# def retrieve(intent: QueryIntent, top_k: int = TOP_K_FINAL) -> Tuple[List[RetrievedDocument], np.ndarray]:
+#     """
+#     Full hybrid retrieval:
+#       1. Embed query (dense + sparse in one pass)
+#       2. Dense chunk search (HNSW)
+#       3. Sparse re-rank on dense candidates
+#       4. Metadata document search
+#       5. Graph retrieval via Neo4j (if enabled, skipped for fulltext queries)
+#       6. RRF fusion of all result lists
+#       7. Final rerank with soft date penalty and query-type-aware weights
+#     """
+#     # No hard date filter — dates handled as soft penalty in _rerank
+#     where_clause, where_params = "", []
+
+#     # Use keyword_query for fulltext, rewritten_query for metadata
+#     if intent.query_type == "fulltext":
+#         search_query = intent.keyword_query or intent.rewritten_query
+#     else:
+#         search_query = intent.rewritten_query
+
+#     query_output = embedder.encode_one_both(search_query, is_query=True)
+#     query_emb    = query_output["dense"]
+#     query_sparse = query_output["sparse"]
+
+#     with get_conn() as conn:
+#         # Path A: chunk-level dense search
+#         t = time.monotonic()
+#         print("[retrieve] starting dense", flush=True)
+#         print(f"[retrieve] query_type: '{intent.query_type}'", flush=True)
+#         print(f"[retrieve] search_query: '{search_query}'", flush=True)
+#         dense_results = _dense_search(query_emb, where_clause, where_params, conn)
+#         print(f"[timing] dense: {time.monotonic()-t:.2f}s", flush=True)
+
+#         # Path B: sparse re-rank on dense candidates
+#         t = time.monotonic()
+#         print("[retrieve] starting sparse", flush=True)
+#         sparse_results = _sparse_search(query_sparse, dense_results)
+#         print(f"[timing] sparse: {time.monotonic()-t:.2f}s", flush=True)
+
+#         # Path C: document-level metadata search
+#         # Skip for fulltext queries — metadata embedding of newspaper titles is not useful
+#         meta_results = []
+#         if intent.query_type != "fulltext":
+#             t = time.monotonic()
+#             print("[retrieve] starting meta", flush=True)
+#             meta_results = _metadata_search(
+#                 query_emb, where_clause, where_params, conn,
+#                 top_k=TOP_K_DENSE,
+#             )
+#             print(f"[timing] meta: {time.monotonic()-t:.2f}s", flush=True)
+#         else:
+#             print("[retrieve] skipping meta (fulltext query)", flush=True)
+
+#         # Path D: graph retrieval
+#         # Skip for fulltext queries — graph entity matching not useful for newspaper search
+#         graph_results = []
+#         if GRAPH_RAG_ENABLED and intent.query_type != "fulltext":
+#             t = time.monotonic()
+#             print("[retrieve] starting graph", flush=True)
+#             graph_results = _graph_search(
+#                 query_emb,
+#                 exclude_ark_ids = set(),
+#                 conn            = conn,
+#                 top_k           = GRAPH_TOP_K,
+#             )
+#             print(f"[timing] graph: {time.monotonic()-t:.2f}s", flush=True)
+#         else:
+#             print("[retrieve] skipping graph (fulltext query or disabled)", flush=True)
+
+#     # Fuse all paths via RRF
+#     rrf_results = _reciprocal_rank_fusion(
+#         dense_results,
+#         sparse_results,
+#         meta_results,
+#         graph_results,
+#     )
+
+#     return _rerank(rrf_results, query_emb, intent=intent, top_k=top_k), query_emb

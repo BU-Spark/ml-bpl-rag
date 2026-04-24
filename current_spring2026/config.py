@@ -25,7 +25,7 @@ NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
 
 # GraphRAG is triggered only for content_driven queries
 GRAPH_RAG_ENABLED        = True
-GRAPH_TOP_K              = 100    # max additional docs from graph
+GRAPH_TOP_K              = 5000    # max additional docs from graph
 GRAPH_MIN_ENTITY_MATCHES = 1    # min query entities a doc must match
 
 # ── PostgreSQL / pgVector ─────────────────────────────────────────────────────
@@ -44,15 +44,15 @@ CHUNK_OVERLAP = 150    # was 100 — proportionally larger overlap
 CHUNK_TOKENIZER       = "cl100k_base"   # tiktoken encoding
 
 # ── Retrieval ─────────────────────────────────────────────────────────────────
-TOP_K_DENSE           = 100     # candidates from vector search before rerank
-TOP_K_BM25            = 100     # candidates from BM25
-TOP_K_FINAL           = 10      # results returned to the user
+TOP_K_DENSE           = 5000     # candidates from vector search before rerank
+TOP_K_BM25            = 5000    # candidates from BM25
+TOP_K_FINAL           = 50      # results returned to the user
 RRF_K                 = 60      # RRF constant (standard is 60)
 
 # ── Metadata score blend weight ───────────────────────────────────────────────
 # final_score = CONTENT_WEIGHT * content_rrf + METADATA_WEIGHT * metadata_sim
-CONTENT_WEIGHT        = 0.75
-METADATA_WEIGHT       = 0.25
+CONTENT_WEIGHT        = 0.80
+METADATA_WEIGHT       = 0.20
 
 # ── Ingestion ─────────────────────────────────────────────────────────────────
 MIN_CHAR_COUNT        = 100     # skip records with fewer chars of raw_text
@@ -62,5 +62,5 @@ JSON_DUMP_DIR         = "data/raw"      # folder containing local JSON dumps
 MAX_CONTEXT_CHUNKS    = 5       # how many chunks to pass to GPT-4o
 GENERATION_MAX_TOKENS = 600
 
-MIN_RELEVANCE_SCORE = 0.01   # documents below this are considered irrelevant
+MIN_RELEVANCE_SCORE = 0.1   # documents below this are considered irrelevant
 
