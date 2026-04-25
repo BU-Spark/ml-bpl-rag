@@ -27,11 +27,19 @@ class PipelineResult:
     documents:  List[RetrievedDocument]
     generation: GenerationResult
     latency_ms: int
+    query_id:   int = None       # Postgres query_logs.id, for downstream feedback
 
 
 # ── Main pipeline ─────────────────────────────────────────────────────────────
 
-def run_query(raw_query: str, top_k: int = TOP_K_FINAL, skip_generation: bool = False, prebuilt_intent: QueryIntent = None) -> PipelineResult:
+def run_query(
+    raw_query:       str,
+    top_k:           int = TOP_K_FINAL,
+    skip_generation: bool = False,
+    prebuilt_intent: QueryIntent = None,
+    session_id:      str = None,
+    parent_query_id: int = None,
+) -> PipelineResult:
 
 
 
@@ -52,8 +60,12 @@ def run_query(raw_query: str, top_k: int = TOP_K_FINAL, skip_generation: bool = 
             source_urls   = [],
         )
         latency_ms = int((time.monotonic() - start) * 1000)
-        log_query(intent=intent, retrieved_docs=[], generation_result=generation, latency_ms=latency_ms)
-        return PipelineResult(intent=intent, documents=[], generation=generation, latency_ms=latency_ms)
+        query_id = log_query(
+            intent=intent, retrieved_docs=[], generation_result=generation,
+            latency_ms=latency_ms, session_id=session_id,
+            parent_query_id=parent_query_id,
+        )
+        return PipelineResult(intent=intent, documents=[], generation=generation, latency_ms=latency_ms, query_id=query_id)
 # ─────────────────────────────────────────────────────────────────────
     print(f"[pipeline] Date filter  : {intent.date_filter}")
 
@@ -83,11 +95,13 @@ def run_query(raw_query: str, top_k: int = TOP_K_FINAL, skip_generation: bool = 
     print(f"[pipeline] Latency      : {latency_ms}ms")
 
     # ── Step 4: Log ────────────────────────────────────────────────────────
-    log_query(
+    query_id = log_query(
         intent            = intent,
         retrieved_docs    = documents,
         generation_result = generation,
         latency_ms        = latency_ms,
+        session_id        = session_id,
+        parent_query_id   = parent_query_id,
     )
 
     return PipelineResult(
@@ -95,6 +109,7 @@ def run_query(raw_query: str, top_k: int = TOP_K_FINAL, skip_generation: bool = 
         documents  = documents,
         generation = generation,
         latency_ms = latency_ms,
+        query_id   = query_id,
     )
 
 def print_result(result: PipelineResult):

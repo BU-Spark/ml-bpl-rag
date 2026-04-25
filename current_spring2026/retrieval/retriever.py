@@ -385,80 +385,29 @@ def _rerank(
 
 def retrieve(intent: QueryIntent, top_k: int = TOP_K_FINAL) -> Tuple[List[RetrievedDocument], np.ndarray]:
     """
-    Full hybrid retrieval:
-      1. Build date filter from intent
-      2. Embed query (dense + sparse in one pass)
-      3. Dense chunk search (HNSW)
-      4. Sparse re-rank on dense candidates
-      5. Metadata document search
-      6. Graph retrieval via Neo4j (if enabled)
-      7. RRF fusion of all result lists
-      8. Final rerank and threshold filter
+    Delegates to the fusion_title_dedup strategy:
+      1. Dual retrieval — tier1 (entity_expand + diversity caps + graph-on)
+         AND unified (rewrite + no caps + graph-off), each via dense+sparse+
+         metadata RRF.
+      2. 1:1 interleave of the two ranked lists.
+      3. Strict per-title dedup (keep first occurrence) to kill the
+         "Boston Traveler x100" monoculture.
 
-    Returns (documents, query_embedding) — embedding returned to avoid
-    re-computation in downstream callers.
+    Returns (documents, query_embedding) — embedding kept for backward compat
+    with callers (pipeline.py discards it).
     """
-    where_clause, where_params = _build_filter_clause(intent)
-    # if intent.query_type == "fulltext":
-    #     search_query = intent.keyword_query or intent.rewritten_query
-    # else:
-    #     search_query = intent.rewritten_query
+    from retrieval.strategies.fusion_title_dedup import retrieve as fusion_retrieve
 
-    # query_output = embedder.encode_one_both(search_query, is_query=True)
+    t = time.monotonic()
+    print("[retrieve] running fusion_title_dedup", flush=True)
+    documents = fusion_retrieve(intent, top_k=top_k)
+    print(f"[timing] fusion_title_dedup: {time.monotonic()-t:.2f}s", flush=True)
 
-    query_output = embedder.encode_one_both(intent.rewritten_query, is_query=True)
-    query_emb    = query_output["dense"]
-    query_sparse = query_output["sparse"]
-
-    with get_conn() as conn:
-        # Path A: chunk-level dense search
-        t = time.monotonic()
-        print("[retrieve] starting dense", flush=True)
-        print(f"[retrieve] where_clause: '{where_clause}'", flush=True)
-        print(f"[retrieve] where_params: {where_params}", flush=True)
-        dense_results = _dense_search(query_emb, where_clause, where_params, conn)
-
-        print(f"[timing] dense: {time.monotonic()-t:.2f}s", flush=True)
-        # Path B: sparse re-rank on dense candidates
-        t = time.monotonic()
-        print("[retrieve] starting sparse", flush=True)
-        sparse_results = _sparse_search(
-            query_sparse, dense_results
-        )
-       
-        # Path C: document-level metadata search
-        t = time.monotonic()
-        print("[retrieve] starting meta", flush=True)
-        meta_results = _metadata_search(
-            query_emb, where_clause, where_params, conn,
-            top_k=TOP_K_DENSE,
-        )
-        print(f"[timing] meta: {time.monotonic()-t:.2f}s", flush=True)
-        # Path D: graph retrieval
-        graph_results = []
-        if GRAPH_RAG_ENABLED:
-            # REPLACE WITH this:
-            t = time.monotonic()
-            print("[retrieve] starting graph", flush=True)
-            graph_results = _graph_search(
-                query_emb,
-                exclude_ark_ids = set(),
-                conn            = conn,
-                top_k           = GRAPH_TOP_K,
-            )
-            print(f"[timing] graph: {time.monotonic()-t:.2f}s", flush=True)
-
-
-    # Fuse all paths via RRF
-    rrf_results = _reciprocal_rank_fusion(
-        dense_results,
-        sparse_results,
-        meta_results,
-        graph_results,
-    )
-
-    # return _rerank(rrf_results, query_emb, top_k=top_k), query_emb
-    return _rerank(rrf_results, query_emb, intent=intent, top_k=top_k), query_emb
+    # Embedding kept for return-tuple compatibility — strategy already used it
+    # internally; recompute here only for the return contract. Cheap relative
+    # to retrieval and only happens once per query.
+    query_emb = embedder.encode_one_both(intent.rewritten_query, is_query=True)["dense"]
+    return documents, query_emb
 
 # def retrieve(intent: QueryIntent, top_k: int = TOP_K_FINAL) -> Tuple[List[RetrievedDocument], np.ndarray]:
 #     """
