@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from pipeline import run_query, PipelineResult
 from retrieval.retriever import RetrievedDocument
-from retrieval.refine import refine_search
+from retrieval.refine import refine_with_user_query
 from evaluation.feedback import log_feedback
 
 st.set_page_config(
@@ -320,6 +320,15 @@ div[data-testid="stButton"] button[kind="primary"] span[class*="material-symbols
     font-variation-settings: 'FILL' 1 !important;
     font-size: 1.15rem !important;
 }
+
+/* Hide Streamlit's built-in "Press Cmd+Enter to apply" hint on text inputs */
+[data-testid="InputInstructions"],
+[data-testid="stTextAreaInstructions"],
+[data-testid="stWidgetInstructions"],
+div[data-testid="stTextArea"] small,
+div[data-testid="stTextInput"] small {
+    display: none !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -436,6 +445,7 @@ for k, v in [
     ("thumbs", {}),                    # {ark_id: "up"|"down"} for current results
     ("missing_text", ""),              # last "missed the point" comment
     ("refined_with", []),              # last set of follow-up queries shown
+    ("_scroll_to_top", False),         # set after refine succeeds, consumed below
 ]:
     if k not in st.session_state:
         st.session_state[k] = v
@@ -532,6 +542,35 @@ if st.session_state.searched and st.session_state.results is not None:
     st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
     if results:
+        # ── Refined-search banner (only when a refine just ran) ───────────
+        if st.session_state["refined_with"]:
+            chips = " · ".join(html.escape(q) for q in st.session_state["refined_with"])
+            st.markdown(
+                '<div class="context-banner">'
+                '<strong>Refined search.</strong> ' + chips + '</div>',
+                unsafe_allow_html=True,
+            )
+
+        # ── Scroll to top after a refinement (one-shot) ───────────────────
+        if st.session_state["_scroll_to_top"]:
+            st.session_state["_scroll_to_top"] = False
+            components.html(
+                """
+                <script>
+                  (function() {
+                    const doc = window.parent.document;
+                    const main = doc.querySelector('section[data-testid="stMain"]')
+                              || doc.querySelector('[data-testid="stAppViewContainer"]')
+                              || doc.scrollingElement
+                              || doc.body;
+                    main.scrollTo({ top: 0, behavior: 'smooth' });
+                    window.parent.scrollTo({ top: 0, behavior: 'smooth' });
+                  })();
+                </script>
+                """,
+                height=0,
+            )
+
         context_with_links = linkify_citations(context, len(results))
         st.markdown(
             '<div class="context-banner"><strong>About these results.</strong> '
@@ -626,87 +665,62 @@ if st.session_state.searched and st.session_state.results is not None:
                         st.session_state["page"] += 1
                         st.rerun()
 
-        # ── Human-in-the-loop: refine + "missed the point" ────────────────
+        # ── Human-in-the-loop: user-typed refinement ──────────────────────
         st.markdown('<hr class="divider">', unsafe_allow_html=True)
         st.markdown(
-            '<div class="search-label">Help us improve this search</div>',
+            '<div class="search-label">Didn\'t find any relevant results?</div>',
             unsafe_allow_html=True,
         )
-
-        thumbs_up_arks = [
-            ark for ark, sig in st.session_state["thumbs"].items() if sig == "up"
-        ]
-        n_up = len(thumbs_up_arks)
-
-        # ── Refine row ────────────────────────────────────────────────────
-        disabled = n_up == 0
-        refine_label = (
-            f"Refine using my {n_up} pick(s)"
-            if n_up else "Refine (mark some thumbs up first)"
-        )
-        if st.button(refine_label, key="refine_btn",
-                     use_container_width=True, disabled=disabled):
-            liked_docs = [
-                d for d in st.session_state.docs if d.ark_id in thumbs_up_arks
-            ]
-            with st.spinner("Generating follow-up queries and re-searching…"):
-                try:
-                    merged, follow_ups, _child_ids = refine_search(
-                        original_query   = st.session_state["query"],
-                        original_results = st.session_state.docs,
-                        thumbed_up_docs  = liked_docs,
-                        top_k            = max(50, len(st.session_state.docs)),
-                        session_id       = st.session_state["session_id"],
-                        parent_query_id  = st.session_state["query_id"],
-                    )
-                    if follow_ups:
-                        st.session_state.docs         = merged
-                        st.session_state.results      = [format_card(d) for d in merged]
-                        st.session_state.refined_with = follow_ups
-                        st.session_state["page"]      = 0
-                        st.rerun()
-                    else:
-                        st.warning("Could not generate follow-up queries. Try again.")
-                except Exception as e:
-                    st.error(f"Refine failed: {e}")
-
-        # ── Missing-result feedback ───────────────────────────────────────
         st.markdown(
-            '<div class="search-label" style="margin-top:1.4rem;margin-bottom:0.4rem;">'
-            'None of these were what you wanted? Tell us what you meant'
+            '<div style="font-size:0.85rem;color:var(--muted);margin-bottom:0.6rem;">'
+            'Refine your search. Be more specific about what you want.'
             '</div>',
             unsafe_allow_html=True,
         )
         st.text_area(
-            "Tell us what you meant",
+            "Refine your search",
             key="missing_text",
-            height=120,
-            placeholder="e.g. I wanted photographs only, not newspaper clippings",
+            height=110,
+            placeholder="e.g. photographs of JFK as a senator in 1958, not newspaper clippings",
             label_visibility="collapsed",
         )
-        if st.button("Submit feedback", key="missing_btn",
+        if st.button("Refine search", key="refine_btn",
                      use_container_width=True):
-            if st.session_state["missing_text"].strip():
+            user_text = st.session_state["missing_text"].strip()
+            if not user_text:
+                st.info("Type a refined query before clicking refine.")
+            else:
+                # Log as 'missing' feedback so the team can see what queries
+                # the original retrieval was failing on.
                 log_feedback(
                     query_id   = st.session_state["query_id"],
                     ark_id     = "",
                     signal     = "missing",
-                    comment    = st.session_state["missing_text"].strip(),
+                    comment    = user_text,
                     session_id = st.session_state["session_id"],
                     raw_query  = st.session_state["query"],
                 )
-                st.success("Thanks. Saved for the next maintainer.")
-            else:
-                st.info("Add a note before submitting.")
-
-        if st.session_state["refined_with"]:
-            chips = " · ".join(html.escape(q) for q in st.session_state["refined_with"])
-            st.markdown(
-                '<div style="margin-top:0.8rem;font-size:0.78rem;color:var(--muted);">'
-                'Also searched: <span style="color:var(--sepia);">'
-                + chips + '</span></div>',
-                unsafe_allow_html=True,
-            )
+                with st.spinner("Searching with your refined query…"):
+                    try:
+                        merged, follow_ups, _child_ids = refine_with_user_query(
+                            original_query   = st.session_state["query"],
+                            original_results = st.session_state.docs,
+                            user_query       = user_text,
+                            top_k            = max(50, len(st.session_state.docs)),
+                            session_id       = st.session_state["session_id"],
+                            parent_query_id  = st.session_state["query_id"],
+                        )
+                        if follow_ups:
+                            st.session_state.docs           = merged
+                            st.session_state.results        = [format_card(d) for d in merged]
+                            st.session_state.refined_with   = follow_ups
+                            st.session_state["page"]        = 0
+                            st.session_state["_scroll_to_top"] = True
+                            st.rerun()
+                        else:
+                            st.warning("Refinement search failed. Try again.")
+                    except Exception as e:
+                        st.error(f"Refine failed: {e}")
 
     else:
         st.markdown(

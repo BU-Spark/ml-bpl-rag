@@ -126,6 +126,45 @@ def _rrf_merge(
     return out
 
 
+def refine_with_user_query(
+    original_query:   str,
+    original_results: List[RetrievedDocument],
+    user_query:       str,
+    top_k:            int = 50,
+    session_id:       Optional[str] = None,
+    parent_query_id:  Optional[int] = None,
+) -> Tuple[List[RetrievedDocument], List[str], List[Optional[int]]]:
+    """
+    Run a user-provided refinement query (no GPT-4o follow-up generation —
+    the user already wrote what they want), then RRF-merge the new results
+    with the original list. Each call logs a child query_logs row with
+    parent_query_id set so the refinement chain stays reconstructable.
+
+    Returns (merged_docs, [user_query], [child_query_id]).
+    On empty input or failure: returns the original results unchanged.
+    """
+    from pipeline import run_query
+
+    user_query = (user_query or "").strip()
+    if not user_query:
+        return original_results, [], []
+
+    try:
+        r = run_query(
+            user_query,
+            top_k           = top_k,
+            skip_generation = True,
+            session_id      = session_id,
+            parent_query_id = parent_query_id,
+        )
+    except Exception as e:
+        print(f"[refine] user-query retrieval failed for {user_query!r}: {e}")
+        return original_results, [], []
+
+    merged = _rrf_merge(original_results, r.documents)[:top_k]
+    return merged, [user_query], [r.query_id]
+
+
 def refine_search(
     original_query:   str,
     original_results: List[RetrievedDocument],
