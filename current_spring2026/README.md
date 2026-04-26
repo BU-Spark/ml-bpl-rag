@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./figures/logos/bpl_hybrid_rag_logo.svg" alt="BPL Hybrid RAG Logo" width="200" style="margin-bottom: -20px;"/>
+  <img src="./figures/logos/bpl_rag_logo.svg" alt="BPL Hybrid RAG Logo" width="200" style="margin-bottom: -20px;"/>
 </p>
 
 <h1 align="center">BPL-LIBRAG</h1>
