@@ -33,7 +33,7 @@
   <a href="https://neo4j.com/"><img src="https://img.shields.io/badge/graph-Neo4j-008cc1.svg" alt="Neo4j"/></a>
   <a href="https://platform.openai.com/docs/models/gpt-4o"><img src="https://img.shields.io/badge/LLM-GPT--4o-10a37f.svg" alt="GPT-4o"/></a>
   <a href="https://streamlit.io/"><img src="https://img.shields.io/badge/UI-Streamlit-ff4b4b.svg" alt="Streamlit"/></a>
-  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License"/></a>
+  <a href="https://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/license-GPL--3.0-blue.svg" alt="License: GPL v3"/></a>
 </p>
 
 ---
@@ -323,6 +323,8 @@ Sections 4–5 and you should be querying the corpus on day one.
 
 ## 7. License & Acknowledgments
 
-Released under the MIT License (see project root). Built on the Boston Public
+Released under the **GNU General Public License v3.0** (see the `LICENSE` file
+at the project root). Any redistribution or modified version must remain
+GPL-3.0-licensed and source-available. Built on the Boston Public
 Library *Digital Commonwealth* archive in collaboration with BU Spark!.
 See the team list at the top of this README.
