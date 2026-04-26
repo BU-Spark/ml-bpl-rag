@@ -1,0 +1,13 @@
+{
+  "n": 14,
+  "mrr": 0.2313,
+  "hit_at_10": 0.3571,
+  "recall_at_10": 0.1607,
+  "precision_at_10": 0.0643,
+  "hit_at_30": 0.4286,
+  "recall_at_30": 0.1893,
+  "precision_at_30": 0.0262,
+  "hit_at_50": 0.4286,
+  "recall_at_50": 0.1893,
+  "precision_at_50": 0.0157
+}

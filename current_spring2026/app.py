@@ -723,6 +723,19 @@ if st.session_state.searched and st.session_state.results is not None:
                         st.error(f"Refine failed: {e}")
 
     else:
+        context_with_links = linkify_citations(context, len(results))
+        st.markdown(
+            '<div style="'
+            'background:#1E1A14;'
+            'border:1px solid #3D3028;'
+            'border-radius:6px;'
+            'padding:1.2rem 1.5rem;'
+            'margin-bottom:2rem;'
+            'font-size:0.95rem;line-height:1.65;color:#A89880;">'
+            + context_with_links +
+            '</div>',
+            unsafe_allow_html=True,
+        )
         st.markdown(
             '<div class="no-results">'
             '<div class="no-results-icon">🗂️</div>'

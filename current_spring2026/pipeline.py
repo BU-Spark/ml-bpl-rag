@@ -90,6 +90,8 @@ def run_query(
     else:
         top_docs_for_generation = documents[:10]
         generation = generate(raw_query, top_docs_for_generation)
+        if not generation.is_relevant:
+            documents = []
 
     latency_ms = int((time.monotonic() - start) * 1000)
     print(f"[pipeline] Latency      : {latency_ms}ms")

@@ -6,6 +6,8 @@ inline by number, e.g. [1], [2], so users can trace claims to results.
 """
 
 from __future__ import annotations
+
+import json
 from dataclasses import dataclass, field
 from typing import List
 from openai import OpenAI
@@ -21,6 +23,7 @@ class GenerationResult:
     response:      str
     source_titles: List[str]
     source_urls:   List[str]
+    is_relevant:   bool = True
 
 
 SYSTEM_PROMPT = """
@@ -31,19 +34,32 @@ from Massachusetts institutions.
 You will be given a user query and a numbered list of retrieved documents with their
 metadata and text excerpts.
 
-Write a 3-5 sentence response that:
-- Summarizes what was found and why it is relevant to the query
-- Cites specific documents inline using their number, e.g. [1], [2], [3]
-- Is grounded ONLY in the provided documents — do not invent facts
-- Uses clear, accessible language suitable for researchers and the general public
-- Does not mention scores, rankings, or technical retrieval details
+Return a JSON object with exactly these fields:
+{
+  "is_relevant": <true if the retrieved documents are genuinely relevant to the query, false otherwise>,
+  "response": "<your response here>"
+}
 
-Example format:
-"Several materials related to the 1919 Boston Molasses Disaster are available [1][2].
-The Boston Traveler covered the event extensively in its January 1919 issues [1],
-while photographs of the aftermath document the structural damage to the North End [3]."
+Rules for response:
+- If is_relevant is true: write a 3-5 sentence summary that cites specific documents
+  inline using their number e.g. [1], [2], [3], grounded ONLY in the provided documents,
+  using clear accessible language suitable for researchers and the general public,
+  without mentioning scores rankings or technical retrieval details
+- If is_relevant is false: explain that no relevant materials were found for this query
+  in the Digital Commonwealth collection and suggest refining the search
 
-If the documents are not relevant to the query, say so clearly and suggest refining the search.
+Rules for is_relevant:
+- true if at least some of the retrieved documents genuinely relate to what the user is asking
+- false if the retrieved documents are clearly unrelated to the user query, e.g. the user
+  asked about a modern topic and the results are historical materials with no connection
+
+Example format when relevant:
+{
+  "is_relevant": true,
+  "response": "Several materials related to the 1919 Boston Molasses Disaster are available [1][2]. The Boston Traveler covered the event extensively [1], while photographs document the structural damage [3]."
+}
+
+Return ONLY valid JSON. No markdown, no explanation.
 """.strip()
 
 
@@ -71,6 +87,7 @@ def generate(raw_query: str, docs: List[RetrievedDocument]) -> GenerationResult:
             response      = "No relevant materials were found for your query. Try rephrasing or using a more specific historical topic.",
             source_titles = [],
             source_urls   = [],
+            is_relevant   = False,
         )
 
     context = _build_context(docs)
@@ -94,10 +111,28 @@ Write a concise summary that cites the relevant documents inline by number."""
 
     if not response.choices:
         raise ValueError("OpenAI returned empty choices (finish_reason may indicate content filter)")
-    response_text = response.choices[0].message.content.strip()
+
+    raw_json = response.choices[0].message.content.strip()
+    if raw_json.startswith("```"):
+        raw_json = raw_json.split("```")[1]
+        if raw_json.startswith("json"):
+            raw_json = raw_json[4:]
+        raw_json = raw_json.strip()
+
+    try:
+        parsed = json.loads(raw_json)
+    except json.JSONDecodeError:
+        # Fallback — treat raw text as response, assume relevant
+        return GenerationResult(
+            response      = raw_json,
+            source_titles = [d.title for d in docs],
+            source_urls   = [d.source_url for d in docs],
+            is_relevant   = True,
+        )
 
     return GenerationResult(
-        response      = response_text,
+        response      = parsed.get("response", ""),
         source_titles = [d.title for d in docs],
         source_urls   = [d.source_url for d in docs],
+        is_relevant   = parsed.get("is_relevant", True),
     )
