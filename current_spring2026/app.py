@@ -372,11 +372,7 @@ def format_card(doc: RetrievedDocument) -> dict:
     snippet   = doc.best_chunk_text[:300] if doc.best_chunk_text else ""
     full_text = doc.best_chunk_text if doc.best_chunk_text else ""
     tags     = list(set((doc.topics or []) + (doc.geography or [])))[:5]
-    url = (
-        f"https://www.digitalcommonwealth.org/search/commonwealth:{doc.ark_id}"
-        if doc.best_chunk_text
-        else f"https://www.digitalcommonwealth.org/collections/commonwealth:{doc.ark_id}"
-    )
+    url = f"https://www.digitalcommonwealth.org/search/commonwealth:{doc.ark_id}"
     thumbnail_url = (
         f"https://iiif.digitalcommonwealth.org/iiif/2/{doc.exemplary_image_id}/full/400,/0/default.jpg"
         if doc.exemplary_image_id and doc.exemplary_image_id.strip() else ""
