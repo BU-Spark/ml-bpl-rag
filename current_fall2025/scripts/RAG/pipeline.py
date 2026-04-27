@@ -50,10 +50,6 @@ def RAG(
     try:
         # Stage 1: Query enhancement
         expanded_query = rephrase_and_expand_query(query, llm)
-        # rephrase_and_expand_query now returns {"text","improved","expanded"};
-        # downstream stages expect a plain string.
-        if isinstance(expanded_query, dict):
-            expanded_query = expanded_query.get("text") or query
 
         # Stage 2: Vector retrieval with filters
         retrieved, _ = retrieve_from_pg(conn, embeddings, expanded_query, llm, k)
