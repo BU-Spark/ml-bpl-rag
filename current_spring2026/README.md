@@ -51,11 +51,12 @@ single ingestion pass and a single retrieval entrypoint
 ([`pipeline.py`](pipeline.py)).
 
 > **Branch:** `hybrid-rag-dev` 
+>
 > 
-> **Status:** active Spring 2026 development.
+> Dashboard: https://huggingface.co/spaces/spark-ds549/BPL-RAG-Spring-2026: 
+>
+> see [Running the App](#9-running-the-app) for local launch instructions.
 > 
-> Dashboard: `<TODO: insert hosted dashboard URL>` — see [Running the App](#9-running-the-app) for local launch instructions.
-
 <p align="center">
   <img src="./figures/architecture/bpl_hybrid_rag.png" width="900" alt="BPL Hybrid RAG architecture (TODO: add diagram)"/>
 </p>
