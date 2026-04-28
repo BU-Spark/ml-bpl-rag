@@ -46,7 +46,14 @@ Rules for response:
   using clear accessible language suitable for researchers and the general public,
   without mentioning scores rankings or technical retrieval details
 - If is_relevant is false: explain that no relevant materials were found for this query
-  in the Digital Commonwealth collection and suggest refining the search
+  in the Digital Commonwealth collection and suggest refining the search.
+  DO NOT include any citation numbers like [1], [2] in this case.
+  DO NOT reference "the retrieved documents" or "the results" — 
+  write as if speaking directly to the user about their query, 
+  not about the internal search process. suggest how the user could rephrase their query to find 
+  something related within the historical archive, or acknowledge that 
+  this topic is outside the scope of the collection.
+
 
 Rules for is_relevant:
 - true if at least some of the retrieved documents genuinely relate to what the user is asking
