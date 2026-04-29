@@ -1,0 +1,224 @@
+/var/spool/sge/scc-tc2/job_scripts/4294092: line 9: /etc/profile.d/modules.sh: No such file or directory
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 30: export: mamba: not a function
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 31: export: __mamba_exe: not a function
+Starting entity extraction at Wed Apr 15 19:10:08 EDT 2026
+CPUs available: 8
+
+============================================================
+BPL Graph — Phase 1: Entity Extraction
+  Year    : all
+  Workers : 8
+  Output  : data/graph/entities_all.jsonl
+============================================================
+
+Loading spaCy model...
+Fetching documents from PostgreSQL...
+  Found 11725 documents
+
+  [1/11725] 000065223 | 40 entities | ETA: 25628.3min
+  [100/11725] 057489766 | 40 entities | ETA: 420.3min
+  [200/11725] 0g35bq80z | 40 entities | ETA: 364.9min
+  [300/11725] 0p09dj02j | 40 entities | ETA: 330.9min
+  [400/11725] 0z70h4907 | 40 entities | ETA: 301.9min
+  [500/11725] 1544k6090 | 40 entities | ETA: 282.2min
+  [600/11725] 1c18mz813 | 40 entities | ETA: 281.0min
+  [700/11725] 1n79qf14z | 40 entities | ETA: 273.9min
+  [800/11725] 1v53sj98b | 40 entities | ETA: 255.8min
+  [900/11725] 2801ws15m | 40 entities | ETA: 256.7min
+  [1000/11725] 2f75zx93s | 40 entities | ETA: 257.3min
+  [1100/11725] 2r372967f | 40 entities | ETA: 244.5min
+  [1200/11725] 2z114d81m | 40 entities | ETA: 246.1min
+  [1300/11725] 37726w396 | 40 entities | ETA: 241.7min
+  [1400/11725] 3f468t43c | 40 entities | ETA: 238.3min
+  [1500/11725] 3r07c877r | 40 entities | ETA: 231.5min
+  [1600/11725] 3x81f6682 | 40 entities | ETA: 232.3min
+  [1700/11725] 4742hm203 | 40 entities | ETA: 227.7min
+  [1800/11725] 4f16kd150 | 40 entities | ETA: 225.2min
+  [1900/11725] 4m90ng60x | 40 entities | ETA: 224.1min
+  [2000/11725] 4x51r0569 | 40 entities | ETA: 219.4min
+  [2100/11725] 5425sq981 | 40 entities | ETA: 218.4min
+  [2200/11725] 5d86w938x | 40 entities | ETA: 213.5min
+  [2300/11725] 5q4809264 | 40 entities | ETA: 212.3min
+  [2400/11725] 61092n40r | 40 entities | ETA: 208.6min
+  [2500/11725] 697057901 | 40 entities | ETA: 207.0min
+  [2600/11725] 6h447906x | 40 entities | ETA: 202.7min
+  [2700/11725] 6q189663x | 40 entities | ETA: 202.4min
+  [2800/11725] 7366dd18w | 40 entities | ETA: 199.3min
+  [2900/11725] 7940g9201 | 40 entities | ETA: 197.1min
+  [3000/11725] 7h14jc71x | 40 entities | ETA: 195.8min
+  [3100/11725] 7s75mp20z | 40 entities | ETA: 191.8min
+  [3200/11725] 8049pn590 | 40 entities | ETA: 189.0min
+  [3300/11725] 8623rh24s | 40 entities | ETA: 188.2min
+  [3400/11725] 8g84tx744 | 40 entities | ETA: 184.8min
+  [3500/11725] 8p58wr629 | 40 entities | ETA: 183.0min
+  [3600/11725] 90200c53t | 40 entities | ETA: 181.2min
+  [3700/11725] 95942843x | 40 entities | ETA: 178.7min
+  [3800/11725] 9c684516d | 40 entities | ETA: 177.6min
+  [3900/11725] 9p296p077 | 40 entities | ETA: 174.0min
+  [4000/11725] 9z909k627 | 40 entities | ETA: 171.1min
+  [4100/11725] b564cc68p | 40 entities | ETA: 169.9min
+  [4200/11725] bk12gp62f | 40 entities | ETA: 167.0min
+  [4300/11725] bv73k784m | 40 entities | ETA: 165.4min
+  [4400/11725] c247n395b | 40 entities | ETA: 162.6min
+  [4500/11725] c821q326n | 40 entities | ETA: 160.8min
+  [4600/11725] cf95s2165 | 40 entities | ETA: 158.0min
+  [4700/11725] cr56vc790 | 40 entities | ETA: 156.6min
+  [4800/11725] d217z121d | 40 entities | ETA: 153.2min
+  [4900/11725] d7920t54c | 40 entities | ETA: 151.1min
+  [5000/11725] df662n19r | 40 entities | ETA: 149.2min
+  [5100/11725] dn404k08j | 40 entities | ETA: 147.8min
+  [5200/11725] f1887x86t | 40 entities | ETA: 144.2min
+  [5300/11725] f7629s59t | 40 entities | ETA: 142.4min
+  [5400/11725] fn10f3648 | 40 entities | ETA: 140.2min
+  [5500/11725] ft84h353q | 40 entities | ETA: 137.9min
+  [5600/11725] g158k5136 | 40 entities | ETA: 135.6min
+  [5700/11725] gb19nc508 | 40 entities | ETA: 133.0min
+  [5800/11725] gh93qc46c | 40 entities | ETA: 131.3min
+  [5900/11725] gt54st03z | 40 entities | ETA: 129.4min
+  [6000/11725] h128vw092 | 40 entities | ETA: 125.9min
+  [6100/11725] h702xx60z | 40 entities | ETA: 124.3min
+  [6200/11725] hh641596r | 40 entities | ETA: 122.4min
+  [6300/11725] hq383879q | 40 entities | ETA: 120.3min
+  [6400/11725] j0995p30f | 40 entities | ETA: 117.2min
+  [6500/11725] j6737d101 | 40 entities | ETA: 115.4min
+  [6600/11725] jd479k25p | 40 entities | ETA: 113.5min
+  [6700/11725] jq08cx491 | 40 entities | ETA: 111.0min
+  [6800/11725] jw82g2343 | 40 entities | ETA: 108.5min
+  [6900/11725] k643jc570 | 40 entities | ETA: 106.5min
+  [7000/11725] kk91p820d | 40 entities | ETA: 104.5min
+  [7100/11725] kw52rk31g | 40 entities | ETA: 101.8min
+  [7200/11725] m326tr88p | 40 entities | ETA: 99.7min
+  [7300/11725] mc87x2716 | 40 entities | ETA: 97.5min
+  [7400/11725] mk620669v | 40 entities | ETA: 95.5min
+  [7500/11725] mw232g41h | 40 entities | ETA: 93.0min
+  [7600/11725] n2974d189 | 40 entities | ETA: 90.5min
+  [7700/11725] n87169174 | 40 entities | ETA: 88.7min
+  [7800/11725] nk328q382 | 40 entities | ETA: 86.4min
+  [7900/11725] ns06bj58h | 40 entities | ETA: 84.2min
+  [8000/11725] nz80d9302 | 40 entities | ETA: 81.8min
+  [8100/11725] p554g9371 | 40 entities | ETA: 79.8min
+  [8200/11725] pg15k459w | 40 entities | ETA: 77.6min
+  [8300/11725] pr76nd952 | 40 entities | ETA: 75.3min
+  [8400/11725] pz50qk13b | 40 entities | ETA: 73.2min
+  [8500/11725] q811sv646 | 40 entities | ETA: 71.0min
+  [8600/11725] qf85vr859 | 40 entities | ETA: 69.0min
+  [8700/11725] qn59xm08c | 40 entities | ETA: 66.5min
+  [8800/11725] qv340k234 | 40 entities | ETA: 64.5min
+  [8900/11725] r4953070v | 40 entities | ETA: 62.3min
+  [9000/11725] rb694x708 | 40 entities | ETA: 60.2min
+  [9100/11725] rj436w381 | 40 entities | ETA: 57.7min
+  [9200/11725] rv049734v | 40 entities | ETA: 55.5min
+  [9300/11725] s178c830z | 40 entities | ETA: 53.5min
+  [9400/11725] sb39fm221 | 40 entities | ETA: 51.4min
+  [9500/11725] sj13h890t | 40 entities | ETA: 49.0min
+  [9600/11725] sq87k655s | 40 entities | ETA: 46.8min
+  [9700/11725] sx61mz73t | 40 entities | ETA: 44.7min
+  [9800/11725] t722qd56r | 40 entities | ETA: 42.5min
+  [9900/11725] td96sh88m | 40 entities | ETA: 40.2min
+  [10000/11725] tq57w226s | 40 entities | ETA: 38.0min
+  [10100/11725] tx31xw41d | 40 entities | ETA: 35.9min
+  [10200/11725] v4060w81j | 40 entities | ETA: 33.7min
+  [10300/11725] vd673c002 | 40 entities | ETA: 31.4min
+  [10400/11725] vq2866261 | 40 entities | ETA: 29.2min
+  [10500/11725] w0898j069 | 40 entities | ETA: 27.1min
+  [10600/11725] w663bg89c | 40 entities | ETA: 24.8min
+  [10700/11725] wd37db76g | 40 entities | ETA: 22.6min
+  [10800/11725] wp98gq401 | 40 entities | ETA: 20.4min
+  [10900/11725] ww72jm46s | 40 entities | ETA: 18.2min
+  [11000/11725] x346mr05d | 40 entities | ETA: 16.1min
+  [11100/11725] x920pn67h | 40 entities | ETA: 13.8min
+  [11200/11725] xk81rx63q | 40 entities | ETA: 11.6min
+  [11300/11725] xs55tp55k | 40 entities | ETA: 9.4min
+  [11400/11725] z029wj82p | 40 entities | ETA: 7.2min
+  [11500/11725] z8910f42s | 40 entities | ETA: 5.0min
+  [11600/11725] zk522t032 | 40 entities | ETA: 2.8min
+  [11700/11725] zw135n25x | 40 entities | ETA: 0.6min
+
+✓ Entity extraction complete.
+  Documents processed : 11725
+  Output file         : data/graph/entities_all.jsonl
+  Total time          : 258.9 min
+Entity extraction complete at Wed Apr 15 23:52:31 EDT 2026
+/var/spool/sge/scc-pi3/job_scripts/4309275: line 9: /etc/profile.d/modules.sh: No such file or directory
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 30: export: mamba: not a function
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 31: export: __mamba_exe: not a function
+Starting entity extraction at Thu Apr 16 11:57:01 EDT 2026
+CPUs available: 2
+
+============================================================
+BPL Graph — Phase 1: Entity Extraction (GPT-4o-mini)
+  Year        : all
+  Concurrency : 50
+  Output      : data/graph/entities_all.jsonl
+============================================================
+
+Fetching documents from PostgreSQL...
+  Found 11725 documents
+
+  [200/11725] written=189 | rate=11.2 docs/s | ETA: 17.1min
+  [400/11725] written=379 | rate=10.2 docs/s | ETA: 18.4min
+  [600/11725] written=567 | rate=10.1 docs/s | ETA: 18.4min
+  [800/11725] written=754 | rate=10.8 docs/s | ETA: 16.8min
+  [1000/11725] written=947 | rate=11.2 docs/s | ETA: 16.0min
+  [1200/11725] written=1139 | rate=11.6 docs/s | ETA: 15.1min
+  [1400/11725] written=1329 | rate=11.0 docs/s | ETA: 15.7min
+  [1600/11725] written=1522 | rate=11.0 docs/s | ETA: 15.4min
+  [1800/11725] written=1714 | rate=11.1 docs/s | ETA: 14.9min
+  [2000/11725] written=1903 | rate=11.2 docs/s | ETA: 14.4min
+  [2200/11725] written=2092 | rate=11.3 docs/s | ETA: 14.1min
+  [2400/11725] written=2284 | rate=11.4 docs/s | ETA: 13.7min
+  [2600/11725] written=2471 | rate=11.5 docs/s | ETA: 13.2min
+  [2800/11725] written=2659 | rate=11.6 docs/s | ETA: 12.9min
+  [3000/11725] written=2850 | rate=11.4 docs/s | ETA: 12.8min
+  [3200/11725] written=3041 | rate=11.5 docs/s | ETA: 12.4min
+  [3400/11725] written=3233 | rate=10.5 docs/s | ETA: 13.2min
+  [3600/11725] written=3419 | rate=10.7 docs/s | ETA: 12.7min
+  [3800/11725] written=3614 | rate=10.7 docs/s | ETA: 12.3min
+  [4000/11725] written=3801 | rate=10.8 docs/s | ETA: 11.9min
+  [4200/11725] written=3992 | rate=11.0 docs/s | ETA: 11.4min
+  [4400/11725] written=4181 | rate=11.1 docs/s | ETA: 11.0min
+  [4600/11725] written=4372 | rate=11.0 docs/s | ETA: 10.8min
+  [4800/11725] written=4560 | rate=11.0 docs/s | ETA: 10.5min
+  [5000/11725] written=4753 | rate=11.1 docs/s | ETA: 10.1min
+  [5200/11725] written=4938 | rate=10.8 docs/s | ETA: 10.0min
+  [5400/11725] written=5129 | rate=10.9 docs/s | ETA: 9.6min
+  [5600/11725] written=5316 | rate=11.0 docs/s | ETA: 9.3min
+  [5800/11725] written=5513 | rate=11.1 docs/s | ETA: 8.9min
+  [6000/11725] written=5705 | rate=11.1 docs/s | ETA: 8.6min
+  [6200/11725] written=5894 | rate=11.1 docs/s | ETA: 8.3min
+  [6400/11725] written=6081 | rate=11.2 docs/s | ETA: 7.9min
+  [6600/11725] written=6268 | rate=11.2 docs/s | ETA: 7.6min
+  [6800/11725] written=6458 | rate=11.2 docs/s | ETA: 7.3min
+  [7000/11725] written=6647 | rate=11.3 docs/s | ETA: 7.0min
+  [7200/11725] written=6839 | rate=11.3 docs/s | ETA: 6.7min
+  [7400/11725] written=7030 | rate=11.3 docs/s | ETA: 6.4min
+  [7600/11725] written=7215 | rate=11.3 docs/s | ETA: 6.1min
+  [7800/11725] written=7407 | rate=11.3 docs/s | ETA: 5.8min
+  [8000/11725] written=7599 | rate=11.3 docs/s | ETA: 5.5min
+  [8200/11725] written=7795 | rate=11.4 docs/s | ETA: 5.2min
+  [8400/11725] written=7984 | rate=11.3 docs/s | ETA: 4.9min
+  [8600/11725] written=8176 | rate=11.3 docs/s | ETA: 4.6min
+  [8800/11725] written=8363 | rate=11.4 docs/s | ETA: 4.3min
+  [9000/11725] written=8555 | rate=11.4 docs/s | ETA: 4.0min
+  [9200/11725] written=8744 | rate=11.4 docs/s | ETA: 3.7min
+  [9400/11725] written=8940 | rate=11.4 docs/s | ETA: 3.4min
+  [9600/11725] written=9130 | rate=11.5 docs/s | ETA: 3.1min
+  [9800/11725] written=9322 | rate=11.4 docs/s | ETA: 2.8min
+  [10000/11725] written=9517 | rate=11.4 docs/s | ETA: 2.5min
+  [10200/11725] written=9712 | rate=11.2 docs/s | ETA: 2.3min
+  [10400/11725] written=9900 | rate=11.2 docs/s | ETA: 2.0min
+  [10600/11725] written=10084 | rate=11.3 docs/s | ETA: 1.7min
+  [10800/11725] written=10272 | rate=11.3 docs/s | ETA: 1.4min
+  [11000/11725] written=10460 | rate=11.3 docs/s | ETA: 1.1min
+  [11200/11725] written=10651 | rate=11.2 docs/s | ETA: 0.8min
+  [11400/11725] written=10840 | rate=11.3 docs/s | ETA: 0.5min
+  [11600/11725] written=11033 | rate=11.3 docs/s | ETA: 0.2min
+  [11725/11725] written=11151 | rate=11.2 docs/s | ETA: 0.0min
+
+✓ Entity extraction complete.
+  Documents processed : 11725
+  Documents with entities: 11151
+  Output file         : data/graph/entities_all.jsonl
+  Total time          : 17.4 min
+  Avg rate            : 11.2 docs/s
+Entity extraction complete at Thu Apr 16 12:38:59 EDT 2026
