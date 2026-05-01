@@ -69,10 +69,6 @@ The system combines, end-to-end inside this folder:
 - **Hybrid retrieval** over PostgreSQL + `pgvector`: dense ANN (HNSW) +
   sparse lexical scoring + **Reciprocal Rank Fusion** + metadata-embedding
   rerank — see [`retrieval/retriever.py`](retrieval/retriever.py).
-- **Query understanding** with GPT-4o that classifies each query as
-  `content_driven` / `metadata_driven` / `hybrid`, rewrites it for embedding,
-  and emits hard SQL filters (date, geography, doc type) — see
-  [`retrieval/query_understanding.py`](retrieval/query_understanding.py).
 - **GraphRAG** layer in Neo4j: spaCy NER → entity vector index → two-hop
   `CO_OCCURS_WITH` traversal, triggered selectively for entity-centric queries
   — see [`graph/`](graph/).
@@ -148,15 +144,6 @@ current_spring2026/
 ├── evaluation/
 │   └── logger.py               # Writes events to query_logs
 │
-├── pages/                      # Streamlit multi-page entries
-│   ├── 1_Document.py           # Per-document detail view
-│   └── 3_History.py            # Query history viewer
-│
-├── ui/                         # Shared rendering helpers
-│   ├── components.py
-│   ├── styles.py
-│   ├── history.py
-│   └── data.py
 │
 ├── submit.sh                   # SCC: ingest full-text
 ├── submit_metadata.sh          # SCC: ingest metadata-only
@@ -184,10 +171,6 @@ artefacts or local state; do not commit.
 # Conda (recommended — matches the SCC submit scripts)
 conda env create -f environment.yml
 conda activate spark-rag
-
-# OR pip
-pip install -r requirements.txt
-python -m spacy download en_core_web_sm
 ```
 
 ### Configuration
@@ -278,9 +261,11 @@ Prints the cited summary, the ranked documents, and total latency.
 streamlit run app.py
 ```
 
-Pages: search (root), `pages/1_Document.py` for detail view,
-`pages/3_History.py` for query history.
+or if you're on the scc
 
+```bash
+streamlit run app.py --server.address 0.0.0.0 --server.port 8501 --server.baseUrlPath ""
+```
 ---
 
 ## 6. Handoff Notes for the Next Team
@@ -322,7 +307,11 @@ Sections 4–5 and you should be querying the corpus on day one.
 
 ---
 
-## 7. License & Acknowledgments
+## 7. Deployment
+  - The code used for the huggingface deployment can be found here `/projectnb/sparkgrp/ml-bpl-rag-data-subset/temp/BPL-RAG-Spring-2026` on the scc.
+  - Link: https://huggingface.co/spaces/spark-ds549/BPL-RAG-Spring-2026
+
+## 8. License & Acknowledgments
 
 Released under the **GNU General Public License v3.0** (see the `LICENSE` file
 at the project root). Any redistribution or modified version must remain
