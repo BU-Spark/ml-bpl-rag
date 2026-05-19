@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="bookL" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#14505E" />
+      <stop offset="100%" style="stop-color:#2B7A8A" />
+    </linearGradient>
+    <linearGradient id="bookR" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3A9BAA" />
+      <stop offset="100%" style="stop-color:#1E6878" />
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#B8882E" />
+      <stop offset="100%" style="stop-color:#E0C06A" />
+    </linearGradient>
+  </defs>
+
+  <!-- === BOOK: two bold curved page shapes === -->
+  <!-- Left page -->
+  <path d="
+    M 200 265
+    C 180 255, 110 248, 95 220
+    L 118 158
+    C 135 178, 175 182, 200 170
+    Z
+  " fill="url(#bookL)"/>
+
+  <!-- Right page -->
+  <path d="
+    M 200 265
+    C 220 255, 290 248, 305 220
+    L 282 158
+    C 265 178, 225 182, 200 170
+    Z
+  " fill="url(#bookR)"/>
+
+  <!-- === AI SPARKLE: 4-point star above book spine === -->
+  <!-- A clean, bold 4-point sparkle — the universal AI symbol -->
+  <path d="
+    M 200 170
+    C 196 155, 194 130, 200 95
+    C 206 130, 204 155, 200 170
+  " fill="url(#gold)"/>
+  <!-- Top point (already above) + left/right arms -->
+  <path d="
+    M 200 132
+    C 190 128, 170 128, 155 122
+    C 170 118, 190 118, 200 114
+    C 210 118, 230 118, 245 122
+    C 230 128, 210 128, 200 132
+  " fill="url(#gold)"/>
+  <!-- Vertical axis full sparkle -->
+  <path d="
+    M 200 80
+    C 196 95, 194 108, 200 122
+    C 206 108, 204 95, 200 80
+  " fill="#E0C06A"/>
+
+  <!-- Center glow of sparkle -->
+  <circle cx="200" cy="122" r="5" fill="#E8D080"/>
+
+  <!-- Small secondary sparkle — adds depth -->
+  <path d="
+    M 160 100
+    C 158 94, 157 86, 160 78
+    C 162 86, 161 94, 160 100
+  " fill="#E0C06A" opacity="0.5"/>
+  <path d="
+    M 160 89
+    C 156 87, 150 87, 146 85
+    C 150 83, 156 83, 160 81
+    C 164 83, 170 83, 174 85
+    C 170 87, 164 87, 160 89
+  " fill="#E0C06A" opacity="0.5"/>
+
+  <!-- === SEARCH LENS: bold minimal magnifying glass === -->
+  <circle cx="290" cy="268" r="22" fill="none" stroke="#D4A84B" stroke-width="5"/>
+  <line x1="306" y1="284" x2="325" y2="303" stroke="#D4A84B" stroke-width="5" stroke-linecap="round"/>
+
+</svg>

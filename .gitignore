@@ -180,3 +180,7 @@ data/
 
 *.pyc
 __pycache__/
+
+logs/
+
+ 

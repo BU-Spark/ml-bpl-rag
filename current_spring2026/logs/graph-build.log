@@ -1,0 +1,107 @@
+/var/spool/sge/scc-513/job_scripts/4289225: line 11: /etc/profile.d/modules.sh: No such file or directory
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 30: export: mamba: not a function
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 31: export: __mamba_exe: not a function
+Starting graph build at Wed Apr 15 12:23:02 EDT 2026
+GPU: NVIDIA L40S
+NVIDIA L40S
+NVIDIA L40S
+NVIDIA L40S
+/var/spool/sge/scc-513/job_scripts/4289225: line 32: /etc/profile.d/modules.sh: No such file or directory
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 30: export: mamba: not a function
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 31: export: __mamba_exe: not a function
+Starting graph build at Wed Apr 15 12:23:02 EDT 2026
+GPU: NVIDIA L40S
+NVIDIA L40S
+NVIDIA L40S
+NVIDIA L40S
+
+============================================================
+BPL RAG Graph Builder
+  Year filter : all
+============================================================
+
+Creating Neo4j schema...
+  OK: CREATE CONSTRAINT document_ark IF NOT EXISTS FOR (d:Document...
+  OK: CREATE CONSTRAINT entity_unique IF NOT EXISTS FOR (e:Entity)...
+  OK: CREATE INDEX entity_name IF NOT EXISTS FOR (e:Entity) ON (e....
+  OK: CREATE INDEX entity_type IF NOT EXISTS FOR (e:Entity) ON (e....
+  OK: CREATE INDEX document_year IF NOT EXISTS FOR (d:Document) ON...
+  OK: vector index on Entity.embedding (1024 dims, cosine)
+Schema ready.
+Fetching documents from PostgreSQL...
+  Found 11725 documents
+
+
+── Chunk [1-200/11725] ──
+Loading spaCy model: en_core_web_sm
+  Extracted entities from 200 docs
+  Embedding 8000 entities on GPU...
+Loading BGE-M3 model on cuda
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 4803.55it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 41455.33it/s]
+loading existing colbert_linear and sparse_linear---------
+Inference Embeddings:   0%|          | 0/125 [00:00<?, ?it/s]Inference Embeddings:   1%|          | 1/125 [00:02<05:17,  2.56s/it]Inference Embeddings:   7%|▋         | 9/125 [00:02<00:25,  4.59it/s]Inference Embeddings:  16%|█▌        | 20/125 [00:02<00:08, 11.94it/s]Inference Embeddings:  25%|██▍       | 31/125 [00:02<00:04, 20.77it/s]Inference Embeddings:  34%|███▎      | 42/125 [00:02<00:02, 30.87it/s]Inference Embeddings:  42%|████▏     | 53/125 [00:03<00:01, 41.53it/s]Inference Embeddings:  51%|█████     | 64/125 [00:03<00:01, 52.06it/s]Inference Embeddings:  60%|██████    | 75/125 [00:03<00:00, 62.54it/s]Inference Embeddings:  69%|██████▉   | 86/125 [00:03<00:00, 72.36it/s]Inference Embeddings:  78%|███████▊  | 97/125 [00:03<00:00, 80.31it/s]Inference Embeddings:  86%|████████▋ | 108/125 [00:03<00:00, 86.81it/s]Inference Embeddings:  95%|█████████▌| 119/125 [00:03<00:00, 92.30it/s]Inference Embeddings: 100%|██████████| 125/125 [00:03<00:00, 33.25it/s]
+  Embedding complete
+  Written 200/11725 docs | ETA: 3089.8min
+
+── Chunk [201-400/11725] ──
+  Extracted entities from 200 docs
+  Embedding 8000 entities on GPU...
+Inference Embeddings:   0%|          | 0/125 [00:00<?, ?it/s]Inference Embeddings:   8%|▊         | 10/125 [00:00<00:01, 98.88it/s]Inference Embeddings:  16%|█▌        | 20/125 [00:00<00:01, 99.25it/s]Inference Embeddings:  25%|██▍       | 31/125 [00:00<00:00, 102.61it/s]Inference Embeddings:  34%|███▎      | 42/125 [00:00<00:00, 103.72it/s]Inference Embeddings:  42%|████▏     | 53/125 [00:00<00:00, 104.14it/s]Inference Embeddings:  51%|█████     | 64/125 [00:00<00:00, 104.87it/s]Inference Embeddings:  60%|██████    | 75/125 [00:00<00:00, 105.43it/s]Inference Embeddings:  69%|██████▉   | 86/125 [00:00<00:00, 105.62it/s]Inference Embeddings:  78%|███████▊  | 97/125 [00:00<00:00, 105.29it/s]Inference Embeddings:  86%|████████▋ | 108/125 [00:01<00:00, 105.02it/s]Inference Embeddings:  95%|█████████▌| 119/125 [00:01<00:00, 105.09it/s]Inference Embeddings: 100%|██████████| 125/125 [00:01<00:00, 104.48it/s]
+  Embedding complete
+  Written 400/11725 docs | ETA: 3010.5min
+
+── Chunk [401-600/11725] ──
+  Extracted entities from 200 docs
+  Embedding 8000 entities on GPU...
+Inference Embeddings:   0%|          | 0/125 [00:00<?, ?it/s]Inference Embeddings:   9%|▉         | 11/125 [00:00<00:01, 101.66it/s]Inference Embeddings:  18%|█▊        | 22/125 [00:00<00:01, 101.26it/s]Inference Embeddings:  26%|██▋       | 33/125 [00:00<00:00, 98.47it/s] Inference Embeddings:  34%|███▍      | 43/125 [00:00<00:00, 96.79it/s]Inference Embeddings:  42%|████▏     | 53/125 [00:00<00:00, 97.74it/s]Inference Embeddings:  50%|█████     | 63/125 [00:00<00:00, 97.40it/s]Inference Embeddings:  58%|█████▊    | 73/125 [00:00<00:00, 97.80it/s]Inference Embeddings:  66%|██████▋   | 83/125 [00:00<00:00, 97.87it/s]Inference Embeddings:  74%|███████▍  | 93/125 [00:00<00:00, 98.05it/s]Inference Embeddings:  83%|████████▎ | 104/125 [00:01<00:00, 98.93it/s]Inference Embeddings:  91%|█████████ | 114/125 [00:01<00:00, 95.86it/s]Inference Embeddings:  99%|█████████▉| 124/125 [00:01<00:00, 91.88it/s]Inference Embeddings: 100%|██████████| 125/125 [00:01<00:00, 96.25it/s]
+  Embedding complete
+  Written 600/11725 docs | ETA: 2892.9min
+
+── Chunk [601-800/11725] ──
+  Extracted entities from 200 docs
+  Embedding 8000 entities on GPU...
+Inference Embeddings:   0%|          | 0/125 [00:00<?, ?it/s]Inference Embeddings:   9%|▉         | 11/125 [00:00<00:01, 102.59it/s]Inference Embeddings:  18%|█▊        | 22/125 [00:00<00:00, 104.64it/s]Inference Embeddings:  26%|██▋       | 33/125 [00:00<00:00, 105.78it/s]Inference Embeddings:  35%|███▌      | 44/125 [00:00<00:00, 106.13it/s]Inference Embeddings:  44%|████▍     | 55/125 [00:00<00:00, 106.42it/s]Inference Embeddings:  53%|█████▎    | 66/125 [00:00<00:00, 106.08it/s]Inference Embeddings:  62%|██████▏   | 77/125 [00:00<00:00, 106.11it/s]Inference Embeddings:  70%|███████   | 88/125 [00:00<00:00, 106.37it/s]Inference Embeddings:  79%|███████▉  | 99/125 [00:00<00:00, 106.66it/s]Inference Embeddings:  88%|████████▊ | 110/125 [00:01<00:00, 106.68it/s]Inference Embeddings:  97%|█████████▋| 121/125 [00:01<00:00, 106.37it/s]Inference Embeddings: 100%|██████████| 125/125 [00:01<00:00, 106.14it/s]
+/var/spool/sge/scc-505/job_scripts/4292630: line 11: /etc/profile.d/modules.sh: No such file or directory
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 30: export: mamba: not a function
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 31: export: __mamba_exe: not a function
+Starting graph build at Wed Apr 15 17:21:24 EDT 2026
+GPU: NVIDIA L40S
+NVIDIA L40S
+NVIDIA L40S
+NVIDIA L40S
+/var/spool/sge/scc-505/job_scripts/4292630: line 32: /etc/profile.d/modules.sh: No such file or directory
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 30: export: mamba: not a function
+/share/pkg.8/miniconda/25.3.1/install/etc/profile.d/mamba.sh: line 31: export: __mamba_exe: not a function
+Starting graph build at Wed Apr 15 17:21:24 EDT 2026
+GPU: NVIDIA L40S
+NVIDIA L40S
+NVIDIA L40S
+NVIDIA L40S
+
+============================================================
+BPL RAG Graph Builder
+  Year filter : all
+============================================================
+
+Creating Neo4j schema...
+  OK: CREATE CONSTRAINT document_ark IF NOT EXISTS FOR (d:Document...
+  OK: CREATE CONSTRAINT entity_unique IF NOT EXISTS FOR (e:Entity)...
+  OK: CREATE INDEX entity_name IF NOT EXISTS FOR (e:Entity) ON (e....
+  OK: CREATE INDEX entity_type IF NOT EXISTS FOR (e:Entity) ON (e....
+  OK: CREATE INDEX document_year IF NOT EXISTS FOR (d:Document) ON...
+  OK: vector index on Entity.embedding (1024 dims, cosine)
+Schema ready.
+Fetching documents from PostgreSQL...
+  Found 11725 documents
+
+
+── Chunk [1-200/11725] ──
+Loading spaCy model: en_core_web_sm
+  Extracted entities from 200 docs
+  Embedding 8000 entities on GPU...
+Loading BGE-M3 model on cuda
+Fetching 30 files:   0%|          | 0/30 [00:00<?, ?it/s]Fetching 30 files: 100%|██████████| 30/30 [00:00<00:00, 7147.35it/s]
+Loading weights:   0%|          | 0/391 [00:00<?, ?it/s]Loading weights: 100%|██████████| 391/391 [00:00<00:00, 49241.04it/s]
+loading existing colbert_linear and sparse_linear---------
+Inference Embeddings:   0%|          | 0/125 [00:00<?, ?it/s]Inference Embeddings:   1%|          | 1/125 [00:02<06:00,  2.91s/it]Inference Embeddings:   2%|▏         | 2/125 [00:03<02:35,  1.26s/it]Inference Embeddings:  10%|█         | 13/125 [00:03<00:14,  7.59it/s]Inference Embeddings:  20%|██        | 25/125 [00:03<00:06, 16.65it/s]Inference Embeddings:  29%|██▉       | 36/125 [00:03<00:03, 26.33it/s]Inference Embeddings:  38%|███▊      | 47/125 [00:03<00:02, 37.07it/s]Inference Embeddings:  46%|████▋     | 58/125 [00:03<00:01, 48.24it/s]Inference Embeddings:  55%|█████▌    | 69/125 [00:03<00:00, 59.29it/s]Inference Embeddings:  65%|██████▍   | 81/125 [00:03<00:00, 70.54it/s]Inference Embeddings:  74%|███████▍  | 93/125 [00:03<00:00, 80.69it/s]Inference Embeddings:  84%|████████▍ | 105/125 [00:03<00:00, 88.79it/s]Inference Embeddings:  94%|█████████▎| 117/125 [00:04<00:00, 94.95it/s]Inference Embeddings: 100%|██████████| 125/125 [00:04<00:00, 30.23it/s]
